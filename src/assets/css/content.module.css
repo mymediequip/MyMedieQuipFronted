@@ -1,0 +1,94 @@
+.advt{
+    display: flex;
+    justify-content: space-around;
+    width: 95%;
+    margin: 40px auto 40px auto;
+}
+.advt_1{
+    width: 46vw;
+    height: 350px;
+    background-size: cover;
+}
+.experties_container h2{
+    text-align: center;
+    margin-bottom: 30px;
+}
+.expertbox{
+    display: flex;
+    width: 80%;
+    margin: auto;
+}
+.experties_container{
+    margin-bottom: 50px;
+}
+
+/* Footer Design  */
+footer{
+    padding: 3rem 2rem;
+    display: flex;
+    gap: 5.9rem;
+}
+
+.mediLogo{
+    width: 25vh;
+}
+
+.rightFoot{
+    width: 226px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: justify;
+    gap: 20px;
+}
+.rightFoot p{
+    color: #908F8F  ;
+    line-height: 1.21rem;
+}
+
+.footSocial{
+    margin-right:24px;
+    width: 3vh;
+}
+
+.row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5.9rem;
+    letter-spacing: 2px;
+}
+
+.listStyle{
+    list-style: none;
+}
+
+.listStyle li{
+    margin-bottom: 15px;
+}
+
+.listStyle li a{
+    text-decoration: none;
+    color: #545553;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.listTitle{
+    font-size: larger;
+    color:#019C89;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.allRights{
+    font-size: 1.2rem;
+    font-weight: 500;
+    display: flex;
+    width: 100%;
+    height: 8vh;
+    color: #373737;
+    background-color: #EDEDED;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: 2px;
+}
