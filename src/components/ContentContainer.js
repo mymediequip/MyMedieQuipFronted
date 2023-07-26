@@ -7,10 +7,10 @@ import { OurClients } from './OurClients';
 import { Advt2 } from './Advt';
 import { ClientBanner } from './OurClients';
 
-export const ContentConatiner=()=>{
+export const ContentConatiner=(props)=>{
     return(
         <React.Fragment>
-            <Hero/>
+            <Hero specs={props.specs}/>
             <NewProducts isnew={true} title="New Products"/>
             <Advt/>
             <NewProducts isnew={false} title="Featured Products"/>

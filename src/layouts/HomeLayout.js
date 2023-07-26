@@ -1,13 +1,13 @@
 import React from 'react';
 import { Navigation } from '../components/Navigation';
-import { ContentConatiner } from '../components/ContentContainer';
 import { Footer } from '../components/Footer';
+import { Outlet } from 'react-router-dom';
 export const HomeLayout=()=>{
     return(
         <React.Fragment>
             <Navigation/>
-            <ContentConatiner/>
-            <Footer/>
+            <Outlet/>
+            <Footer/>   
         </React.Fragment>
     );
 }

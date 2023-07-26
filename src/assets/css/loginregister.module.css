@@ -1,0 +1,89 @@
+.userContainer{
+    height: 600px;
+    width: 100%;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    background-repeat: no-repeat;
+}
+.lrContent img{
+    height: 400px;
+    width: fit-content;
+    margin-left: 30px;
+}
+.lrContent{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    color: #FFFFFF;
+    height: 99%;
+    align-items: center;
+    justify-content: space-around;
+}
+.lrContent p{
+    font-size: 12px;
+    text-align: center;
+    width: fit-content;
+}
+.lrContent h3{
+    font-weight: 400;
+    font-size: 25px;
+}
+.FormContainer{
+    width: 35%;
+    height: 400px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+}
+.formHead{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 70px;
+    margin-top: 20px;
+}
+.formHead span{
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid black;
+    width: 30%;
+    text-align: center;
+    padding-bottom: 10px;
+}
+.signupForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 84%;
+    height: 70%;
+    margin: auto;
+    font-size: 13px;
+}
+.signupForm input{
+    height: 35px;
+    background-color: #FAFFFE;
+    border: 1px solid #DDE6E4;
+    outline:none;
+    padding-left: 15px;
+    border-radius: 5px;
+}
+.signupForm input[type=radio]{
+    margin-right: 5px;
+}
+.signupForm input[type=submit]{
+    background-color: black;
+    color: white;
+    border-radius: 20px;
+}
+.registerType{
+    display: flex;
+    flex-direction: column;
+}
+.registerType span{
+    display: inline-flex;
+    align-items: center; 
+    margin-right: 20px;
+}
+.registerRadio{
+    display: flex;
+}

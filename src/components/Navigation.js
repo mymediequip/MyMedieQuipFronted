@@ -29,20 +29,20 @@ export const Navigation=()=>{
 
 const Nav2=()=>{
     const links=[
-        "Equipment Category",
-        "Used Equipment",
-        "New Equipment",
-        "Service",
-        "Spare and accessories",
-        "For Distribution",
-        "Contact Us"
+        {name:"Equipment Category",path:"/specialization"},
+        {name:"Used Equipment",path:"/"},
+        {name:"New Equipment",path:"/"},
+        {name:"Service",path:"/"},
+        {name:"Spare and accessories",path:"/"},
+        {name:"For Distribution",path:"/"},
+        {name:"Contact Us",path:"/"}
     ];
     return(
         <div className={styles.Nav2Container}>
            <div className={styles.navlinks}>
            {
                 links.map((values,index)=>{
-                    return <NavLink to="/">{values}</NavLink>;
+                    return <NavLink to={values.path} style={activateLink} key={index}>{values.name}</NavLink>;
                 })
             }
            </div>
@@ -94,7 +94,7 @@ const Speciality=()=>{
 
 const LoginBtn=()=>{
     return(
-        <NavLink className={styles.LoginBtn} to="/">
+        <NavLink className={styles.LoginBtn} to="/login">
             <img src={profileIcon} alt='profile'/>
             <span>Login</span>
         </NavLink>
@@ -132,4 +132,11 @@ const Humberger=()=>{
             }
         </div>
     );
+}
+
+// non components functions
+const activateLink=({isActive})=>{
+    return {
+        color:isActive?"#019C89":"#757574"
+    };
 }

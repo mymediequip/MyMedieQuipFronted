@@ -8,8 +8,7 @@ import {
 } from '../assets/images/index';
 import catog_data from '../assets/data/specialization.json';
 
-export const Hero=()=>{
-    console.log(hero);
+export const Hero=(props)=>{
     const heroStyle={
         backgroundImage:`url(${hero})`,
         backgroundSize:"cover",
@@ -18,7 +17,7 @@ export const Hero=()=>{
     }
     return(
         <div style={heroStyle} className={styles.heroContainer}>
-            <Catogories/>
+            {props.specs && <Catogories/>}
         </div>
     );
 };
