@@ -16,9 +16,12 @@ export const Hero=(props)=>{
         backgroundPosition:"center"
     }
     return(
-        <div style={heroStyle} className={styles.heroContainer}>
-            {props.specs && <Catogories/>}
-        </div>
+        <React.Fragment>
+            <div style={heroStyle} className={styles.heroContainer}>
+                {props.specs && <Catogories/>}
+            </div>
+            <MobileHero/>
+        </React.Fragment>
     );
 };
 
@@ -66,6 +69,22 @@ const CatItem=(props)=>{
             }
             </div>
         </div>
+    );
+};
+
+const MobileHero=()=>{
+    return(
+        <div className={styles.MobileHero}>
+            <p style={{textAlign:"center"}}>WHAT ARE YOU LOOKING FOR?</p>
+            <MobileSearch/>
+        </div>
+    );
+};
+const MobileSearch=()=>{
+    return(
+        <form className={styles.mobileSearch}>
+            <input type='text' placeholder='Find medical instrument..'/>
+        </form>
     );
 }
 

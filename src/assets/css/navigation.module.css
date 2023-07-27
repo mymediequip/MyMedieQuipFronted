@@ -1,6 +1,9 @@
 :root{
     --common-color:#019C89;
 }
+a{
+    text-decoration: none;
+}
 .logo{
     height: 90px;
     margin-top: 5px;
@@ -27,6 +30,7 @@
 .humberg{
     display: none;
 }
+
 
 .search input{
     border: none;
@@ -117,21 +121,49 @@
     color: #FFFFFF;
 }
 .humberg i{
-    font-size: 40px;
-    color:var(--common-color);
+    font-size: 34px;
+    color:#80837B;
+}
+.AddToCart{
+    display: none;
 }
 .mobileMenu{
+    padding-top: 30px;
     background-color: var(--common-color);
     position: absolute;
     right: 0px;
-    top: 106px;
-    height: 100vh;
-    width: 100vw;
+    top: 68px;
+    height: 80vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-
+.mobileMenu a{
+    color: white;
+    font-size: 18px;
+    margin: 10px;
+}
+.topMobileMenu{
+    background-color: #FFFFFF;
+    text-align: center;
+    padding: 8px 0px 8px 0px;
+    width: 100%;
+}
+/* Mobile Response  */
 @media(max-width:1200px){
-    .BuyBtn,.SellBtn,.Speciality,.LoginBtn,.CreatBtn,.location,.search{
+    .BuyBtn,.SellBtn,.Speciality,.LoginBtn,.CreatBtn,.search{
         display: none;
+    }
+    .AddToCart{
+        display: block;
+        margin-right: 10px;
+    }
+    .AddToCart img{
+        width: 23px;
+    }
+    .logo{
+        height: 60px;
     }
     .Nav2Container{
         display: none;

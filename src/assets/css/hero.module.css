@@ -1,3 +1,6 @@
+:root{
+    --common-color:#019C89;
+}
 .heroContainer{
     width: 100%;
     height: 500px;
@@ -45,5 +48,36 @@
 .cat_inner{
     display: flex;
     align-items: center;
+}
+.MobileHero{
+    display: none;
+}
+.mobileSearch input{
+    height: 45px;
+    width: 80vw;
+    border-radius: 33px;
+    outline: none;
+    border: none;
+    padding: 0px 20px 0px 20px;
+}
+
+/* Mobile Responsive */
+
+@media(max-width:1200px){
+    .MobileHero{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        background-color: var(--common-color);
+        height: 160px;
+        color: #FFFFFF;
+        font-size: 20px;
+        font-weight: 400;
+    }
+   
+    .heroContainer{
+        display: none;
+    }
 }
 

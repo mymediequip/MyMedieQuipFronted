@@ -31,7 +31,15 @@ import plus_symbol from './plus_circle.png';
 import minus from './minus.png';
 import loginBg from './loginbg.png';
 import howWeWorks from './how_we_works.png';
+import linkdinLogin from './linkedinLogin.png';
+import fbllogin from './facebookLogin.png';
+import googleLogin from './googlLogin.png';
+import actimg from './atc.png';
 export {
+    actimg,
+    linkdinLogin,
+    fbllogin,
+    googleLogin,
     loginBg,
     howWeWorks,
     twitter,

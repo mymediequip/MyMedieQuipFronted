@@ -5,7 +5,8 @@ import styles from '../assets/css/navigation.module.css';
 import {
     downIcon,
     searchIcon,
-    profileIcon
+    profileIcon,
+    actimg
 } from '../assets/images/index';
 export const Navigation=()=>{
     return(
@@ -20,7 +21,10 @@ export const Navigation=()=>{
                 <SellBtn/>
                 <Speciality/>
                 <LoginBtn/>
-                <Humberger/>
+                <div style={{display:"flex",alignItems:"center"}}>
+                    <AddToCart/>
+                    <Humberger/>
+                </div>
             </header>
             <Nav2/>
         </React.Fragment>
@@ -33,7 +37,7 @@ const Nav2=()=>{
         {name:"Used Equipment",path:"/"},
         {name:"New Equipment",path:"/"},
         {name:"Service",path:"/"},
-        {name:"Spare and accessories",path:"/"},
+        {name:"Spare and Accessories",path:"/"},
         {name:"For Distribution",path:"/"},
         {name:"Contact Us",path:"/"}
     ];
@@ -94,7 +98,7 @@ const Speciality=()=>{
 
 const LoginBtn=()=>{
     return(
-        <NavLink className={styles.LoginBtn} to="/login">
+        <NavLink className={styles.LoginBtn} to="/user/login/">
             <img src={profileIcon} alt='profile'/>
             <span>Login</span>
         </NavLink>
@@ -111,25 +115,44 @@ const Humberger=()=>{
     const [isMobile,setIsMobile]=useState(true);
     const handleHumberg=()=>{
         setIsMobile(!isMobile);
-    }
-
+    };
+    const links=[
+        {name:"USED EQUIPMENTS",path:"/"},
+        {name:"NEW EQUIPMENTS",path:"/"},
+        {name:"SERVICES",path:"/"},
+        {name:"SPARE and ACCESSORIES",path:"/"},
+        {name:"FOR DISTRIBUTION",path:"/"},
+        {name:"CONTACT US",path:"/"},
+        {name:"POST ADVERT",path:"/"}
+    ];
     return(
         <div className={styles.humberg} id="humberg">
             <span id="humIcon" onClick={handleHumberg}>
                 {
                     isMobile ? <i class="bi bi-list"></i> : <i class="bi bi-x"></i>
                 }
+                
             </span>
             {
                 isMobile?"":<div className={styles.mobileMenu}>
-                <div className={styles.menu1}>
-                    <Location isnone={true}/>
-                    <BuyBtn/>
-                    <SellBtn/>
-                    <LoginBtn/>
-                </div>
+                {
+                    links.map((value,index)=>{
+                        if(index===0){
+                            return <NavLink to={value.path} style={{color:"#019C89"}} className={styles.topMobileMenu} key={index}>{value.name}</NavLink>
+                        }
+                        return <NavLink to={value.path} key={index}>{value.name}</NavLink>
+                    })
+                }
                 </div>
             }
+        </div>
+    );
+};
+
+const AddToCart=()=>{
+    return(
+        <div className={styles.AddToCart}>
+            <img src={actimg} alt='atc'/>
         </div>
     );
 }
