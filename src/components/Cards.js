@@ -37,7 +37,7 @@ export const ExpertCard=()=>{
 export const NewProductsCard=(props)=>{
     return (
       <div className={styles.cardContainer}>    
-         <div className='cardContent'>
+         <div className={styles.cardContent}>
          <div className={styles.equipImage}>
             <div className={styles.productImage}>
               {props.isNew && <img src={newBanner} alt='banner' className={styles.newBanner}/>}

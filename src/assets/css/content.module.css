@@ -1,8 +1,9 @@
 .advt{
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
     width: 95%;
-    margin: 40px auto 40px auto;
+    margin: 30px auto 40px auto;
 }
 .advt_1{
     width: 46vw;
@@ -15,6 +16,8 @@
 }
 .expertbox{
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
     width: 80%;
     margin: auto;
 }
@@ -91,4 +94,9 @@ footer{
     justify-content: center;
     align-items: center;
     letter-spacing: 2px;
+}
+@media(max-width:600px){
+    .advt_1{
+        width: 90vw;
+    }
 }

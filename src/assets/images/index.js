@@ -35,7 +35,9 @@ import linkdinLogin from './linkedinLogin.png';
 import fbllogin from './facebookLogin.png';
 import googleLogin from './googlLogin.png';
 import actimg from './atc.png';
+import m_search from './m_search.png';
 export {
+    m_search,
     actimg,
     linkdinLogin,
     fbllogin,

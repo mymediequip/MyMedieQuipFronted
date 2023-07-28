@@ -3,12 +3,13 @@
     color: #161616;
 }
 .new_prod_container{
-    margin-bottom: 70px;
+    margin-bottom: 21px;
 }
 .product_container{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    overflow-x: auto;
 }
 .cardContainer{
     margin: 10px 10px;
@@ -164,7 +165,8 @@
     text-align: center;
     box-shadow: rgba(100, 111, 109, 0.2) 0px 7px 29px 0px;
     margin: 10px;
-    max-width: 47vh;
+    /* max-width: 47vh; */
+    width: 270px;
     height: 49vh;
     padding: 22px;   
 }
@@ -192,6 +194,9 @@ color: #545454;
 .swipeArrow img{
     width: 7vh;
 }
+.cardContent{
+    width: 230px;
+}
 
 /* client card */
 .clientContainer{
@@ -205,4 +210,9 @@ color: #545454;
 }
 .clientContainer img{
     width: 120px;
+}
+@media(max-width:1200px){
+    .arrowImg{
+        display: none;
+    }
 }

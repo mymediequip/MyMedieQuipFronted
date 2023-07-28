@@ -1,5 +1,5 @@
 import React from 'react';
-import {Hero} from './Hero';
+import {Hero,MobileCatogories,MobileHero} from './Hero';
 import {NewProducts} from "./NewProducts";
 import { Advt } from './Advt';
 import { OurExperties } from './OurExperties';
@@ -10,6 +10,8 @@ import { ClientBanner } from './OurClients';
 export const ContentConatiner=(props)=>{
     return(
         <React.Fragment>
+            <MobileHero/>
+            <MobileCatogories/>
             <Hero specs={props.specs}/>
             <NewProducts isnew={true} title="New Products"/>
             <Advt/>

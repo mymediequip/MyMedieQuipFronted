@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { hero } from "../assets/images/index";
 import { Search } from './Navigation'
 import styles from '../assets/css/hero.module.css';
+import catog_data from '../assets/data/specialization.json';
+import { NavLink } from 'react-router-dom';
 import {
     plus_symbol,
-    minus
+    minus,
+    m_search,
+    downIcon
 } from '../assets/images/index';
-import catog_data from '../assets/data/specialization.json';
 
 export const Hero=(props)=>{
     const heroStyle={
@@ -20,7 +23,6 @@ export const Hero=(props)=>{
             <div style={heroStyle} className={styles.heroContainer}>
                 {props.specs && <Catogories/>}
             </div>
-            <MobileHero/>
         </React.Fragment>
     );
 };
@@ -72,7 +74,7 @@ const CatItem=(props)=>{
     );
 };
 
-const MobileHero=()=>{
+export const MobileHero=()=>{
     return(
         <div className={styles.MobileHero}>
             <p style={{textAlign:"center"}}>WHAT ARE YOU LOOKING FOR?</p>
@@ -84,7 +86,46 @@ const MobileSearch=()=>{
     return(
         <form className={styles.mobileSearch}>
             <input type='text' placeholder='Find medical instrument..'/>
+            <img src={m_search} alt='...'/>
         </form>
+    );
+};
+
+export const MobileCatogories=()=>{
+    const catKeys=Object.keys(catog_data);
+    return(
+        <div className={styles.mobileCatContainer}>
+            {
+                catKeys.map((values,index)=>{
+                    return <CatgoriesDropDown key={index} data={values}/>
+                })
+            }
+        </div>
+    );
+};
+const CatgoriesDropDown=(props)=>{
+    const [isOpen,setIsOpen]=useState(false);
+    const subcat=catog_data[props.data];
+    const handleIsopen=()=>{
+        setIsOpen(!isOpen);
+    }
+    return(
+        <div className={styles.catDrop}>
+            <div className={styles.catTitle} onClick={handleIsopen}>
+                <span>{props.data}</span>
+                <img src={downIcon} alt='...'/>
+            </div>
+            {
+                isOpen?<div className={styles.subCatogories}>
+                    {
+                        subcat.map((value,index)=>{
+                            return <NavLink to="/" key={index}>{value}</NavLink>
+                        })
+                    }
+                </div>:""
+            }
+            
+        </div> 
     );
 }
 
