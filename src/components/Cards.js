@@ -20,7 +20,7 @@ export const ClientCard=()=>{
           <img src={line2} alt='...'/>
           <img className={styles.clientImage} src={testimage2} alt='...'/>
           <p className={styles.clientName}> Tiya Sharma</p>
-      </div>
+    </div>
   );
 };
 

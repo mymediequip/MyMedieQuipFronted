@@ -165,17 +165,17 @@
     text-align: center;
     box-shadow: rgba(100, 111, 109, 0.2) 0px 7px 29px 0px;
     margin: 10px;
-    /* max-width: 47vh; */
     width: 270px;
-    height: 49vh;
+    height: 350px;
     padding: 22px;   
 }
 .testCardDesc{
-font-size: 14px;
-color: #545454;
+    font-size: 14px;
+    color: #545454;
+    width: 270px;
 }
 .clientName{
- color: #747678;
+ color: #4c6680;
 }
 .clientImage{
     width: 77px;
@@ -190,6 +190,7 @@ color: #545454;
     justify-content: space-between;
     align-items: center;
     padding: 20px 0px;
+    overflow-y: auto;
 }
 .swipeArrow img{
     width: 7vh;
@@ -214,5 +215,22 @@ color: #545454;
 @media(max-width:1200px){
     .arrowImg{
         display: none;
+    }
+    .swipeArrow{
+        display: none;
+    }
+    .testMaincCont{
+        padding: 11px;
+    }
+    .clientContainer{
+        display: none;
+    }
+}
+@media(max-width:368px){
+    .testCardDesc{
+        width: 80vw;
+    }
+    .testContainer{
+        width: 70vw;
     }
 }

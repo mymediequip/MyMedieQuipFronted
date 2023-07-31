@@ -19,17 +19,17 @@ export const OurClients=()=>{
           <img className={styles.headingLine1} src={line} alt='...'/>
         </div>
         <div className={styles.reviewCont}>
-        <div className={styles.swipeArrow}>
-        <img className={styles.headingLine}  src={swipetestleft}/>
-        </div>
-        
-        <ClientCard/>
-        <ClientCard/>
-        <ClientCard/>
-        
-        <div className={styles.swipeArrow}>
-        <img className={styles.headingLine}  src={nextArow}/>
-        </div>
+          <div className={styles.swipeArrow}>
+          <img className={styles.headingLine}  src={swipetestleft}/>
+          </div>
+          
+          <ClientCard/>
+          <ClientCard/>
+          <ClientCard/>
+          
+          <div className={styles.swipeArrow}>
+          <img className={styles.headingLine}  src={nextArow}/>
+          </div>
         </div>
       </div>
     );

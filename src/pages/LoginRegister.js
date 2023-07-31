@@ -105,6 +105,13 @@ export const Login=()=>{
     );
 };
 
+export const OtpVervicatonForm=()=>{
+    return(
+        <div className={styles.otpVerifyCont}>
+            {/* verifyinng otp */}
+        </div>
+    );
+}
 // non components function
 
 const ActivateLink=({isActive})=>{

@@ -9,21 +9,12 @@ import {
     linkdin
 } from '../assets/images/index';
 
-// export const Footer=()=>{
-//     return(
-//         <div className={styles.footerContainer}>
-//             <div className={styles.footerData}>
-//                 <FoterLogo/>
-//             </div>
-//             <p>@All rights reserved to My Medie Quip.in</p>
-//         </div>
-//     );
-// };
+
 
 export const Footer=()=>{
     return(
         <div>
-            <footer>
+            <footer className={styles.footContainer}>
             <div className={styles.rightFoot}>
                 <img className={styles.mediLogo} src={process.env.PUBLIC_URL + "logo.png"} alt="" />
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas iure possimus natus voluptate dolores expedita </p>

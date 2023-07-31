@@ -17,9 +17,12 @@ export const Advt2=()=>{
     const advtStyle1={backgroundImage:`url(${video_Advt})`};
     const advtStyle2={backgroundImage:`url(${video2img})`};
     return(
-        <div className={styles.advt}>
-            <div style={advtStyle1} className={styles.advt_1}></div>
-            <div style={advtStyle2} className={styles.advt_1}></div>
+        <div className={styles.advt_blogs}>
+            <h2>Blogs/Articles</h2>
+            <div className={styles.blogsContainer}>
+                <div style={advtStyle1} className={styles.badvt} ></div>
+                <div style={advtStyle2} className={styles.badvt}></div>
+            </div>
         </div>
     );
 }
