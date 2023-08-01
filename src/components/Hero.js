@@ -22,6 +22,12 @@ export const Hero=(props)=>{
         <React.Fragment>
             <div style={heroStyle} className={styles.heroContainer}>
                 {props.specs && <Catogories/>}
+                <div className={styles.heroContent}>
+                    <p className={styles.heroHead}>Empower Your Health Journey Monitor Blood Pressure Like a Pro!</p>
+                    <p className={styles.heroDesc}>Precision measurements, advanced technology. Take control of your health with accurate blood pressure monitoring for informed decisions and optimal well-being</p>
+                    <NavLink to="/" className={styles.buyBtn}>Buy Product</NavLink>
+                    <NavLink to="/" className={styles.postAdvt}>Post Your Advertisement</NavLink>
+                </div>
             </div>
         </React.Fragment>
     );

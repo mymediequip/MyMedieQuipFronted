@@ -130,3 +130,21 @@
     justify-content: center;
     margin-top: 10px;
 }
+
+/* otpverfication form css */
+.otpVerifyCont{
+    text-align: center;
+    margin-top: 40px;
+}
+.otpVerifyCont a{
+    font-size: 12px;
+    color: #019C89;
+}
+.otp_digits{
+    width: 60%;
+    margin: 40px auto 40px auto;
+}
+.otpVerifyCont p{
+    font-size: 13px;
+    margin: 20px 0px 20px 0px;
+}

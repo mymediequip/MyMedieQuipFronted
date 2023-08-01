@@ -19,6 +19,7 @@ export const Navigation=()=>{
                 <Search/>
                 <BuyBtn/>
                 <SellBtn/>
+                <Explore/>
                 <Speciality/>
                 <LoginBtn/>
                 <div style={{display:"flex",alignItems:"center"}}>
@@ -86,6 +87,40 @@ const SellBtn=()=>{
         <NavLink className={styles.SellBtn} to="/">Sell</NavLink>
     )
 };
+
+const Explore=()=>{
+    const [isOpen,setIsOpen]=useState(false);
+    const exploreLinks=[
+        {title:"Blog Post"},
+        {title:"Review"},
+        {title:"Articles"},
+        {title:"Tech Updates"},
+        {title:"News"},
+        {title:"Forum"},
+        {title:"Expert Tip’s"},
+    ];
+    const handleClick=()=>{
+        setIsOpen(!isOpen);
+    }
+    return(
+        <div className={styles.exploreCont}>
+            <div className={styles.exploreHead} onClick={handleClick}>
+                <span>Explore</span>
+                <img src={downIcon} alt='>'/>
+            </div>
+            {
+                isOpen?<div className={styles.exploreLinks}>
+                {
+                exploreLinks.map((values,index)=>{
+                    return <NavLink to="/">{values.title}</NavLink>
+                })
+                }
+                </div>:""
+            }
+            
+        </div>
+    );
+}
 
 const Speciality=()=>{
     return(

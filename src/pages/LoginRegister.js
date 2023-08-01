@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { NavLink,useNavigate,Outlet} from 'react-router-dom';
+import { useState } from 'react';
 import styles from '../assets/css/loginregister.module.css';
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
-import { Outlet } from 'react-router-dom';
+import PhoneInput from 'react-phone-input-2';
+import OtpInput from 'react-otp-input';
+import 'react-phone-input-2/lib/style.css';
 import {
     loginBg,
     howWeWorks,
@@ -10,8 +12,7 @@ import {
     fbllogin,
     googleLogin,
 } from '../assets/images/index';
-import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
+
 
 export const LoginRegister=()=>{
     const Style1={backgroundImage:`url(${loginBg})`};
@@ -40,8 +41,13 @@ const FormContainer=()=>{
 };
 
 export const Signup=()=>{
+    const navigate=useNavigate();
+    const handleSignupSubmition=(event)=>{
+        event.preventDefault();
+        navigate("/user/verifyotp/")
+    };
     return(
-        <form className={styles.signupForm}>
+        <form className={styles.signupForm} onSubmit={handleSignupSubmition}>
             <div>
                 <p style={{marginBottom:"8px"}}>MOBILE NO.</p>
                 <PhoneInput 
@@ -66,13 +72,19 @@ export const Signup=()=>{
 
 export const Login=()=>{
     const [isPhone,setIsphone]=useState(true);
+    const navigate=useNavigate();
     const activeStyle={
         backgroundColor:"#019C89",
         color:"#FFFFFF"
     }
-   
+    const handleLoginSubmition=(event)=>{
+        event.preventDefault();
+        if(isPhone){
+            navigate("/user/verifyotp/")
+        }
+    }
     return(
-        <form className={styles.signupForm}>
+        <form className={styles.signupForm} onSubmit={handleLoginSubmition}>
             <div className={styles.loginOptions}>
                 <label onClick={()=>{setIsphone(true)}} style={isPhone?activeStyle:{}}>Phone Number</label>
                 <label onClick={()=>{setIsphone(false)}} style={isPhone?{}:activeStyle}>Email Id</label>
@@ -105,10 +117,54 @@ export const Login=()=>{
     );
 };
 
+
 export const OtpVervicatonForm=()=>{
+    const [otp, setOtp] = useState('');
+    const [otpTime,setOtpTime]=useState({minute:4,sec:59});
+    const styleInpute={
+        width:"30px",
+        height:"30px",
+        margin:"auto",
+        backgroundColor:"#FAFFFE",
+        border:"1px solid #DDE6E4",
+        borderRadius:"2px",
+        outline:"1px solid #019C89",
+    };
+
+    useEffect(()=>{
+        let timeIntervel=setTimeout(()=>{
+            if(otpTime.sec===0){
+                otpTime.minute-=1;
+                otpTime.sec=60;
+            }
+            otpTime.sec-=1;
+            setOtpTime({...otpTime})
+        },1000);
+        if(otpTime.minute===0 && otpTime.sec===0){
+            clearTimeout(timeIntervel)
+        }
+    });
+
     return(
         <div className={styles.otpVerifyCont}>
-            {/* verifyinng otp */}
+            <div>
+                <h4 style={{color:"black"}}>Verification Code</h4>
+                <p>Enter the 6 digit OTP Send to you phone number</p>
+            </div>
+            <div className={styles.otp_digits}>
+                <OtpInput
+                    value={otp}
+                    onChange={setOtp}
+                    numInputs={6}
+                    inputStyle={styleInpute}
+                    renderSeparator={<span></span>}
+                    renderInput={(props) => <input {...props} />}
+                />
+            </div>
+            <p>Code Expire in 0{otpTime.minute}:{otpTime.sec%10===otpTime.sec?"0"+otpTime.sec:otpTime.sec} </p>
+            {
+                otpTime.minute===0 && otpTime.sec===0?<NavLink>Resend</NavLink>:""
+            }
         </div>
     );
 }
