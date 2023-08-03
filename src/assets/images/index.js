@@ -36,7 +36,9 @@ import fbllogin from './facebookLogin.png';
 import googleLogin from './googlLogin.png';
 import actimg from './atc.png';
 import m_search from './m_search.png';
+import dashAdvt from './dashad.png';
 export {
+    dashAdvt,
     m_search,
     actimg,
     linkdinLogin,

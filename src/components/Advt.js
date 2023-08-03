@@ -1,6 +1,12 @@
 import React from 'react';
 import styles from '../assets/css/content.module.css';
-import {advt1,advt2,video_Advt,video2img} from '../assets/images/index';
+import {
+    advt1,
+    advt2,
+    video_Advt,
+    video2img,
+    dashAdvt
+} from '../assets/images/index';
 
 export const Advt=()=>{
     const advtStyle1={backgroundImage:`url(${advt1})`};
@@ -24,5 +30,19 @@ export const Advt2=()=>{
                 <div style={advtStyle2} className={styles.badvt}></div>
             </div>
         </div>
+    );
+};
+
+export const DashboardAdvt=()=>{
+    const dashStyle={
+        backgroundImage:`url(${dashAdvt})`,
+        backgroundSize:"cover",
+        backgroundPosition:"center",
+        width:"80vw",
+        height:"160px",
+        margin:"20px auto 50px auto"
+    };
+    return(
+        <div style={dashStyle}></div>
     );
 }

@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import {companyName} from '../assets/data/data';
-import { NavLink } from 'react-router-dom';
+import { useSelector,useDispatch } from 'react-redux';
+import { changeLoginStatus } from '../app/Slices/AuthSlice';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styles from '../assets/css/navigation.module.css';
 import {
     downIcon,
     searchIcon,
     profileIcon,
-    actimg
+    actimg,
+    testimage2
 } from '../assets/images/index';
+
 export const Navigation=()=>{
+    const isLogin=useSelector((state)=>state.auth.isLogin);
     return(
         <React.Fragment>
             <header className={styles.headContainer}>
@@ -21,7 +26,9 @@ export const Navigation=()=>{
                 <SellBtn/>
                 <Explore/>
                 <Speciality/>
-                <LoginBtn/>
+                {
+                    isLogin?<ProfileDropDown/>:<LoginBtn/>
+                }
                 <div style={{display:"flex",alignItems:"center"}}>
                     <AddToCart/>
                     <Humberger/>
@@ -140,6 +147,51 @@ const LoginBtn=()=>{
     )
 };
 
+const ProfileDropDown=()=>{
+    const [isOpen,setIsOpen]=useState(false);
+    const profileLinks=[
+        {title:"Profile",path:"/"},
+        {title:"Dashboard",path:"/dashboard"},
+        {title:"Notifications",path:"/"},
+    ];
+    const handleClick=()=>{
+        setIsOpen(!isOpen);
+    };
+    
+    return(
+        <div className={styles.exploreCont}>
+            <div className={styles.profileHead} onClick={handleClick} >
+                <img src={testimage2} style={{width:"45px",height:"45px"}} alt='Dashboard'/>
+                <img src={downIcon} alt='>'/>
+            </div>
+            {
+                isOpen?<div className={styles.exploreLinks} style={{right:"10px"}}>
+                {
+                profileLinks.map((values,index)=>{
+                    return <NavLink to={values.path} onClick={handleClick} key={index}>{values.title}</NavLink>
+                })
+                }
+                <Logout />
+                </div>:""
+            }
+        </div>
+    );
+};
+
+export const Logout=()=>{
+    const dispatch=useDispatch();
+    const navigate=useNavigate();
+
+    const logout=(event)=>{
+        event.preventDefault();
+        dispatch(changeLoginStatus());
+        navigate("/");
+    }
+    return(
+        <NavLink path="/" onClick={logout}>Logout</NavLink>
+    );
+};
+
 const CreatBtn=()=>{
     return(
         <NavLink className={styles.CreatBtn} style={{color:"#FFFFFF"}}to="/">Create a Requirement</NavLink>
@@ -166,7 +218,6 @@ const Humberger=()=>{
                 {
                     isMobile ? <i class="bi bi-list"></i> : <i class="bi bi-x"></i>
                 }
-                
             </span>
             {
                 isMobile?"":<div className={styles.mobileMenu}>
@@ -190,7 +241,7 @@ const AddToCart=()=>{
             <img src={actimg} alt='atc'/>
         </div>
     );
-}
+};
 
 // non components functions
 const activateLink=({isActive})=>{

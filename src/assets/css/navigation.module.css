@@ -103,8 +103,8 @@ a{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border-top: 1px solid #A6A6A5;
-    border-bottom: 1px solid #A6A6A5;
+    border-top: 1px solid #cdcdcd;
+    border-bottom: 1px solid #cdcdcd;
     height: 65px;
 }
 .navlinks{
@@ -185,6 +185,15 @@ a{
     background-color: var(--common-color);
     color: #FFFFFF;
 }
+/* profile Dropdown */
+.profileHead{
+    display: flex;
+    align-items: center;
+}
+.profileHead img{
+    margin-left: 5px;
+}
+
 
 /* Mobile Response  */
 @media(max-width:1200px){

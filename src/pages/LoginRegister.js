@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { NavLink,useNavigate,Outlet} from 'react-router-dom';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { changeLoginStatus } from '../app/Slices/AuthSlice';
 import styles from '../assets/css/loginregister.module.css';
 import PhoneInput from 'react-phone-input-2';
 import OtpInput from 'react-otp-input';
@@ -121,6 +123,8 @@ export const Login=()=>{
 export const OtpVervicatonForm=()=>{
     const [otp, setOtp] = useState('');
     const [otpTime,setOtpTime]=useState({minute:4,sec:59});
+    const navigate=useNavigate();
+    const dispatch=useDispatch();
     const styleInpute={
         width:"30px",
         height:"30px",
@@ -142,6 +146,14 @@ export const OtpVervicatonForm=()=>{
         },1000);
         if(otpTime.minute===0 && otpTime.sec===0){
             clearTimeout(timeIntervel)
+        };
+        //verifying otp
+        if(otp.length===6){
+            //do api callse and verifotp
+            
+            //after verifying 
+            dispatch(changeLoginStatus())
+            navigate("/dashboard");
         }
     });
 
