@@ -10,6 +10,7 @@ import {
     line2,
     testimage2
 } from '../assets/images/index';
+import { useNavigate } from 'react-router-dom';
 
 
 export const ClientCard=()=>{
@@ -34,37 +35,52 @@ export const ExpertCard=()=>{
   );
 };
 
-export const NewProductsCard=(props)=>{
-    return (
-      <div className={styles.cardContainer}>    
-         <div className={styles.cardContent}>
-         <div className={styles.equipImage}>
-            <div className={styles.productImage}>
-              {props.isNew && <img src={newBanner} alt='banner' className={styles.newBanner}/>}
-              <img src={pngwing} className={styles.productimg}/>
-                <div className={styles.favCart} style={{top:props.isNew?"-188px":"-165px"}}>
-                    <a href="#"> <img src={favouriate} alt=".." /></a>
-                    <a href="#"> <img src={cart} alt=".." /></a>
-                </div>
-                
+export const NewProductsCard = (props) => {
+  const navigate=useNavigate();
+  const productClick = () => {
+      navigate("/products/xray-machine/")
+  };
+
+  return (
+    <div className={styles.cardContainer} onClick={productClick}>
+      <div className={styles.cardContent}>
+        <div className={styles.equipImage}>
+          <div className={styles.productImage}>
+            {props.isNew && (
+              <img src={newBanner} alt="banner" className={styles.newBanner} />
+            )}
+            <img src={pngwing} className={styles.productimg} />
+            <div
+              className={styles.favCart}
+              style={{ top: props.isNew ? "-188px" : "-165px" }}
+            >
+              <a href="#">
+                {" "}
+                <img src={favouriate} alt=".." />
+              </a>
+              <a href="#">
+                {" "}
+                <img src={cart} alt=".." />
+              </a>
             </div>
           </div>
-          <div className={styles.title_desk}>
-            <h5>{props.data.title}</h5>
-            <p>{props.data.desc}</p>
+        </div>
+        <div className={styles.title_desk}>
+          <h5>{props.data.title}</h5>
+          <p>{props.data.desc}</p>
+        </div>
+        <div className={styles.price}>
+          <div className={styles.priceTag}>
+            <h5>₹ {props.data.dis_price}</h5>
+            <p>₹{props.data.t_price}</p>
           </div>
-          <div className={styles.price}>
-            <div className={styles.priceTag}>
-              <h5>₹ {props.data.dis_price}</h5>
-              <p>₹{props.data.t_price}</p>
-            </div>
-            <div>
-              <a href='#' className={styles.PriceBtn}>
-                Contact Seller
-                </a>
-            </div>
+          <div>
+            <a href="#" className={styles.PriceBtn}>
+              Contact Seller
+            </a>
           </div>
-         </div> 
+        </div>
       </div>
-    );
+    </div>
+  );
 }; 

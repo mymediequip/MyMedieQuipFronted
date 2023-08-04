@@ -151,7 +151,7 @@ const ProfileDropDown=()=>{
     const [isOpen,setIsOpen]=useState(false);
     const profileLinks=[
         {title:"Profile",path:"/"},
-        {title:"Dashboard",path:"/dashboard"},
+        {title:"Dashboard",path:"/dashboard/"},
         {title:"Notifications",path:"/"},
     ];
     const handleClick=()=>{

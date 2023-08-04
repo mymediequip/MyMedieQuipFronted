@@ -78,21 +78,21 @@ export const MyProfile=()=>{
 };
 export const DashboardMenu=()=>{
     const profileLinks=[
-        {title:"MY Profile"},
-        {title:"MY ADS"},
-        {title:"MY MESSAGES"},
-        {title:"ADS AWAITING PAYMENT"},
-        {title:"PAYMENT HISTORY"},
-        {title:"MY SERVICES"},
-        {title:"MY ORDERS"},
-        {title:"SUBCRIPTIONS"},
-        {title:"STATISTICS"},
+        {title:"MY Profile",path:"/dashboard/"},
+        {title:"MY ADS",path:"/"},
+        {title:"MY MESSAGES",path:"/"},
+        {title:"ADS AWAITING PAYMENT",path:"/"},
+        {title:"PAYMENT HISTORY",path:"/"},
+        {title:"MY SERVICES",path:"/"},
+        {title:"MY ORDERS",path:"/"},
+        {title:"SUBCRIPTIONS",path:"/"},
+        {title:"STATISTICS",path:"/"},
     ];
     return(
         <div className={styles.DashboardMenu}>
             {
                 profileLinks.map((values,index)=>{
-                    return <NavLink key={index}  to="/">{values.title}</NavLink>
+                    return <NavLink key={index}  style={activateLink} to={values.path}>{values.title}</NavLink>
                 })
             }
             <Logout/>

@@ -153,7 +153,7 @@ export const OtpVervicatonForm=()=>{
             
             //after verifying 
             dispatch(changeLoginStatus())
-            navigate("/dashboard");
+            navigate("/dashboard/");
         }
     });
 

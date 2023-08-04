@@ -37,7 +37,13 @@ import googleLogin from './googlLogin.png';
 import actimg from './atc.png';
 import m_search from './m_search.png';
 import dashAdvt from './dashad.png';
+import pdShare from './pd_share.png';
+import star from './star.png';
+import location from './location.png';
 export {
+    location,
+    star,
+    pdShare,
     dashAdvt,
     m_search,
     actimg,

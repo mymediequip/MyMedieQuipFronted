@@ -16,7 +16,7 @@ export const Footer=()=>{
         <div>
             <footer className={styles.footContainer}>
             <div className={styles.rightFoot}>
-                <img className={styles.mediLogo} src={process.env.PUBLIC_URL + "logo.png"} alt="" />
+                <img className={styles.mediLogo} src={process.env.PUBLIC_URL+"/logo.png"} alt="..." />
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas iure possimus natus voluptate dolores expedita </p>
                 <div className={styles.socialLinks}>
                     <img className={styles.footSocial} src={twitter} alt="..." />

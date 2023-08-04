@@ -18,6 +18,7 @@
     width: 236px;
     padding: 12px;
     font-weight: 100;
+    cursor: pointer;
 }
 .arrowImg{
     height: 60px;
@@ -163,7 +164,7 @@
     gap: 10px   ;
     align-items: center;
     text-align: center;
-    box-shadow: rgba(100, 111, 109, 0.2) 0px 7px 29px 0px;
+    hadow: rgba(100, 111, 109, 0.2) 0px 7px 29px 0px;
     margin: 10px;
     width: 270px;
     height: 350px;

@@ -38,7 +38,7 @@ export const DashboardAdvt=()=>{
         backgroundImage:`url(${dashAdvt})`,
         backgroundSize:"cover",
         backgroundPosition:"center",
-        width:"80vw",
+        width:"83vw",
         height:"160px",
         margin:"20px auto 50px auto"
     };
