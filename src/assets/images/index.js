@@ -40,7 +40,11 @@ import dashAdvt from './dashad.png';
 import pdShare from './pd_share.png';
 import star from './star.png';
 import location from './location.png';
+import homeIcon from './home.png';
+import rightMove from './righMove.png';
 export {
+    rightMove,
+    homeIcon,
     location,
     star,
     pdShare,

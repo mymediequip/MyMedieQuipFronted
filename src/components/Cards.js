@@ -39,8 +39,8 @@ export const NewProductsCard = (props) => {
   const navigate=useNavigate();
   const productClick = () => {
       navigate("/products/xray-machine/")
+      window.scrollTo(0,0);
   };
-
   return (
     <div className={styles.cardContainer} onClick={productClick}>
       <div className={styles.cardContent}>

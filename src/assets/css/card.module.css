@@ -1,9 +1,10 @@
 .new_prod_container h2{
-    margin: 20px 0px 20px 50px;
+    margin: 20px 0px 20px 0px;
     color: #161616;
 }
 .new_prod_container{
-    margin-bottom: 21px;
+    margin: 50px auto 55px auto;
+    width: 90vw;
 }
 .product_container{
     display: flex;
@@ -11,16 +12,36 @@
     align-items: center;
     overflow-x: auto;
 }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.product_container::-webkit-scrollbar {
+    display: none;
+}
+  
+/* Hide scrollbar for IE, Edge and Firefox */
+.product_container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
 .cardContainer{
-    margin: 10px 10px;
+    /* margin: 10px 10px; */
     border: 1px solid #9E9F9C;
     border-radius: 8px;
-    width: 236px;
+    width: 254px;
     padding: 12px;
     font-weight: 100;
     cursor: pointer;
 }
-.arrowImg{
+.arrowImgPrev{
+    position: absolute;
+    left: 0vw;
+    height: 60px;
+    cursor: pointer;
+}
+.arrowImgNext{
+    position: absolute;
+    right: 0vw;
+    cursor: pointer;
     height: 60px;
 }
 .productimg{
@@ -85,7 +106,7 @@
     flex-direction: column;
     position: relative;   
     top: -188px;
-    left: 141px;
+    left: 150px;
 }
 
 .productImage{
@@ -117,7 +138,7 @@
     gap: 4px;
     text-align: center;
     width: 32vh;
-    margin: 20px;
+    margin: 10px;
 }
 .expTitle{
     color: #313130;
@@ -153,7 +174,7 @@
 /* CLIENT REVIEW */
 .testMaincCont{
     background-color: #F7F7F7;
-    /* width: 100%; */
+    /* width: 90vw; */
     padding: 40px;
 }
 .testContainer{
@@ -164,7 +185,7 @@
     gap: 10px   ;
     align-items: center;
     text-align: center;
-    hadow: rgba(100, 111, 109, 0.2) 0px 7px 29px 0px;
+    box-shadow: rgba(100, 111, 109, 0.2) 0px 7px 29px 0px;
     margin: 10px;
     width: 270px;
     height: 350px;
@@ -188,6 +209,7 @@
 /* SWIPE REVIEW CONTAINER */
 .reviewCont{
     display: flex;
+    width: 90vw;
     justify-content: space-between;
     align-items: center;
     padding: 20px 0px;
@@ -197,7 +219,7 @@
     width: 7vh;
 }
 .cardContent{
-    width: 230px;
+    width: 254px;
 }
 
 /* client card */

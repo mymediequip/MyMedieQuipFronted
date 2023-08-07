@@ -34,7 +34,9 @@ export const Navigation=()=>{
                     <Humberger/>
                 </div>
             </header>
+            <hr className={styles.nav_line}/>
             <Nav2/>
+            <hr className={styles.nav_line}/>
         </React.Fragment>
     );
 };
@@ -119,7 +121,7 @@ const Explore=()=>{
                 isOpen?<div className={styles.exploreLinks}>
                 {
                 exploreLinks.map((values,index)=>{
-                    return <NavLink to="/">{values.title}</NavLink>
+                    return <NavLink to="/" onClick={handleClick}>{values.title}</NavLink>
                 })
                 }
                 </div>:""

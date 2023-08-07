@@ -16,14 +16,15 @@ export const NewProducts=(props)=>{
         <div className={styles.new_prod_container}>
             <h2>{props.title}</h2>
             <div className={styles.product_container}>
-            <img src={prev_arrow} alt='prev' className={styles.arrowImg}/>
-            {
-                cardData.map((values,index)=>{
-                    return <NewProductsCard isNew={props.isnew} key={index} data={values}/>
-                })
-            }
-            <img src={next_arrow} alt='next' className={styles.arrowImg}/>
+                <img src={prev_arrow} alt='prev' className={styles.arrowImgPrev}/>
+                {
+                    cardData.map((values,index)=>{
+                        return <NewProductsCard isNew={props.isnew} key={index} data={values}/>
+                    })
+                }
+                <img src={next_arrow} alt='next' className={styles.arrowImgNext}/>
             </div>
+
         </div>
     );
 }

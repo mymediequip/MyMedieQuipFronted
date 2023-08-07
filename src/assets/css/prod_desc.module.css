@@ -8,6 +8,19 @@
 .prod_imgs{
     width: 300px;
 }
+.prod_path img{
+    width: 18px;
+    margin: 5px;
+}
+.prod_path{
+    display: flex;
+    align-items: center;
+    margin: 20px 0px 20px 0px;
+}
+.prod_path a{
+    font-size: 12px;
+    color: #5D5D5D;
+}
 .prodBigImg{
     background-size: contain;
     background-repeat: no-repeat;
@@ -77,6 +90,12 @@
     margin: 0px auto 40px auto;
     font-size: 15px;
 }
+.pd_info_links a{
+    /* color: #4F4F4F; */
+    color: #019C89;
+    border-bottom: 2px solid #019C89;
+    padding-bottom: 5px;
+}
 .pd_info{
     margin-top: 70px;
 }
@@ -84,6 +103,98 @@
     display: flex;
     justify-content: center;
     margin: 15px 0px 30px 0px;
+}
+/* Products Meta Data*/
+.ptitle {
+    color: #2A2A29;
+    margin-bottom: 23px;
+    font-weight: 500;
+    /* font-size: 12px; */
+}
+.horiz {
+    background-color: #DBDBDB;
+}
+.data {
+    color: #444444;
+    font-size: 12px;
+    font-family: inherit;
+    padding: 0px 80px 0px 26px;
+    height: 40px;
+    border-bottom: 1px solid #DBDBDB;
+    background-color: aliceblue;
+    font-weight:lighter;
+}
+.prodMetaContainer{
+    width: 100%;
+}
+
+/* Product Review */
+.prod_reive_continer h4{
+    text-align: center;
+    color: #474847;
+    margin-bottom: 40px;
+}
+.reviewParentCont{
+    width: 70%;
+    /* background-color: cadetblue; */
+    margin: 10px auto 10px auto;
+    padding: 10px;
+}
+.allReviewCont{
+    display: flex;
+    gap: 30px;
+
+}
+.userRevDetails{
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 10px;
+    padding: 22px;
+    padding-bottom: 25px;
+}
+.nameRating{
+    display: flex;
+    justify-content: space-between;
+}
+.dateName{
+    display: flex;
+    gap: 22px;
+    align-items: center;
+}
+.reviewDesc{
+    margin-top: 14px;
+    text-align: justify;
+}
+
+.userPic{
+    width: 85px;
+}
+
+.reviewUserName{
+    color: #474847;
+    font-weight: 640;
+    font-size: 15px;
+}
+.reviewUserDate{
+    color: #777777;
+    font-size: 12px;
+    font-weight: 600
+}
+.reviewDesc{
+    color: #6D6D6D;
+    font-size: 13px;
+}
+.userRating{
+    display: flex;
+    gap: 5px;
+    width: 14px;
+    height: 14px;
+    align-items: center;
+    justify-content: right;
+}
+.finalRating{
+    font-size: 14px;
+    text-decoration: underline;
+    color: #777777;
 }
 
 

@@ -37,8 +37,8 @@
 .expertbox{
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
-    width: 80%;
+    justify-content: space-between;
+    width: 90vw;
     margin: auto;
 }
 .experties_container{

@@ -4,7 +4,7 @@ import { HomeLayout } from './layouts/HomeLayout';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { ContentConatiner } from './components/ContentContainer';
 import { MyProfile } from './pages/ProfilePage';
-import { ProductDescription } from './pages/ProductDesc';
+import { ProductDescription,ProductImgVideo,ProductMetaData,ProductReview} from './pages/ProductDesc';
 import { 
   LoginRegister,
   OtpVervicatonForm,
@@ -33,7 +33,11 @@ export const Routers=()=>{
           </Route>
 
           {/* ProductDescription */}
-          <Route path='products/:proddetails' element={<ProductDescription/>}/>
+          <Route path='products/:proddetails' element={<ProductDescription/>}>
+            <Route index element={<ProductImgVideo/>}/>
+            <Route path='info' element={<ProductMetaData/>}/>
+            <Route path='review' element={<ProductReview/>}/>
+          </Route>
 
         </Route>
       </Routes>
