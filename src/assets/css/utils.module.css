@@ -1,0 +1,28 @@
+/* get started popup */
+.getStartContainer{
+    position:fixed;
+    top: 190px;
+    left: 35vw;
+    width: 30vw;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    height: 450px;
+}
+.getStartTop{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 30px 0px 30px;
+    color: #131313;
+}
+.getStartTop i{
+    font-weight: bold;
+    cursor: pointer;
+}
+.getStartInd{
+    text-align: center;
+    padding: 0px 10px 0px 10px;
+    margin-bottom: 30px;
+    font-size: 14px;
+    color: #747678;
+}

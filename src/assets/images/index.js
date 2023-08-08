@@ -42,7 +42,11 @@ import star from './star.png';
 import location from './location.png';
 import homeIcon from './home.png';
 import rightMove from './righMove.png';
+import relatedImg from './relatedCardImg.png';
+import unfilStar from './unfillStar.png';
 export {
+    unfilStar,
+    relatedImg,
     rightMove,
     homeIcon,
     location,

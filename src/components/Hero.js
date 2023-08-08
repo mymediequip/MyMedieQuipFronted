@@ -19,7 +19,7 @@ export const Hero=(props)=>{
         backgroundPosition:"center"
     }
     return(
-        <React.Fragment>
+        <div id="heroBlur">
             <div style={heroStyle} className={styles.heroContainer}>
                 {props.specs && <Catogories/>}
                 <div className={styles.heroContent}>
@@ -29,7 +29,7 @@ export const Hero=(props)=>{
                     <NavLink to="/" className={styles.postAdvt}>Post Your Advertisement</NavLink>
                 </div>
             </div>
-        </React.Fragment>
+        </div>
     );
 };
 

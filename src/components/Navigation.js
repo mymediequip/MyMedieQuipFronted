@@ -15,7 +15,7 @@ import {
 export const Navigation=()=>{
     const isLogin=useSelector((state)=>state.auth.isLogin);
     return(
-        <React.Fragment>
+        <div id="navigationBlur">
             <header className={styles.headContainer}>
                 <NavLink to="/">
                 <img className={styles.logo} src={process.env.PUBLIC_URL+"/logo.png"} alt={companyName}/>
@@ -37,7 +37,7 @@ export const Navigation=()=>{
             <hr className={styles.nav_line}/>
             <Nav2/>
             <hr className={styles.nav_line}/>
-        </React.Fragment>
+        </div>
     );
 };
 

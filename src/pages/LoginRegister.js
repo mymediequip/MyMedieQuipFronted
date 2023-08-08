@@ -30,7 +30,7 @@ export const LoginRegister=()=>{
     );
 };
 
-const FormContainer=()=>{
+export const FormContainer=()=>{
     return(
         <div className={styles.FormContainer}>
             <div className={styles.formHead}>
@@ -72,7 +72,7 @@ export const Signup=()=>{
     );
 };
 
-export const Login=()=>{
+export const Login=(props)=>{
     const [isPhone,setIsphone]=useState(true);
     const navigate=useNavigate();
     const activeStyle={
@@ -81,6 +81,11 @@ export const Login=()=>{
     }
     const handleLoginSubmition=(event)=>{
         event.preventDefault();
+        if(props.setOtpForm){
+            props.setOtpForm(true);
+            return;
+        }
+        
         if(isPhone){
             navigate("/user/verifyotp/")
         }

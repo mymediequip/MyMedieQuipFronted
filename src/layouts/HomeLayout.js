@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 export const HomeLayout=()=>{
     return(
         <React.Fragment>
-            <Navigation/>
+            <Navigation />
             <Outlet/>
             <Footer/>   
         </React.Fragment>

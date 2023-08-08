@@ -1,7 +1,10 @@
 import React from 'react';
 import { DashboardAdvt } from '../components/Advt';
+import { NavLink, Outlet } from 'react-router-dom';
 import styles from '../assets/css/prod_desc.module.css';
+import { RelatedProdCard } from '../components/Cards';
 import {
+    unfilStar,
     rightMove,
     homeIcon,
     pngwing,
@@ -13,7 +16,6 @@ import {
     video_Advt,
     testimage2,
 } from '../assets/images/index';
-import { NavLink, Outlet } from 'react-router-dom';
 
 export const ProductDescription=()=>{
     return(
@@ -21,6 +23,7 @@ export const ProductDescription=()=>{
             <DashboardAdvt/>
             <ProductData/>
             <ProductInfo/>
+            <RelatedProd/>
         </div>
     );
 }; 
@@ -149,14 +152,17 @@ export const ProductMetaData=()=>{
 export const ProductReview=()=>{
     const reviewData=new Array(4).fill(7);
     return(
-        <div className={styles.prod_reive_continer}>
-            <h4>4 RIVIEWS FOR VARIABLE PRODUCT</h4>
-            {
-                reviewData.map((values,index)=>{
-                    return <ProductReviewCard key={index}/>
-                })
-            }
-        </div>
+        <React.Fragment>
+            <div className={styles.prod_reive_continer}>
+                <h4>4 RIVIEWS FOR VARIABLE PRODUCT</h4>
+                {
+                    reviewData.map((values,index)=>{
+                        return <ProductReviewCard key={index}/>
+                    })
+                }
+            </div>
+            <ReviewForm/>
+        </React.Fragment>
     );
 }
 
@@ -194,6 +200,116 @@ export const ProductReviewCard=()=>{
     );
 };
 
+const RelatedProd=()=>{
+    return (
+      <React.Fragment>
+        <div className={styles.hzline}>
+          <hr className={styles.line1} />
+          <h3 className={styles.relprod}>RELATED PRODUCTS</h3>
+          <hr className={styles.line2} />
+        </div>
+        <div className={styles.rowws}>
+            <img src={swipetestleft} alt='...' className={styles.rlatedProdPrev}/>
+            <RelatedProdCard/>
+            <RelatedProdCard/>
+            <RelatedProdCard/>
+            <RelatedProdCard/>
+            <img src={nextArow} className={styles.rlatedProdNext} alt='...'/>
+        </div>
+      </React.Fragment>
+    );
+};
+
+const ReviewForm=()=>{
+    return (
+      <div>
+        <div className={styles.reviewFormCont}>
+          <h2 className={styles.ratingHeading}>ADD YOUR REVIEW HERE</h2>
+
+          <div className={styles.giveRatingCont}>
+            <p className={styles.onlyStarCol}>STAR RATING</p>
+            <div className={styles.giveRatingImg}>
+              <img
+                className={styles.ratingStar}
+                src={unfilStar}
+                alt=""
+              />
+              <img
+                className={styles.ratingStar}
+                src={unfilStar}
+                alt=""
+              />
+              <img
+                className={styles.ratingStar}
+                src={unfilStar}
+                alt=""
+              />
+              <img
+                className={styles.ratingStar}
+                src={unfilStar}
+                alt=""
+              />
+              <img
+                className={styles.ratingStar}
+                src={unfilStar}
+                alt=""
+              />
+            </div>
+          </div>
+
+          <form action="#" method="post" />
+          <div
+            className={
+              styles.form_group +
+              " " +
+              styles.forOneLine +
+              " " +
+              styles.rateFormCol
+            }
+          >
+            <div className={styles.rateFormName}>
+              <label for="name">NAME</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your name"
+                required
+              />
+            </div>
+            <div className={styles.form_group + " " + styles.rateFormName}>
+              <label for="email">EMAIL ID</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email id"
+                required
+              />
+            </div>
+          </div>
+
+          <div className={styles.form_group + " " + styles.rateFormCol}>
+            <label for="review">REVIEW</label>
+            <textarea
+              className={styles.DescPlaceholder}
+              id={styles.review}
+              name="review"
+              rows="4"
+              placeholder="Enter your review in this box"
+              required
+            ></textarea>
+          </div>
+          <input
+            className={styles.reviewSubmit}
+            type="submit"
+            value="Submit Response"
+          />
+          <form />
+        </div>
+      </div>
+    );
+}
 // non component function
 
 const ActivateLinks=({isActive})=>{

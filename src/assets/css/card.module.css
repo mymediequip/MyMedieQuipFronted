@@ -119,6 +119,44 @@
     height: 22px;
 }
 
+/* Related Product Card */
+
+
+.column {
+    width: 260px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 6px 6px 6px 6px;
+    margin:5px
+}
+.images 
+{
+    border-radius: 6px 6px 0px 0px;
+}
+.prodtitle 
+{
+    text-align: center;
+    color: #000000;
+}
+.contain
+ {
+    box-sizing: content-box;
+}
+.pprice
+ {
+    text-align: center;
+    color: #000000;
+    margin: 12px 0px 12px 0px;
+}
+.containDis
+ {
+    color: #8A8A8A;
+    font-size: 12px;
+    text-align: center;
+    margin: 10px 0px 10px 0px;
+    padding: 0px 10px 0px 10px;
+}
+
 /* EXPERTISE HEADING */
 .expertHead{
     display: flex;
