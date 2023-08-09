@@ -6,6 +6,7 @@
     height: 500px;
     display: flex;
     align-items: center;
+    margin-top: -1px;
 }
 .heroHead{
     color: white;
@@ -165,9 +166,7 @@
         display: flex;
     }
     .heroContainer{
-        width: 90vw;
-        height: 279px;
-        margin: auto;
+        display: none;
     }
     
 }

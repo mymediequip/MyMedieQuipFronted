@@ -46,7 +46,7 @@
 }
 
 /* Footer Design  */
-footer{
+/* footer{
     padding: 3rem 2rem;
     display: flex;
     gap: 5.9rem;
@@ -81,8 +81,6 @@ footer{
 .row{
     display: flex;
     flex-wrap: wrap;
-    /* align-items: center; */
-    /* justify-content: center; */
     gap: 5.9rem;
     letter-spacing: 2px;
 }
@@ -120,7 +118,66 @@ footer{
     justify-content: center;
     align-items: center;
     letter-spacing: 2px;
+} */
+/*Fotter 2*/
+
+footer {
+    background-color: #019C89;
+    height: auto;
+    width: 100%;
+    padding-top: 40px;
+    color: white;
+    margin-top: 40px;
 }
+.ftext {
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: medium;
+    margin: auto;
+}
+.social {
+    width: fit-content;
+    margin: 30px auto 10px auto;
+    display: flex;
+    align-items: center;
+}
+.socialAnc{
+    background-color: #019C89; 
+    margin: 10px;
+}
+
+.socMP {
+    width: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 30px auto 30px auto;
+    justify-content: center;
+}
+.socPhon ,.socMed {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    gap: 5px;
+    margin: 20px;
+    background-color: #019C89;
+}
+.bottom {
+    background-color: #74B4AC;
+    padding: 12px;
+    margin-top: 15px;
+    text-align: center;
+}
+.fvalue {
+    font-weight: 400;
+    text-decoration: none;
+    color: white;
+    background-color: #019C89;
+    margin: 10px;
+}
+
 @media(max-width:1200px){
     .footContainer{
         background-color:#019C89;

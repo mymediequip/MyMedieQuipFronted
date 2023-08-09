@@ -10,8 +10,7 @@ import { ClientBanner } from './OurClients';
 export const ContentConatiner=(props)=>{
     return(
         <React.Fragment>
-            <MobileHero/>
-            <MobileCatogories/>
+            {/* <MobileCatogories/> */}
             <Hero specs={props.specs}/>
             <NewProducts isnew={true} title="New Products"/>
             <Advt/>
@@ -20,7 +19,7 @@ export const ContentConatiner=(props)=>{
             <OurExperties/>
             <OurClients/>
             <Advt2/>
-            <ClientBanner/>
+            {/* <ClientBanner/> */}
         </React.Fragment>
     );
 }

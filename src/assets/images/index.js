@@ -44,7 +44,11 @@ import homeIcon from './home.png';
 import rightMove from './righMove.png';
 import relatedImg from './relatedCardImg.png';
 import unfilStar from './unfillStar.png';
+import mailIcon from './mail.png';
+import phoneIcon from './phone-call.png';
 export {
+    mailIcon,
+    phoneIcon,
     unfilStar,
     relatedImg,
     rightMove,

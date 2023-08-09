@@ -4,6 +4,7 @@
 }
 .prod_data{
     display: flex;
+    /* flex-wrap: wrap; */
 }
 .prod_imgs{
     width: 300px;

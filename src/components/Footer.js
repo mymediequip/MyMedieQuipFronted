@@ -1,16 +1,18 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-
+import { getDateTime } from '../utils/purefun';
 import styles from '../assets/css/content.module.css';
 import {
     twitter,
     fb,
     instagram,
-    linkdin
+    linkdin,
+    mailIcon,
+    phoneIcon,
 } from '../assets/images/index';
 
 
-
+// Footer 1
 export const Footer=()=>{
     return(
         <div>
@@ -70,5 +72,56 @@ export const Footer=()=>{
                 @All rights reserved to My Medie Quip.in
         </div>
       </div>
+    );
+};
+
+//Footer 2 
+export const Footer2=()=>{
+    const footerLinks=[
+        {title:"STATISTICS",path:"/"},
+        {title:"USER AGREEMENT",path:"/"},
+        {title:"FAQ's",path:"/"},
+        {title:"SITEMAP",path:"/"},
+        {title:"CONTACTS",path:"/"},
+        {title:"NEWS",path:"/"},
+        {title:"BECOME PARTNER",path:"/"},
+    ];
+    return (
+      <footer>
+        <div className={styles.ftext}>
+          {
+            footerLinks.map((values,index)=>{
+                return <NavLink to={values.path} key={index} className={styles.fvalue}>{values.title}</NavLink>;
+            })
+          }
+        </div>
+        <div className={styles.social}>
+          <a className={styles.socialAnc} href="/">
+            <img src={twitter} alt="s" />{" "}
+          </a>
+          <a className={styles.socialAnc} href="/">
+            <img src={linkdin} alt="s" />{" "}
+          </a>
+          <a className={styles.socialAnc} href="/">
+            <img src={instagram} alt="s" />{" "}
+          </a>
+          <a className={styles.socialAnc} href="/">
+            <img src={fb} alt="s" />{" "}
+          </a>
+        </div>
+        <div className={styles.socMP}>
+          <a className={styles.socMed} href="/">
+            <img src={mailIcon} alt="s" />
+            MedieQuip@gmail.com{" "}
+          </a>
+          <a className={styles.socPhon} href="/">
+            <img src={phoneIcon} alt="s" />
+            265464421132{" "}
+          </a>
+        </div>
+        <div className={styles.bottom}>
+          <p>@Medie Quip 2023-{getDateTime().year}</p>
+        </div>
+      </footer>
     );
 };
