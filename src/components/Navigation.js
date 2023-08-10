@@ -9,7 +9,10 @@ import {
     searchIcon,
     profileIcon,
     actimg,
-    testimage2
+    testimage2,
+    arrLeft,
+    Jaipur,
+    location
 } from '../assets/images/index';
 
 export const Navigation=()=>{
@@ -67,11 +70,78 @@ const Nav2=()=>{
 
 
 const Location=(props)=>{
-
+    const [isOpen,setIsOpen]=useState(false);
+    const handleLocation=(event)=>{
+        event.preventDefault();
+        setIsOpen(!isOpen);
+    }
     return(
-        <div className={styles.location} id="loc1">
-            <span>India</span>
-            <img src={downIcon} alt='>'/>
+        <div>
+            <div className={styles.location} id="loc1" onClick={handleLocation}>
+                <span>India</span>
+                <img src={downIcon} alt='>'/>
+            </div>
+            {
+                isOpen?<LocationDropDown handleLocation={handleLocation}/>:""
+            }
+        </div>
+    );
+};
+
+const LocationDropDown=(props)=>{
+    const locationCity=[
+        {name:"Delhi",bg:Jaipur},
+        {name:"Mumbai",bg:Jaipur},
+        {name:"Bengaluru",bg:Jaipur},
+        {name:"Pune",bg:Jaipur},
+        {name:"Gujarat",bg:Jaipur},
+        {name:"Chennai",bg:Jaipur},
+        {name:"Ahmedabad",bg:Jaipur},
+        {name:"Kolkata",bg:Jaipur},
+        {name:"Bihar",bg:Jaipur}
+    ];
+    return (
+        <div className={styles.locationCont}>
+          <div className={styles.selectLocHead} >
+            <a href="" onClick={props.handleLocation}>
+              <img
+                className={styles.leftArrow}
+                src={arrLeft}
+                alt="..."
+              />
+            </a>
+            <p>Please Select your Location</p>
+          </div>
+
+          <div className={styles.inputCity}>
+            <input type="text" placeholder="Enter Your City" />
+          </div>
+
+          <div className={styles.detectLoc}>
+            <a href="">
+              <img
+                className={styles.locationPic}
+                src={location}
+                alt="..."
+              />
+            </a>
+            <p>Detect my location</p>
+          </div>
+          <div className={styles.pupularCity}>
+            <p>Popular Cities</p>
+          </div>
+          <div className={styles.allCity}>
+            {
+                locationCity.map((value,index)=>{
+                    return (
+                      <NavLink to='/' key={index}>
+                        <img className={styles.cityImage} src={value.bg} alt="..." />
+                        <p className={styles.cityPicName}>{value.name}</p>
+                      </NavLink>
+                    );
+                })
+            }
+          </div>
         </div>
     );
 };

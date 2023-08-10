@@ -8,6 +8,7 @@ export const GetStarted=(props)=>{
     const [otpForm,setOtpForm]=useState(false);
     const handleClose=()=>{
         props.setGetStart(false);
+        props.setBlur(false);
         document.getElementById("heroBlur").style.filter="none";
     };
     return(
@@ -21,5 +22,11 @@ export const GetStarted=(props)=>{
                 otpForm?<OtpVervicatonForm/>:<Login setOtpForm={setOtpForm}/>
             }
         </div>
+    );
+};
+
+export const BackgroundBlur=()=>{
+    return(
+        <div className={styles.bgBlur}></div>
     );
 };

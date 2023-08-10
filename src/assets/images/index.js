@@ -46,7 +46,11 @@ import relatedImg from './relatedCardImg.png';
 import unfilStar from './unfillStar.png';
 import mailIcon from './mail.png';
 import phoneIcon from './phone-call.png';
+import arrLeft from './arrowleft.png';
+import Jaipur from './jaipur.png';
 export {
+    arrLeft,
+    Jaipur,
     mailIcon,
     phoneIcon,
     unfilStar,

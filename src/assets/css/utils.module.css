@@ -2,11 +2,15 @@
 .getStartContainer{
     position:fixed;
     top: 190px;
-    left: 35vw;
-    width: 30vw;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 400px;
     background-color: #FFFFFF;
     border-radius: 8px;
     height: 450px;
+    z-index: 2;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 .getStartTop{
     display: flex;
@@ -25,4 +29,27 @@
     margin-bottom: 30px;
     font-size: 14px;
     color: #747678;
+}
+/* Background Blur */
+.bgBlur{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    background-color: #0e0e0ed1;
+    z-index: 1;
+}
+
+@media(max-width:1200px){
+    .getStartContainer{
+        top: 100px;
+    }
+}
+
+@media(max-width:435px){
+    .getStartContainer{
+        width: 92vw;
+        top: 100px;
+    }
 }

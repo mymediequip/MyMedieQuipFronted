@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../assets/css/card.module.css';
-import { GetStarted } from '../utils/Popups';
+import { GetStarted ,BackgroundBlur } from '../utils/Popups';
 import {
     relatedImg,
     pngwing,
@@ -40,6 +40,7 @@ export const ExpertCard=()=>{
 
 export const NewProductsCard = (props) => {
   const [getStart,setGetStart]=useState(false);
+  const [isBlur,setBlur]=useState(false);
   const navigate=useNavigate();
   const productClick = () => {
       navigate("/products/xray-machine/")
@@ -48,7 +49,7 @@ export const NewProductsCard = (props) => {
 
   const sellarClick=(event)=>{
     event.stopPropagation();
-    document.getElementById("heroBlur").style.filter="brightness(0.5)"; 
+    setBlur(true); 
     window.scrollTo(0,0);
     setGetStart(!getStart);
   };
@@ -99,7 +100,8 @@ export const NewProductsCard = (props) => {
           </div>
         </div>
       </div>
-      {getStart ? <GetStarted setGetStart={setGetStart} /> : ""}
+      {getStart ? <GetStarted setGetStart={setGetStart} setBlur={setBlur}/> : ""}
+      {isBlur?<BackgroundBlur/>:""}
     </React.Fragment>
   );
 }; 

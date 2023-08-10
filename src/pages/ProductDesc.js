@@ -102,8 +102,8 @@ const ProductInfo=()=>{
     return(
         <div className={styles.pd_info}>
             <div className={styles.pd_info_links}>
-                <NavLink style={ActivateLinks} to="/products/xray-machine/info/" >PRODUCT INFORMATION</NavLink>
-                <NavLink style={ActivateLinks} to="/products/xray-machine/" >PRODUCT IMAGES/VIDEOS</NavLink>
+                <NavLink style={ActivateLinks} to="/products/xray-machine/info/" >DETAILS</NavLink>
+                <NavLink style={ActivateLinks} to="/products/xray-machine/" >PHOTOS</NavLink>
                 <NavLink style={ActivateLinks} to="/products/xray-machine/review/" >REVIEWS</NavLink>
             </div>
             <Outlet/>
@@ -155,11 +155,13 @@ export const ProductReview=()=>{
         <React.Fragment>
             <div className={styles.prod_reive_continer}>
                 <h4>4 RIVIEWS FOR VARIABLE PRODUCT</h4>
-                {
-                    reviewData.map((values,index)=>{
-                        return <ProductReviewCard key={index}/>
-                    })
-                }
+                <div className={styles.allReeviewCards}>
+                    {
+                        reviewData.map((values,index)=>{
+                            return <ProductReviewCard key={index}/>
+                        })
+                    }
+                </div>
             </div>
             <ReviewForm/>
         </React.Fragment>
@@ -208,12 +210,14 @@ const RelatedProd=()=>{
           <h3 className={styles.relprod}>RELATED PRODUCTS</h3>
           <hr className={styles.line2} />
         </div>
-        <div className={styles.rowws}>
+        <div style={{position:"relative"}}>
             <img src={swipetestleft} alt='...' className={styles.rlatedProdPrev}/>
-            <RelatedProdCard/>
-            <RelatedProdCard/>
-            <RelatedProdCard/>
-            <RelatedProdCard/>
+            <div className={styles.rowws}>
+                <RelatedProdCard/>
+                <RelatedProdCard/>
+                <RelatedProdCard/>
+                <RelatedProdCard/>
+            </div>
             <img src={nextArow} className={styles.rlatedProdNext} alt='...'/>
         </div>
       </React.Fragment>

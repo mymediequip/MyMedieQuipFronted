@@ -86,8 +86,7 @@
 /* product info */
 .pd_info_links{
     display: flex;
-    justify-content: space-around;
-    width: 52%;
+    width: fit-content;
     margin: 0px auto 40px auto;
     font-size: 15px;
 }
@@ -96,6 +95,7 @@
     color: #019C89;
     border-bottom: 2px solid #019C89;
     padding-bottom: 5px;
+    margin: 10px;
 }
 .pd_info{
     margin-top: 70px;
@@ -104,6 +104,10 @@
     display: flex;
     justify-content: center;
     margin: 15px 0px 30px 0px;
+    overflow-x: auto;
+}
+.prodsImg img{
+    margin: 4px;
 }
 /* Products Meta Data*/
 .ptitle {
@@ -116,14 +120,15 @@
     background-color: #DBDBDB;
 }
 .data {
-    color: #444444;
+    /* color: #444444; */
+    color: black;
     font-size: 12px;
     font-family: inherit;
-    padding: 0px 80px 0px 26px;
+    padding: 0px 30px 0px 26px;
     height: 40px;
     border-bottom: 1px solid #DBDBDB;
     background-color: aliceblue;
-    font-weight:lighter;
+    font-weight:bold;
 }
 .prodMetaContainer{
     width: 100%;
@@ -143,7 +148,6 @@
 }
 .allReviewCont{
     display: flex;
-    gap: 30px;
 
 }
 .userRevDetails{
@@ -155,11 +159,13 @@
 .nameRating{
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 .dateName{
     display: flex;
     gap: 22px;
     align-items: center;
+    margin:4px;
 }
 .reviewDesc{
     margin-top: 14px;
@@ -168,6 +174,7 @@
 
 .userPic{
     width: 85px;
+    margin-right: 30px;
 }
 
 .reviewUserName{
@@ -186,11 +193,13 @@
 }
 .userRating{
     display: flex;
-    gap: 5px;
-    width: 14px;
     height: 14px;
     align-items: center;
     justify-content: right;
+    margin: 4px;
+}
+.userRating img{
+    margin-right: 2px;
 }
 .finalRating{
     font-size: 14px;
@@ -200,14 +209,15 @@
 /*Related Products*/
 .hzline {
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     font-size: 12px;
-    margin: 70px 0px 70px 0px ;
+    margin: 70px 0px 30px 0px ;
 }
 .relprod{
     padding: 0px 12px;
     color: #343434;
+    text-align: center;
 }
 .line1 
 {
@@ -221,7 +231,7 @@
 }
 .rowws 
 {
-    /* margin: auto; */
+    overflow-x: auto;
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -231,12 +241,14 @@
     height: 25px;
     position: absolute;
     left: -8px;
+    z-index: 1;
     top: 45%;
 }
 .rlatedProdNext{
     height: 25px;
     position: absolute;
     right: -8px;
+    z-index: 1;
     top: 45%;
 }
 
@@ -252,7 +264,8 @@
 
 .giveRatingCont {
     display: flex;
-    margin-bottom: 4vh;
+    margin-bottom: 40px;
+    align-items: center;
 }
 
 .ratingHeading {
@@ -273,6 +286,9 @@
     gap: 10px;
     margin-left: 5vh;
 }
+.giveRatingImg img{
+    height: 20px;
+}
 
 .form_group input,
 #review {
@@ -281,14 +297,19 @@
 }
 
 .form_group {
+    /* display: flex; */
+    width: 100%;
+    flex-wrap: wrap;
     margin-bottom: 12px;
-    gap: 60px;
+    gap: 26px;
 }
-
+.rateFormName{
+    width: 100%;
+}
 .rateFormName input {
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     padding: 15px;
-    width: 26vw;
+    width: 100%;
     border-radius: 4px;
     margin-top: 10px;
     border: none;
@@ -322,5 +343,55 @@
     color: #555751;
     font-weight: 500;
     font-size: 14px;
+}
+
+@media(max-width:848px){
+    .userPic{
+        display: none;
+    }
+    .reviewParentCont{
+        width: 80vw;
+        margin: auto;
+    }
+}
+
+@media(max-width:700px){
+    .rlatedProdPrev,.rlatedProdNext,.line1,.line2{
+        display: none;
+    }
+    .prod_data{
+        flex-wrap: wrap;
+    }
+    .p_data{
+        margin: 20px 0px 0px 0px;
+    }
+}
+@media(max-width:400px){
+    .allReeviewCards{
+        display: flex;
+        overflow-x: auto;
+    }
+    .reviewDesc{
+        width: 220px;
+    }
+    .reviewFormCont{
+        width: 100%;
+        margin: auto;
+    }
+    .rateFormName input,.DescPlaceholder{
+        width: 93%;
+    }
+
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.rowws::-webkit-scrollbar,.prodsImg::-webkit-scrollbar{
+    display: none;
+}
+  
+/* Hide scrollbar for IE, Edge and Firefox */
+.rowws,.prodsImg{
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 
