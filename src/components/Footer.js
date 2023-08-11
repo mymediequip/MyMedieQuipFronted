@@ -125,3 +125,33 @@ export const Footer2=()=>{
       </footer>
     );
 };
+
+export const MobileBottomNavbar=()=>{
+  return(
+    <div className={styles.mobileBottonNavbarr}>
+      <NavLink style={activateLink} to="/">
+        <i class="bi bi-house"></i>   
+        <span>Home</span>
+      </NavLink>
+      <NavLink to="/">
+        <i class="bi bi-cart-plus"></i>   
+        <span>Buy</span>
+      </NavLink>
+      <NavLink to="/">
+        <i class="bi bi-box2"></i>
+        <span>Sell</span>
+      </NavLink>
+      <NavLink to="/user/login/">
+        <i class="bi bi-person"></i>
+        <span>Profile</span>
+      </NavLink>
+    </div>
+  )
+};
+
+// non components functions
+const activateLink=({isActive})=>{
+  return {
+      color:isActive?"#019C89":"#81837F"
+  };
+}

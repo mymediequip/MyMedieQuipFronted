@@ -44,6 +44,30 @@
 .experties_container{
     margin-bottom: 50px;
 }
+/* mobile Navbar Footer */
+.mobileBottonNavbarr{
+    display: none;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0vh;
+    width: 100%;
+    background-color: #FFFFFF;
+    padding: 10px 0px 10px 0px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.mobileBottonNavbarr a{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #81837F;
+}
+.mobileBottonNavbarr i{
+    font-size: 20px;
+}
+.mobileBottonNavbarr span{
+    font-size: 11px;
+    margin-top: 4px;
+}
 
 /* Footer Design  */
 /* footer{
@@ -181,6 +205,9 @@ footer {
 @media(max-width:1200px){
     .footContainer{
         background-color:#019C89;
+    }
+    .mobileBottonNavbarr{
+        display: flex;
     }
 }
 @media(max-width:600px){

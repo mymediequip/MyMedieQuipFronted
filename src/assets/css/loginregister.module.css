@@ -30,7 +30,7 @@
     font-size: 25px;
 }
 .FormContainer{
-    width: 32%;
+    width: 400px;
     height: 438px;
     background-color: #FFFFFF;
     border-radius: 10px;
@@ -147,4 +147,22 @@
 .otpVerifyCont p{
     font-size: 13px;
     margin: 20px 0px 20px 0px;
+}
+@media(max-width:900px){
+    .lrContent{
+        display: none;
+    }
+    .userContainer{
+        justify-content: center;
+    }
+    .FormContainer{
+        position: absolute;
+        top: 18vh;
+    }
+}
+@media(max-width:430px){
+    
+    .FormContainer{
+        width: 90vw;
+    }
 }
