@@ -124,7 +124,6 @@ export const Login=(props)=>{
     );
 };
 
-
 export const OtpVervicatonForm=()=>{
     const [otp, setOtp] = useState('');
     const [otpTime,setOtpTime]=useState({minute:4,sec:59});
@@ -157,7 +156,7 @@ export const OtpVervicatonForm=()=>{
             //do api callse and verifotp
             
             //after verifying 
-            dispatch(changeLoginStatus())
+            dispatch(changeLoginStatus());
             navigate("/dashboard/");
         }
     });

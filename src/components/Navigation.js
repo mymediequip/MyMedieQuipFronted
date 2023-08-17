@@ -163,7 +163,7 @@ const BuyBtn=()=>{
 
 const SellBtn=()=>{
     return(
-        <NavLink className={styles.SellBtn} to="/">Sell</NavLink>
+        <NavLink className={styles.SellBtn} to="/post/">Sell</NavLink>
     )
 };
 

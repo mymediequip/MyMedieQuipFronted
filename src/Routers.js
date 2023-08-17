@@ -5,6 +5,7 @@ import { DashboardLayout } from './layouts/DashboardLayout';
 import { ContentConatiner } from './components/ContentContainer';
 import { MyProfile } from './pages/ProfilePage';
 import { ProductDescription,ProductImgVideo,ProductMetaData,ProductReview} from './pages/ProductDesc';
+import { SelectAdvtType,PostAdvt ,AdvtMedia} from './pages/PostAdvt';
 import { 
   LoginRegister,
   OtpVervicatonForm,
@@ -37,6 +38,13 @@ export const Routers=()=>{
             <Route index element={<ProductImgVideo/>}/>
             <Route path='info' element={<ProductMetaData/>}/>
             <Route path='review' element={<ProductReview/>}/>
+          </Route>
+
+          {/* post advertisement */}
+
+          <Route path='post' element={<PostAdvt/>}>
+              <Route index element={<SelectAdvtType/>}/>
+              <Route path='media' element={<AdvtMedia/>}/>
           </Route>
 
         </Route>

@@ -1,0 +1,66 @@
+/* Select Advertisement Type*/
+.postContainer{
+    background-color: #FAFAFA;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+}
+.selectAdvtCont{
+    width: 80vw;
+    margin: auto;
+    text-align: center;
+}
+.selectAdvtCont h3{
+    color: #019C89;
+    font-weight: 500;
+    font-size: 25px;
+}
+.slectTypes{
+    margin: 50px 0px 50px 0px;
+}
+.slectTypes span{
+    margin: 10px;
+    padding: 9px 18px 9px 18px;
+    border: 1px solid #DADADA;
+    background-color: #FFFFFF;
+    color: #0B7D6F;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight:500;
+    cursor: pointer;
+}
+
+.advtContinue{
+    background-color: #019C89;
+    color: #FFFFFF;
+    padding: 8px 50px 8px 50px;
+    border-radius: 30px;
+    font-size: 13px;
+    margin: 20px;
+}
+
+/*  Advertisement Media */
+.advtMediaCont{
+    margin: auto;
+}
+.advtMediaCont>div{
+    margin: 20px;
+}
+.advtMediaCont input[type="file"]{
+    display: none;
+}
+.advtImgs img {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+}
+.advtImgs label{
+    cursor: pointer;
+}
+.advtImgs{
+    width: 440px;
+    height: 260px;
+    border: 1px solid #8C8C8C;
+    border-radius: 5px;
+}

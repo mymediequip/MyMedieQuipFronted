@@ -48,7 +48,9 @@ import mailIcon from './mail.png';
 import phoneIcon from './phone-call.png';
 import arrLeft from './arrowleft.png';
 import Jaipur from './jaipur.png';
+import ImageUpload from './ImageUpload.png';
 export {
+    ImageUpload,
     arrLeft,
     Jaipur,
     mailIcon,

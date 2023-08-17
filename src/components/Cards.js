@@ -107,8 +107,13 @@ export const NewProductsCard = (props) => {
 }; 
 
 export const RelatedProdCard=()=>{
+  const navigate=useNavigate();
+  const productClick = () => {
+    navigate("/products/xray-machine/");
+    window.scrollTo(0, 0);
+  };
   return (
-    <div className={styles.column}>
+    <div className={styles.column} onClick={productClick}>
       <div className={styles.imagess}>
         <img
           className={styles.images}
