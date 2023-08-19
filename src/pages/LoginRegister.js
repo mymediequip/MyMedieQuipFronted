@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { NavLink,useNavigate,Outlet} from 'react-router-dom';
+import { NavLink,useNavigate,Outlet, useLocation} from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { changeLoginStatus } from '../app/Slices/AuthSlice';
@@ -14,9 +14,12 @@ import {
     fbllogin,
     googleLogin,
 } from '../assets/images/index';
+import { postData } from '../services';
 
 
 export const LoginRegister=()=>{
+
+
     const Style1={backgroundImage:`url(${loginBg})`};
     return(
         <div style={Style1} className={styles.userContainer} >
@@ -43,11 +46,13 @@ export const FormContainer=()=>{
 };
 
 export const Signup=()=>{
+  
     const navigate=useNavigate();
     const handleSignupSubmition=(event)=>{
         event.preventDefault();
         navigate("/user/verifyotp/")
     };
+
     return(
         <form className={styles.signupForm} onSubmit={handleSignupSubmition}>
             <div>
@@ -74,26 +79,62 @@ export const Signup=()=>{
 
 export const Login=(props)=>{
     const [isPhone,setIsphone]=useState(true);
+    const [phoneError, setPhoneError] = useState('');
+    const [mobile,setMobile]=useState("");
     const navigate=useNavigate();
     const activeStyle={
         backgroundColor:"#019C89",
         color:"#FFFFFF"
     }
-    const handleLoginSubmition=(event)=>{
+
+    const validatePhone = () => {
+        if (!mobile) {
+          setPhoneError('Phone number is required');
+          return false;
+        }else if(mobile.length < 10){
+            setPhoneError('Phone number must be 10 digits');
+          return false;
+        }
+        // Add more validation logic if needed
+        setPhoneError('');
+        return true;
+      };
+
+
+    const handleLoginSubmition= async(event)=>{
         event.preventDefault();
-        if(props.setOtpForm){
-            props.setOtpForm(true);
-            return;
+        if (validatePhone()){
+            const data = {
+                mobile : mobile.length == 12 ? mobile.slice(2,12) : mobile
+                // mobile : "9716924981"
+            }
+            const res =  await postData("users/generateotp/" , data)
+            console.log(res,"res")
+            if(res?.status){
+                navigate("/user/verifyotp/" , {state : {opt : res?.data?.otp , number : mobile.length == 12 ? mobile.slice(2,12) : mobile}})
+            }
         }
-        
-        if(isPhone){
-            navigate("/user/verifyotp/")
-        }
+        // if(validatePhone()){
+        //     if(props.setOtpForm){
+        //         props.setOtpForm(true);
+        //         return;
+        //     }
+        //     if(isPhone){
+        //         navigate("/user/verifyotp/")
+        //     }
+        // }
+       
     }
+
+
+
+   
+
+    
     return(
         <form className={styles.signupForm} onSubmit={handleLoginSubmition}>
             <div className={styles.loginOptions}>
-                <label onClick={()=>{setIsphone(true)}} style={isPhone?activeStyle:{}}>Phone Number</label>
+                <label onClick={()=>{setIsphone(true)}} style={isPhone?activeStyle:{}}>Mobile Number</label>
                 <label onClick={()=>{setIsphone(false)}} style={isPhone?{}:activeStyle}>Email Id</label>
             </div>
             {
@@ -101,9 +142,14 @@ export const Login=(props)=>{
                 <p style={{marginBottom:"8px"}}>MOBILE NO.</p>
                 <PhoneInput 
                 country={'in'} 
-                value="91"
-                inputStyle={{width:"100%",backgroundColor:"#FAFFFE"}}
-                /></div>:
+                value={mobile}
+                inputStyle={{width:"100%",backgroundColor:"#FAFFFE" }}
+                onChange={(phone)=>setMobile(phone)}
+                onBlur={validatePhone}
+                
+                />
+                {phoneError && <div style={{color : 'red'}}>{phoneError}</div>}
+                </div>:
                 <div className={styles.emailLogin}>
                     <p style={{marginBottom:"8px"}}>EMAIL ID</p>
                     <input type='email'/>
@@ -126,7 +172,11 @@ export const Login=(props)=>{
 
 
 export const OtpVervicatonForm=()=>{
-    const [otp, setOtp] = useState('');
+   const location  =  useLocation()
+   const preOtp = location?.state?.otp
+   const preNumber = location?.state?.number
+   console.log(preNumber , preOtp)
+    const [otp, setOtp] = useState("");
     const [otpTime,setOtpTime]=useState({minute:4,sec:59});
     const navigate=useNavigate();
     const dispatch=useDispatch();
@@ -140,27 +190,46 @@ export const OtpVervicatonForm=()=>{
         outline:"1px solid #019C89",
     };
 
+   
     useEffect(()=>{
-        let timeIntervel=setTimeout(()=>{
-            if(otpTime.sec===0){
-                otpTime.minute-=1;
-                otpTime.sec=60;
+        handleOtp()  
+        const interval = setInterval(() => {
+            if (otpTime.minute === 0 && otpTime.sec === 0) {
+              // Timer expired
+              clearInterval(interval);
+              // Handle timer expiration if needed
+            } else {
+              if (otpTime.sec === 0) {
+                setOtpTime(prevTime => ({ minute: prevTime.minute - 1, sec: 59 }));
+              } else {
+                setOtpTime(prevTime => ({ ...prevTime, sec: prevTime.sec - 1 }));
+              }
             }
-            otpTime.sec-=1;
-            setOtpTime({...otpTime})
-        },1000);
-        if(otpTime.minute===0 && otpTime.sec===0){
-            clearTimeout(timeIntervel)
-        };
-        //verifying otp
-        if(otp.length===6){
-            //do api callse and verifotp
-            
-            //after verifying 
+          }, 1000);
+          return () => {
+            clearInterval(interval);
+          };
+    },[otpTime]);
+
+    const handleOtp = async() => {
+        if(otp.length===6 && /^\d+$/.test(otp)){
+            let data = {
+                mobile : preNumber,
+                otp : otp 
+            }
+           const res = await postData("users/verifyotp/",data)
+           console.log(res,"otp")
+           if(res?.status){
             dispatch(changeLoginStatus())
-            navigate("/dashboard/");
+            localStorage.setItem("token" , res?.data.token)
+            setTimeout(()=>{
+                navigate("/dashboard/");
+            },1000)
+           }
         }
-    });
+
+    }
+
 
     return(
         <div className={styles.otpVerifyCont}>

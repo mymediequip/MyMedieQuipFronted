@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { hero } from "../assets/images/index";
 import { Search } from './Navigation'
 import styles from '../assets/css/hero.module.css';
@@ -10,6 +10,7 @@ import {
     m_search,
     downIcon
 } from '../assets/images/index';
+import { postData } from '../services';
 
 export const Hero=(props)=>{
     const heroStyle={
@@ -34,7 +35,21 @@ export const Hero=(props)=>{
 };
 
 const Catogories=()=>{
-    const catogories=Object.keys(catog_data);
+const [categories ,setCategories] =  useState([])
+const handleProductCatLists = async() =>{
+const res = await postData("product/category/menulist/")
+console.log(res)
+setCategories(res?.data)
+} 
+useEffect(()=>{
+    handleProductCatLists()
+},[])
+
+const handleItemClick = equipment => {
+    // Handle the item click here, e.g., update state, show details, etc.
+    console.log('Clicked on:', equipment.name);
+  };
+   
     return(
         <div className={styles.catogories_container}>
             <div className={styles.upper_part}>
@@ -44,8 +59,8 @@ const Catogories=()=>{
             </div> 
             <div className={styles.lower_part}>
                 {
-                    catogories.map((value,index)=>{
-                        return <CatItem key={index} pic={plus_symbol} data={value}/> 
+                    categories?.map((topLevelEquipment,index)=>{
+                        return <CatItem key={topLevelEquipment.id} pic={plus_symbol} equipment={topLevelEquipment} onItemClick={handleItemClick}/> 
                     })
                 }
             </div>
@@ -53,26 +68,25 @@ const Catogories=()=>{
     );
 };
 
-const CatItem=(props)=>{
-    const [specItems,setSpecItems]=useState([]);
-    const [isOpen,setIsOpen]=useState(false);
-    const handleClick=()=>{
-        if(catog_data[props.data]===undefined){
-            return;
-        }
-        setSpecItems(catog_data[props.data]);   
-        setIsOpen(!isOpen);
+const CatItem=({equipment , onItemClick , pic})=>{
+    const [isExpanded, setIsExpanded] = useState(false);
+  const handleNodeClick = () => {
+    if (equipment?.children?.length > 0) {
+      setIsExpanded(!isExpanded);
     }
+    onItemClick(equipment);
+  };
+  
     return(
         <div className={styles.cat_item} >
             <div >
             <div className={styles.cat_inner}>
-                <img src={props.pic} alt='...' onClick={handleClick} className={styles.in_img}/>
-                <span>{props.data}</span>
+                <img src={pic} alt='...' onClick={handleNodeClick} className={styles.in_img}/>
+                <span>{equipment.name}</span>
             </div>
             {
-                isOpen && specItems.map((value,index)=>{
-                    return <CatItem key={index} pic={minus} data={value}/> 
+                isExpanded && equipment?.children?.map((child,index)=>{
+                    return <CatItem key={child.id} pic={child?.children?.length > 0 ? pic : minus} equipment={child} onItemClick={onItemClick}/> 
                 })
             }
             </div>

@@ -16,24 +16,24 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 
-export const ClientCard=()=>{
+export const ClientCard=({clientList})=>{
   return(
-    <div className={styles.testContainer}>
-          <img className={styles.suffixMark}  src={suffix}/>
-          <p className={styles.testCardDesc}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vulputate, Quisque laoreet ultricies sodales. ante quis aliquet lobortis, est est commodo felis,</p>
+    <div className={styles.testContainer} key={clientList?.id}>
+          <img className={styles.suffixMark}  src={  suffix}/>
+          <p className={styles.testCardDesc}>{clientList?.description}</p>
           <img src={line2} alt='...'/>
-          <img className={styles.clientImage} src={testimage2} alt='...'/>
-          <p className={styles.clientName}> Tiya Sharma</p>
+          <img className={styles.clientImage} src={clientList?.image ? `http://13.53.198.145:8000${clientList?.image}` : testimage2} alt='...'/>
+          <p className={styles.clientName}>{clientList?.name}</p>
     </div>
   );
 };
 
-export const ExpertCard=()=>{
+export const ExpertCard=({expertise})=>{
   return(
-    <div className={styles.expertComp}>
-            <img  className={styles.expImage} src={expert} alt="expert" />
-            <p className={styles.expTitle}>Sale Leads</p>
-            <p className={styles.expDesc}> Receive leads from buyers directly on My Medie Quip and cll  based business enquiries </p>
+    <div className={styles.expertComp} key={expertise?.id}>
+            <img  className={styles.expImage} src={expertise?.image ?  `http://13.53.198.145:8000${expertise?.image}` : expert} alt="expert" />
+            <p className={styles.expTitle}>{expertise?.name}</p>
+            <p className={styles.expDesc}> {expertise?.description} </p>
       </div>
   );
 };
