@@ -46,13 +46,13 @@ export const MyProfile=()=>{
    if(res?.status){
     setPreviewImage(res?.data?.profile?.image)
     formik.setValues({
-      fname : res?.data?.profile?.name,
+      fname : res?.data?.profile?.first_name,
       pnumber : res?.data?.mobile,
       nationality : res?.data?.profile?.location,
       gstin : res?.data?.profile?.gstin ?  res?.data?.profile?.gstin : "22ABCDE1234F1Z5",
-      lname : res?.data?.profile?.lname,
+      lname : res?.data?.profile?.last_name,
       email : res?.data?.email,
-      pancard :res?.data?.profile?.pancard ? res?.data?.profile?.pancard : "ABCDE1234H",
+      pancard :res?.data?.profile?.pan_no ? res?.data?.profile?.pan_no : "ABCDE1234H",
     })
    }
   }
@@ -66,13 +66,14 @@ export const MyProfile=()=>{
   const handleSubmitForm = async(val) =>{
     // event.preventDefault(); 
     const data = {
-      name : val?.fname + val?.lname,
+      first_name : val?.fname,
+      last_name : val?.fname,
       email : val?.email,
       mobile : val?.pnumber,
       image : previewImage,
       gstin : val?.gstin,
       location : val?.nationality,
-      pancard : val?.pancard,
+      pan_no : val?.pancard,
       describe : val?.describe
     }
     console.log(data ,"data")
@@ -92,6 +93,14 @@ export const MyProfile=()=>{
       setPreviewImage(imageUrl);
     }
   }
+
+  useEffect(() => {
+    return () => {
+      if (previewImage) {
+        URL.revokeObjectURL(previewImage);
+      }
+    };
+  }, [previewImage]);
 
   const handleLinkClick = () => {
     if (fileInputRef.current) {
@@ -115,7 +124,7 @@ export const MyProfile=()=>{
               <input
               type="file"
               accept="image/*"
-             ref={fileInputRef}
+              ref={fileInputRef}
               style={{ display: 'none' }}
               onChange={handleFileChange}
       />

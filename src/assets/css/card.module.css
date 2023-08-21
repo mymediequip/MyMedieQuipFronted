@@ -276,6 +276,7 @@
 }
 .swipeArrow img{
     width: 7vh;
+    cursor: pointer;
 }
 .cardContent{
     width: 254px;
