@@ -63,6 +63,13 @@
     justify-content: center;
     align-items: center;
 }
+.advtAllMedie{
+    display: flex;
+    justify-content: space-around;
+    width: 80vw;
+    /* flex-wrap: wrap; */
+    margin: auto;
+}
 .advtMediaCont>div{
     margin: 20px;
 }
@@ -74,17 +81,23 @@
     height: 45px;
     margin: 5px;
 }
+.advtImgs video{
+    width: 80px;
+    /* height: 80px; */
+    margin: 4px;
+}
 .advtImgs label{
     cursor: pointer;
 }
 .advtImgs{
     width: 440px;
     height: 260px;
-    border: 1px solid #8C8C8C;
+    border: 2px dashed #8C8C8C;
     border-radius: 8px;
     padding: 5px;
     overflow-y: auto;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+    margin-top: 20px;
+    /* box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset; */
 }
 .videoLink p{
     font-size: 14px;
@@ -197,7 +210,7 @@
 }
 .locSelect{
     display: flex;
-    justify-content: end;
+    justify-content:flex-end;
     font-size:13px ;
     gap: 5px;
     margin-top: 10px;
@@ -310,3 +323,71 @@
 }
 
 /* advt product specifications */
+.advtDataCont{
+    margin: 30px auto 40px auto;
+}
+.specificYear p{
+    color: #474845;
+    margin-bottom: 10px;
+}
+.advtDataCont input{
+    width: 245px;
+    height:30px;
+    outline: none;
+    border: 1px solid #9C9E9F;
+    border-radius: 3px;
+    padding: 0px 5px 0px 5px;
+}
+.advtDataCont>div{
+    margin-bottom: 20px;
+}
+.advtDataCont>p{
+    margin: 33px 0px 20px 0px;
+    color: #474845;
+}
+.advtDetails>div{
+    margin-bottom: 30px;
+}
+.advtDetails span{
+    color: #019C89;
+    margin-right: 40px;
+    display: inline-block;
+    width: 150px;
+}
+.advtRadio{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.advtRadio input{
+    width: 15px;
+    margin: 0px 8px 0px 0px;
+}
+.advtRadio div{
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+.advtOther textarea{
+    width: 270px;
+    padding: 10px;
+    outline: none;
+    border: 1px solid #9C9E9F;
+    border-radius: 4px;
+    height: 60px;
+}
+.advtOther{
+    display: flex;
+    align-items: center;
+}
+.advtDataCont input[type=submit]{
+    width: 150px;
+    border-radius: 40px;
+    display: inline-block;
+    height: 35px;
+    font-size: 16px;
+    margin: auto;
+}
+.advtRadio div span{
+    width: fit-content;
+}
