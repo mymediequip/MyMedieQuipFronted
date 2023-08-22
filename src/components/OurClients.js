@@ -15,11 +15,12 @@ import { postData } from '../services';
 export const OurClients=()=>{
   const [currentIndex, setCurrentIndex] = useState(0);
   const [clientList, setClientList] = useState([]);
-  const itemsPerSlide = 3;
+  const [displayedData, setDisplayedData] = useState([]);
+
 
   const handleClientListData = async()=>{
     const res = await postData("master/list_ourclient/")
-    console.log(res.data)
+    console.log(res?.data)
     if(res.status){
       setClientList(res?.data)
     }
@@ -30,23 +31,27 @@ export const OurClients=()=>{
   },[])
   
   const handleScrollLeft = () =>{
-    setCurrentIndex(Math.max(currentIndex - itemsPerSlide, 0));
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + clientList?.length) % clientList?.length);
   }
   const handleScrollRight = () =>{
-    if (currentIndex + itemsPerSlide < clientList.length) {
-      setCurrentIndex(currentIndex + 1);
-    } else if (currentIndex + itemsPerSlide === clientList.length) {
-      // Add new client data and remove the first item
-      const newClient = {
-        id: clientList.length + 1,
-        name: "New Client",
-        // Add other properties as needed
-      };
-      setClientList([...clientList.slice(1), newClient]);
-    }
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % clientList?.length);
   }
+
+  useEffect(() => {
+    const updateDisplayedData = () => {
+      const displayed = [
+        clientList[currentIndex % clientList?.length],
+        clientList[(currentIndex + 1) % clientList?.length],
+        clientList[(currentIndex + 2) % clientList?.length]
+      ];
+      setDisplayedData(displayed);
+    };
+  
+    updateDisplayedData();
+  }, [currentIndex , clientList]);
  
-  console.log(clientList , currentIndex)
+  console.log(currentIndex ,displayedData , "ourclient")
+
     return(
         <div className={styles.testMaincCont}>
         <div className={styles.testHeading}>
@@ -58,15 +63,11 @@ export const OurClients=()=>{
           <img onClick={handleScrollLeft} alt='' className={styles.headingLine}  src={swipetestleft}/>
           </div>
           {
-            clientList?.slice(currentIndex, currentIndex + itemsPerSlide)?.map((client)=>{
+            displayedData?.map((client)=>{
                return   <ClientCard clientList={client} />
             })
           }
-          
-          
-          {/* <ClientCard/>
-          <ClientCard/>
-           */}
+        
           <div className={styles.swipeArrow}>
           <img onClick={handleScrollRight} alt='' className={styles.headingLine}  src={nextArow}/>
           </div>

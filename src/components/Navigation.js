@@ -16,8 +16,8 @@ import {
 } from '../assets/images/index';
 
 export const Navigation=()=>{
-    // const isLogin=useSelector((state)=>state.auth.isLogin);
-    const isLogin=localStorage.getItem("token")
+    const isLogin=useSelector((state)=>state.auth.isLogin);
+    // const isLogin=localStorage.getItem("token")
     return(
         <div id="navigationBlur">
             <header className={styles.headContainer}>
@@ -235,7 +235,7 @@ const ProfileDropDown=()=>{
         <div className={styles.exploreCont}>
             <div className={styles.profileHead} onClick={handleClick} >
                 <img src={testimage2} style={{width:"45px",height:"45px"}} alt='Dashboard'/>
-                <img src={downIcon} alt='>'/>
+                <img style={{cursor : 'pointer'}} src={downIcon} alt='>'/>
             </div>
             {
                 isOpen?<div className={styles.exploreLinks} style={{right:"10px"}}>
@@ -256,7 +256,7 @@ export const Logout=()=>{
     const navigate=useNavigate();
 
     const logout=(event)=>{
-        // event.preventDefault();
+        event.preventDefault();
         localStorage.removeItem("token")
         dispatch(changeLoginStatus());
         navigate("/");
