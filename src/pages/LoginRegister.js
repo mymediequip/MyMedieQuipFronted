@@ -204,21 +204,6 @@ export const OtpVervicatonForm=()=>{
                 setOtpTime(prevTime => ({ ...prevTime, sec: prevTime.sec - 1 }));
               }
             }
-<<<<<<< HEAD
-            otpTime.sec-=1;
-            setOtpTime({...otpTime})
-        },1000);
-        if(otpTime.minute===0 && otpTime.sec===0){
-            clearTimeout(timeIntervel)
-        };
-        //verifying otp
-        if(otp.length===6){
-            //do api callse and verifotp
-            
-            //after verifying 
-            dispatch(changeLoginStatus());
-            navigate("/dashboard/");
-=======
           }, 1000);
           return () => {
             clearInterval(interval);
@@ -240,7 +225,6 @@ export const OtpVervicatonForm=()=>{
                 navigate("/dashboard/");
             },1000)
            }
->>>>>>> 119dcec08d6cf670bb57887ee2d65a7658159611
         }
 
     }
