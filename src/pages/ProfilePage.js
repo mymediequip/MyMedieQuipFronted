@@ -49,10 +49,12 @@ export const MyProfile=()=>{
       fname : res?.data?.profile?.first_name,
       pnumber : res?.data?.mobile,
       nationality : res?.data?.profile?.location,
-      gstin : res?.data?.profile?.gstin ?  res?.data?.profile?.gstin : "22ABCDE1234F1Z5",
+      gstin : res?.data?.profile?.gstin ,
       lname : res?.data?.profile?.last_name,
       email : res?.data?.email,
-      pancard :res?.data?.profile?.pan_no ? res?.data?.profile?.pan_no : "ABCDE1234H",
+      pancard :res?.data?.profile?.pan_no ,
+      describe :res?.data?.profile?.describe
+
     })
    }
   }
@@ -60,47 +62,52 @@ export const MyProfile=()=>{
   useEffect(()=>{
     handleUserDetails()
   },[])
+ 
+  
 
   
 
   const handleSubmitForm = async(val) =>{
-    // event.preventDefault(); 
-    const data = {
-      first_name : val?.fname,
-      last_name : val?.fname,
-      email : val?.email,
-      mobile : val?.pnumber,
-      image : previewImage,
-      gstin : val?.gstin,
-      location : val?.nationality,
-      pan_no : val?.pancard,
-      describe : val?.describe
-    }
-    console.log(data ,"data")
-    const res = await postData("users/add_profile/" , data , true)
-    console.log(res,"res data")
-    setTimeout(()=>{
-      handleUserDetails()
-    },1000)
+    const formData = new FormData();
+    formData.append('image', selectedFile);
+      const data = {
+        first_name : val?.fname,
+        last_name : val?.lname,
+        email : val?.email,
+        mobile : val?.pnumber,
+        image : selectedFile,
+        gstin : val?.gstin,
+        location : val?.nationality,
+        pan_no : val?.pancard,
+        describe : val?.describe
+      }
+      console.log(data ,"data")
+      const res = await postData("users/add_profile/" , data , true)
+      console.log(res,"res data")
+      setTimeout(()=>{
+        handleUserDetails()
+      },1000)
+      
     
   }
 
   const handleFileChange = (event) =>{
     const file = event.target.files[0];
+    console.log(file,"file")
     setSelectedFile(file);
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewImage(imageUrl);
-    }
+    // if (file) {
+    //   const imageUrl = URL.createObjectURL(file);
+    //   setPreviewImage(imageUrl);
+    // }
   }
 
-  useEffect(() => {
-    return () => {
-      if (previewImage) {
-        URL.revokeObjectURL(previewImage);
-      }
-    };
-  }, [previewImage]);
+  // useEffect(() => {
+  //   return () => {
+  //     if (previewImage) {
+  //       URL.revokeObjectURL(previewImage);
+  //     }
+  //   };
+  // }, [previewImage]);
 
   const handleLinkClick = () => {
     if (fileInputRef.current) {

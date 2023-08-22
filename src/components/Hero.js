@@ -81,7 +81,7 @@ const CatItem=({equipment , onItemClick , pic})=>{
         <div className={styles.cat_item} >
             <div >
             <div className={styles.cat_inner}>
-                <img src={pic} alt='...' onClick={handleNodeClick} className={styles.in_img}/>
+                <img src={!isExpanded ? pic : minus} alt='...' onClick={handleNodeClick} className={styles.in_img}/>
                 <span>{equipment.name}</span>
             </div>
             {

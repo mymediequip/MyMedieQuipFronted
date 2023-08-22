@@ -48,9 +48,9 @@ export const OurClients=()=>{
     };
   
     updateDisplayedData();
-  }, [currentIndex]);
+  }, [currentIndex , clientList]);
  
-  console.log(currentIndex)
+  console.log(currentIndex ,displayedData , "ourclient")
 
     return(
         <div className={styles.testMaincCont}>

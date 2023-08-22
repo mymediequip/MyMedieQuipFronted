@@ -7,7 +7,6 @@ export const OurExperties=()=>{
 
     const handleExpertise = async() =>{
         const res = await postData("master/list_expertise/")
-        console.log(res.data)
         if(res?.status){
             setExpertData(res?.data)
         }
