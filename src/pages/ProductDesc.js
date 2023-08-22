@@ -3,6 +3,8 @@ import { DashboardAdvt } from '../components/Advt';
 import { NavLink, Outlet } from 'react-router-dom';
 import styles from '../assets/css/prod_desc.module.css';
 import { RelatedProdCard } from '../components/Cards';
+import { GetStarted,BackgroundBlur } from '../utils/Popups';
+import { useState } from 'react';
 import {
     unfilStar,
     rightMove,
@@ -29,6 +31,16 @@ export const ProductDescription=()=>{
 }; 
 
 const ProductData=()=>{
+    const [getStart,setGetStart]=useState(false);
+    const [isBlur,setBlur]=useState(false);
+
+    const sellarClick=(event)=>{
+        event.preventDefault();
+        setBlur(true); 
+        window.scrollTo(0,0);
+        setGetStart(!getStart);
+    };
+
     const prodImgStyle={
         backgroundImage:`url(${pngwing})`,
     };
@@ -91,9 +103,15 @@ const ProductData=()=>{
                         <h3>₹ 50000</h3>
                         <p>(Plus Shipping and VAT tax included)</p>
                     </div>
-                    <NavLink className={styles.contactSellar}>Contact Seller</NavLink>
+                    <NavLink className={styles.contactSellar} onClick={sellarClick}>Contact Seller</NavLink>
                 </div>
             </div>
+            {
+                getStart?<GetStarted setGetStart={setGetStart} setBlur={setBlur}/>:""
+            }
+            {
+                isBlur?<BackgroundBlur/>:""
+            }
         </React.Fragment>
     );
 };

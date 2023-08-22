@@ -9,7 +9,6 @@ export const GetStarted=(props)=>{
     const handleClose=()=>{
         props.setGetStart(false);
         props.setBlur(false);
-        document.getElementById("heroBlur").style.filter="none";
     };
     return(
         <div className={styles.getStartContainer}>

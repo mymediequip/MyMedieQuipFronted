@@ -170,7 +170,6 @@ export const Login=(props)=>{
     );
 };
 
-
 export const OtpVervicatonForm=()=>{
    const location  =  useLocation()
    const preOtp = location?.state?.otp

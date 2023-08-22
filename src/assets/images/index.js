@@ -48,7 +48,13 @@ import mailIcon from './mail.png';
 import phoneIcon from './phone-call.png';
 import arrLeft from './arrowleft.png';
 import Jaipur from './jaipur.png';
+import postDropdown from './post_dropdown.png';
+import ImageUpload from './ImageUpload.png';
+import videoIcon from './videoPlay.webp';
 export {
+    videoIcon,
+    postDropdown,
+    ImageUpload,
     arrLeft,
     Jaipur,
     mailIcon,

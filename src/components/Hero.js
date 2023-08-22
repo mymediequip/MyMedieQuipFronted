@@ -55,7 +55,7 @@ const handleItemClick = equipment => {
             <div className={styles.upper_part}>
                 <span>FILTER</span>
                 <Search/>
-                <p>EQUIPMENTS</p>
+                <p>EQUIPMENT</p>
             </div> 
             <div className={styles.lower_part}>
                 {

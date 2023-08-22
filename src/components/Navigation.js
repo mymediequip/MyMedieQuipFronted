@@ -51,7 +51,7 @@ const Nav2=()=>{
         {name:"Used Equipment",path:"/"},
         {name:"New Equipment",path:"/"},
         {name:"Service",path:"/"},
-        {name:"Spare and Accessories",path:"/"},
+        {name:"Spare & Accessories",path:"/"},
         {name:"For Distribution",path:"/"},
         {name:"Contact Us",path:"/"}
     ];
@@ -164,7 +164,7 @@ const BuyBtn=()=>{
 
 const SellBtn=()=>{
     return(
-        <NavLink className={styles.SellBtn} to="/">Sell</NavLink>
+        <NavLink className={styles.SellBtn} to="/post/">Sell</NavLink>
     )
 };
 

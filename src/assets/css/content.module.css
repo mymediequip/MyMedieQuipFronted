@@ -12,6 +12,7 @@
 }
 .advt_blogs{
     text-align: center;
+    margin-bottom: 70px;
 }
 .advt_blogs h2{
     margin: 40px 0px 40px 0px;
@@ -151,7 +152,7 @@ footer {
     width: 100%;
     padding-top: 40px;
     color: white;
-    margin-top: 40px;
+    /* margin-top: 40px; */
 }
 .ftext {
     width: fit-content;
@@ -163,7 +164,7 @@ footer {
 }
 .social {
     width: fit-content;
-    margin: 30px auto 10px auto;
+    margin: 7px auto 0px auto;
     display: flex;
     align-items: center;
 }
@@ -176,7 +177,7 @@ footer {
     width: fit-content;
     display: flex;
     flex-wrap: wrap;
-    margin: 30px auto 30px auto;
+    margin: 0px auto 14px auto;
     justify-content: center;
 }
 .socPhon ,.socMed {
@@ -190,8 +191,8 @@ footer {
 }
 .bottom {
     background-color: #74B4AC;
-    padding: 12px;
-    margin-top: 15px;
+    padding: 6px;
+    margin-top: 10px;
     text-align: center;
 }
 .fvalue {
