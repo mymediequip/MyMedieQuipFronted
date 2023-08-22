@@ -1,17 +1,124 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from '../assets/css/profile.module.css';
 import { NavLink } from 'react-router-dom';
 import { Logout } from '../components/Navigation';
 import { testimage2 } from '../assets/images';
+import { useFormik } from 'formik';
+import * as yup from "yup"
+import { emailSchema, fnameSchema, gstinSchema, lnameSchema, nationalitySchema, pancardSchema, pnumberSchema } from '../utils/validation';
+import {postData } from '../services';
 
 export const MyProfile=()=>{
+  const fileInputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const formik = useFormik({
+    initialValues:{
+      fname :  "",
+      pnumber :  "",
+      nationality : "",
+      gstin : "",
+      lname :   "",
+      email :  "",
+      pancard : "",
+      describe : "",
+    },
+    validationSchema : yup.object({
+      fname  : fnameSchema,
+      lname : lnameSchema,
+      pnumber : pnumberSchema,
+      email : emailSchema,
+      gstin : gstinSchema,
+      pancard : pancardSchema,
+      nationality : nationalitySchema
+
+    }),
+    onSubmit : function (values){
+      handleSubmitForm(values)
+
+    }
+  })
+
+
+   const handleUserDetails = async() => {
+   const res = await postData("users/get_user_detail/" ,"", true)
+   if(res?.status){
+    setPreviewImage(res?.data?.profile?.image)
+    formik.setValues({
+      fname : res?.data?.profile?.name,
+      pnumber : res?.data?.mobile,
+      nationality : res?.data?.profile?.location,
+      gstin : res?.data?.profile?.gstin ?  res?.data?.profile?.gstin : "22ABCDE1234F1Z5",
+      lname : res?.data?.profile?.lname,
+      email : res?.data?.email,
+      pancard :res?.data?.profile?.pancard ? res?.data?.profile?.pancard : "ABCDE1234H",
+    })
+   }
+  }
+
+  useEffect(()=>{
+    handleUserDetails()
+  },[])
+
+  
+
+  const handleSubmitForm = async(val) =>{
+    // event.preventDefault(); 
+    const data = {
+      name : val?.fname + val?.lname,
+      email : val?.email,
+      mobile : val?.pnumber,
+      image : previewImage,
+      gstin : val?.gstin,
+      location : val?.nationality,
+      pancard : val?.pancard,
+      describe : val?.describe
+    }
+    console.log(data ,"data")
+    const res = await postData("users/add_profile/" , data , true)
+    console.log(res,"res data")
+    setTimeout(()=>{
+      handleUserDetails()
+    },1000)
+    
+  }
+
+  const handleFileChange = (event) =>{
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setPreviewImage(imageUrl);
+    }
+  }
+
+  const handleLinkClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
     return (
       <div className={styles.row}>
         <h2>Personal Information</h2>
-        <form action="" method="post">
+        <form 
+        action="" 
+        method="post" 
+        onSubmit={formik.handleSubmit}>
           <div className={styles.column1}>
-            <div className={styles.image} style={{backgroundImage:`url(${testimage2})`}}></div>
-              <a href="/">Edit Profile Image </a>
+            <div 
+            className={styles.image} 
+            style={{backgroundImage:`url(${previewImage ? previewImage : testimage2})`}}
+            >
+            </div>
+              <a style={{cursor  : "pointer"}} onClick={handleLinkClick}>Edit Profile Image </a>
+              <input
+              type="file"
+              accept="image/*"
+             ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+      />
               <h4 className={styles.discribe}>WHATS BEST DECRIBES YOU</h4>
             <div className={styles.radios}>
               <div>
@@ -19,7 +126,10 @@ export const MyProfile=()=>{
                   className={styles.rd}
                   type="radio"
                   value="buyer"
-                  name="s"
+                  checked={formik.values.describe === "buyer"}
+                  name="describe"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
                 <label className={styles.rdt}>BUYER</label>
               </div>
@@ -28,7 +138,10 @@ export const MyProfile=()=>{
                   className={styles.rd}
                   type="radio"
                   value="seller"
-                  name="s"
+                  checked={formik.values.describe === "seller"}
+                  name="describe"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
                 <label className={styles.rdt}>SELLER</label>
               </div>
@@ -37,24 +150,30 @@ export const MyProfile=()=>{
           <div className={styles.column2}>
             <div className={styles.col21}>
               <label className={styles.name}>First Name</label>
-              <input className={styles.nameField} type="text" name="fname" />
+              <input className={styles.nameField} type="text" name="fname" onChange={formik.handleChange}  onBlur={formik.handleBlur} value={formik.values.fname}/>
+              {formik.errors.fname && formik.touched.fname && (<div style={{color : 'red'}}>{formik.errors.fname}</div>)}
               <label className={styles.name}>Phone Number</label>
               <input
                 className={styles.nameField}
                 type="number"
                 name="pnumber"
+                onChange={formik.handleChange}  onBlur={formik.handleBlur} value={formik.values.pnumber}
               />
+               {formik.errors.pnumber && formik.touched.pnumber && (<div style={{color : 'red'}}>{formik.errors.pnumber}</div>)}
               <label className={styles.name}>Nationality</label>
               <input
                 className={styles.nameField}
                 type="text"
                 name="nationality"
+                onChange={formik.handleChange}  onBlur={formik.handleBlur} value={formik.values.nationality}
+
               />
+              {formik.errors.nationality && formik.touched.nationality && (<div style={{color : 'red'}}>{formik.errors.nationality}</div>)}
               <label className={styles.name}>GSTIN Number</label>
-              <input className={styles.nameField} type="number" name="gstin" />
-              
+              <input className={styles.nameField} type="text" name="gstin" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.gstin}  />
+              {formik.errors.gstin && formik.touched.gstin && (<div style={{color : 'red'}}>{formik.errors.gstin}</div>)}
               <div className={styles.btnContainer}>
-                <button type="button" className={styles.btn}>
+                <button   type="submit" className={styles.btn}>
                   SAVE CHANGE
                 </button>
                 <button type="button" className={styles.btn2}>
@@ -65,11 +184,14 @@ export const MyProfile=()=>{
             </div>
             <div className={styles.col22}>
               <label className={styles.nameC}>Last Name</label>
-              <input className={styles.nameField} type="text" name="lname" />
+              <input className={styles.nameField} type="text" name="lname"  onChange={formik.handleChange}  onBlur={formik.handleBlur} value={formik.values.lname} />
+              {formik.errors.lname && formik.touched.lname && (<div style={{color : 'red'}}>{formik.errors.lname}</div>)}
               <label className={styles.nameC}>Email</label>
-              <input className={styles.nameField} type="email" name="email" />
+              <input className={styles.nameField} type="email" name="email" onChange={formik.handleChange}  onBlur={formik.handleBlur} value={formik.values.email} />
+              {formik.errors.email && formik.touched.email && (<div style={{color : 'red'}}>{formik.errors.email}</div>)}
               <label className={styles.nameC}>Pan Card Number</label>
-              <input className={styles.nameField} type="text" name="pancard" />
+              <input className={styles.nameField} type="text" name="pancard" onChange={formik.handleChange}  onBlur={formik.handleBlur} value={formik.values.pancard} />
+              {formik.errors.pancard && formik.touched.pancard && (<div style={{color : 'red'}}>{formik.errors.pancard}</div>)}
             </div>
           </div>
         </form>

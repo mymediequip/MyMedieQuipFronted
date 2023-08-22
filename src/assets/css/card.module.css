@@ -209,7 +209,8 @@
 }
 /* IMAGE */
 .expImage{
-    width: 18vh;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
 }
 
@@ -258,7 +259,8 @@
  color: #4c6680;
 }
 .clientImage{
-    width: 77px;
+    width: 109px;
+    height: 109px;
     border-radius: 50%;
 }
 .suffixMark{

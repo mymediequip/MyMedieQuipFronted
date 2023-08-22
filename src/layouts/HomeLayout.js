@@ -7,7 +7,7 @@ export const HomeLayout=()=>{
     return(
         <React.Fragment>
             <Navigation />
-            <MobileHero/>
+            <MobileHero/>   
             <Outlet/>
             <Footer2/>   
             <MobileBottomNavbar/>

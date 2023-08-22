@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { HomeLayout } from './layouts/HomeLayout';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { ContentConatiner } from './components/ContentContainer';
@@ -12,20 +12,33 @@ import {
   Signup,
   Login
 } from './pages/LoginRegister';
+import PrivateRoutes from './components/PrivateRoute';
 
 export const Routers=()=>{
     return(
     <BrowserRouter>
       <Routes>
+        <Route element={<PrivateRoutes/>}>
+        <Route
+            exact
+            path="/"
+            element={
+              localStorage.getItem("token") ? (
+                <Navigate replace to="/dashboard/" />
+              ) : (
+                <Navigate replace to="/" />
+              )
+            }
+          />
+           {/* dashbaord */}
+             <Route path="dashboard" element={<DashboardLayout/>}>
+            <Route index element={<MyProfile/>}/>
+          </Route>
+        </Route>
         <Route path='/' element={<HomeLayout/>}>
           <Route index element={<ContentConatiner specs={false}/>}/>
           <Route path='specialization' element={<ContentConatiner specs={true}/>}/>
-          
-          {/* dashbaord */}
-          <Route path="dashboard" element={<DashboardLayout/>}>
-            <Route index element={<MyProfile/>}/>
-          </Route>
-
+        
           {/* Authentication */}
           <Route path="/user" element={<LoginRegister/>}>
             <Route path="login" element={<Login/>}/>

@@ -16,7 +16,8 @@ import {
 } from '../assets/images/index';
 
 export const Navigation=()=>{
-    const isLogin=useSelector((state)=>state.auth.isLogin);
+    // const isLogin=useSelector((state)=>state.auth.isLogin);
+    const isLogin=localStorage.getItem("token")
     return(
         <div id="navigationBlur">
             <header className={styles.headContainer}>
@@ -30,7 +31,7 @@ export const Navigation=()=>{
                 <Explore/>
                 <Speciality/>
                 {
-                    isLogin?<ProfileDropDown/>:<LoginBtn/>
+                    isLogin  ? <ProfileDropDown/> : <LoginBtn/>
                 }
                 <div style={{display:"flex",alignItems:"center"}}>
                     <AddToCart/>
@@ -255,7 +256,8 @@ export const Logout=()=>{
     const navigate=useNavigate();
 
     const logout=(event)=>{
-        event.preventDefault();
+        // event.preventDefault();
+        localStorage.removeItem("token")
         dispatch(changeLoginStatus());
         navigate("/");
     }
