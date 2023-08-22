@@ -115,6 +115,12 @@
 }
 
 /* post advt location */
+.specialtCont{
+    display: flex;
+    flex-direction: column;
+    height: 177px;
+    justify-content: space-between;
+}
 .selectEquipDiv{
     border: 1px solid #9C9E9F;
     display: flex;
@@ -134,7 +140,7 @@
 }
 .infoForm form{
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
 }
 .labelCol{
     color: #474845;
@@ -164,6 +170,7 @@
 .selectEquipDiv{
     padding: 8px;
     border-radius: 5px;
+    height: 22px;
 }
 .specTag{
     margin-bottom: 10px;
@@ -172,6 +179,9 @@
     margin-top: -2px;
     border: 1px solid #9C9E9F;
     border-top: none;
+    position: absolute;
+    width: 342px;
+    background-color: #FFFFFF;
 }
 .checkboxCont{
     border: 1px solid #F3F3F3;
@@ -182,6 +192,9 @@
 .checkboxCont label{
     font-size: 13px;
     color: #6D6D6D;
+}
+.speciality{
+    background-color: #FFFFFF;
 }
 .specTag p{
     color: #474845;
@@ -197,9 +210,10 @@
     width: fit-content;
     color: white;
     font-size: 18px;
-    display: block;
+    /* display: block; */
     cursor: pointer;
     margin-top: 40px;
+    
 }
 .dropDownImage{
     width: 16px;
@@ -390,4 +404,24 @@
 }
 .advtRadio div span{
     width: fit-content;
+}
+.radiosSpec{
+    display: flex;
+    gap: 30px;
+    /* width: 60%; */
+}
+.radiosSpec>div{
+    display: flex;
+    align-items: center;
+}
+.radiosSpec input{
+    width: 15px;
+}
+
+.currSymbolSpec i{
+ color: #019C89;
+ font-size: 20px;
+ position: relative;
+ /* left: 25px; */
+ top: 4px;
 }
