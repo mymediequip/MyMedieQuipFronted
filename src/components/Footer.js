@@ -137,7 +137,7 @@ export const MobileBottomNavbar=()=>{
         <i class="bi bi-cart-plus"></i>   
         <span>Buy</span>
       </NavLink>
-      <NavLink to="/">
+      <NavLink to="/post/" style={activateLink}>
         <i class="bi bi-box2"></i>
         <span>Sell</span>
       </NavLink>

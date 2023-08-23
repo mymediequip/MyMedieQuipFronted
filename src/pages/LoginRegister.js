@@ -105,13 +105,13 @@ export const Login=(props)=>{
         event.preventDefault();
         if (validatePhone()){
             const data = {
-                mobile : mobile.length == 12 ? mobile.slice(2,12) : mobile
+                mobile : mobile.length === 12 ? mobile.slice(2,12) : mobile
                 // mobile : "9716924981"
             }
             const res =  await postData("users/generateotp/" , data)
             console.log(res,"res")
             if(res?.status){
-                navigate("/user/verifyotp/" , {state : {opt : res?.data?.otp , number : mobile.length == 12 ? mobile.slice(2,12) : mobile}})
+                navigate("/user/verifyotp/" , {state : {opt : res?.data?.otp , number : mobile.length === 12 ? mobile.slice(2,12) : mobile}})
             }
         }
         // if(validatePhone()){

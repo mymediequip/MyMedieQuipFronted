@@ -64,7 +64,7 @@ export const SelectAdvtType = () => {
   };
   return (
     <div className={styles.selectAdvtCont}>
-      <h3>Post Your AD</h3>
+      <h3>Post Your Adv</h3>
       <div className={styles.slectTypes}>
         {selectTypes.map((value, index) => {
           return (
@@ -196,7 +196,7 @@ export const AdvtLocation = () => {
 
       <div className={styles.infoForm}>
         <form action="/action_page.php" onSubmit={handleSubmit}>
-          <div style={{ display: "flex",justifyContent:"space-between"}}>
+          <div className={styles.formFiledCont}>
             <div className={styles.labelCol}>
               <label for="ename">Equipment name</label>
               <input
@@ -211,8 +211,20 @@ export const AdvtLocation = () => {
               })()}
             </div>
             <div className={styles.specialtCont}>
-              <AdvtSpecialityDorpDown data={dropCat} />
+              {selectedPostType === "SPARE & ACCESSORIES" ? (
+                ""
+              ) : (
+                <AdvtSpecialityDorpDown data={dropCat} />
+              )}
               <AdvtSpecialityDorpDown data={dropSpec} />
+              {selectedPostType === "SPARE & ACCESSORIES" ? (
+                <div className={styles.prodComptaible}>
+                  <label for="lname">Compatible Models</label>
+                  <input type="text" id="lname" name="lname" style={{padding:"11px",borderRadius:"5px"}}/>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
           <div style={{ textAlign: "center" }}>
@@ -322,7 +334,7 @@ export const AdvtPrice = () => {
         <div className={styles.prodDiscr}>
           <label className={styles.pdis}>
             Product Discription
-            <span className={styles.disSpan}>(500 words only)</span>
+            {/* <span className={styles.disSpan}>(500 words only)</span> */}
           </label>
 
           <textarea className={styles.tetAr} typeof="textarea" name="text" />
@@ -371,31 +383,35 @@ export const AdvtProdData = () => {
               <div className={styles.advtRadio}>
                 <span>Under Warranty :</span>
                 <div>
-                  <input type="radio" name="waranty" />
-                  <span>YES</span>
-                </div>
-                <div>
-                  <input type="radio" name="waranty" />
-                  <span>NO</span>
+                  <div>
+                    <input type="radio" name="waranty" />
+                    <span>YES</span>
+                  </div>
+                  <div>
+                    <input type="radio" name="waranty" />
+                    <span>NO</span>
+                  </div>
                 </div>
               </div>
 
               <div className={styles.advtRadio}>
                 <span>Existing AMC/CME :</span>
                 <div>
-                  <input type="radio" name="amc" />
-                  <span>YES</span>
-                </div>
-                <div>
-                  <input type="radio" name="amc" />
-                  <span>NO</span>
+                  <div>
+                    <input type="radio" name="amc" />
+                    <span>YES</span>
+                  </div>
+                  <div>
+                    <input type="radio" name="amc" />
+                    <span>NO</span>
+                  </div>
                 </div>
               </div>
             </React.Fragment>
           )}
           <div className={styles.advtOther}>
             <span>Other Details :</span>
-            <textarea placeholder="Enter  the details" rows={10} cols={10} />
+            <textarea placeholder="Enter the details" rows={10} cols={10} />
           </div>
         </div>
         <div style={{textAlign:"center"}}>
@@ -415,7 +431,7 @@ const getAddProdScreen2 = (selectedType) => {
       <div className={styles.prodDiscr}>
         <label className={styles.pdis}>
           Product Discription
-          <span className={styles.disSpan}>(500 words only)</span>
+          {/* <span className={styles.disSpan}>(500 words only)</span> */}
         </label>
 
         <textarea className={styles.tetAr} typeof="textarea" name="text" />
@@ -435,7 +451,7 @@ const getAddProdScreen2 = (selectedType) => {
   } else if (selectedType === "SPARE & ACCESSORIES") {
     return (
       <React.Fragment>
-        <label for="lname">Compatible Models</label>
+        <label for="lname">Product Details</label>
         <input type="text" id="lname" name="lname" />
       </React.Fragment>
     );
@@ -452,7 +468,8 @@ const getAddProdScreen3 = (selectedType) => {
         <div className={styles.currSymbolSpec}>
           <i className="bi bi-currency-rupee"></i>
           <input
-            style={{width:"350px",marginLeft:"-22px",paddingLeft:"25px",}}
+          
+            style={{marginLeft:"-22px",paddingLeft:"25px",}}
             type="number"
             id={styles.rupee}
             
@@ -500,7 +517,7 @@ const getAddProdScreen3 = (selectedType) => {
         <div className={styles.currSymbolSpec}>
           <i className="bi bi-currency-rupee"></i>
           <input
-            style={{width:"350px",marginLeft:"-22px",paddingLeft:"25px",}}
+            style={{width:"245px",marginLeft:"-22px"}}
             type="number"
             id={styles.rupee}
             

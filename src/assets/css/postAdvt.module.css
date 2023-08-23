@@ -28,6 +28,9 @@
 }
 .slectTypes{
     margin: 50px 0px 50px 0px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 .slectTypes span{
     margin: 10px;
@@ -57,7 +60,7 @@
 .advtMediaCont{
     margin: auto;
     /* text-align: center; */
-    height: 500px;
+    min-height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -67,8 +70,11 @@
     display: flex;
     justify-content: space-around;
     width: 80vw;
-    /* flex-wrap: wrap; */
+    flex-wrap: wrap;
     margin: auto;
+}
+.advtAllMedie>div{
+    margin: 20px;
 }
 .advtMediaCont>div{
     margin: 20px;
@@ -120,14 +126,21 @@
     flex-direction: column;
     height: 177px;
     justify-content: space-between;
+    position: relative;
+}
+.formFiledCont{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
 }
 .selectEquipDiv{
     border: 1px solid #9C9E9F;
     display: flex;
-    width: 50vh;
+    width: 51vh;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    background-color: #FFFFFF;
 }
 .selectEquipDiv p{
     display: inline;
@@ -149,10 +162,10 @@
     display: flex;
     flex-direction: column;
 }
-.labelCol input[type="text"]{
+.labelCol input[type="text"],.prodComptaible input{
     padding: 11px;
     border-radius: 5px;
-    width: 60vh;
+    width: 50vh;
     border: 1px solid #9C9E9F;
     outline: none;
 }
@@ -180,7 +193,7 @@
     border: 1px solid #9C9E9F;
     border-top: none;
     position: absolute;
-    width: 342px;
+    width: 99.35%;
     background-color: #FFFFFF;
 }
 .checkboxCont{
@@ -193,9 +206,7 @@
     font-size: 13px;
     color: #6D6D6D;
 }
-.speciality{
-    background-color: #FFFFFF;
-}
+
 .specTag p{
     color: #474845;
     font-weight: 500;
@@ -241,6 +252,14 @@
     margin: 20px auto 50px auto;
     width: 40%;
 }
+.prodComptaible{
+    display: flex;
+    flex-direction: column;
+}
+.prodComptaible label{
+    margin-bottom: 10px;
+}
+
 .title {
     font-size: 18px;
     /* font-family: monospace; */
@@ -251,6 +270,7 @@
     gap: 10px;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     margin: 25px 0px 18px 0px;
 }
 .rdt{
@@ -312,7 +332,7 @@
 }
 .bttn{
     color: white;
-    margin-left: 220px;
+    margin:auto;
     width: 155px;
     height: 35px;
     border: none;
@@ -337,6 +357,7 @@
 }
 
 /* advt product specifications */
+
 .advtDataCont{
     margin: 30px auto 40px auto;
 }
@@ -354,6 +375,7 @@
 }
 .advtDataCont>div{
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 .advtDataCont>p{
     margin: 33px 0px 20px 0px;
@@ -361,6 +383,7 @@
 }
 .advtDetails>div{
     margin-bottom: 30px;
+    flex-wrap: wrap;
 }
 .advtDetails span{
     color: #019C89;
@@ -424,4 +447,44 @@
  position: relative;
  /* left: 25px; */
  top: 4px;
+}
+.prodScreen3{
+    width: 350px;
+    margin-left: -22px;
+    padding-left: 25px;
+}
+
+/* Mobile Responsiveness */
+@media(max-width:900px){
+    .advtPriceCont{
+        width: 70vw;
+    }
+}
+
+@media(max-width:500px){
+    .advtImgs{
+        width: 80vw;
+    }
+    .labelCol input[type="text"],.prodComptaible input{
+        width: 80vw;
+    }
+    .selectEquipDiv{
+        width: 82vw;
+    }
+    .advtPriceCont{
+        width: 90vw;
+    }
+    .priceinput,.tetAr{
+        padding: 0px;
+    }
+    .advtDataCont{
+        width: 80vw;
+    }
+    .advtOther textarea,.advtDataCont input[type=text],.advtDataCont input[type=number]{
+        margin-top: 10px;
+    }
+    .specialtCont{
+        margin-top: 20px;
+    }
+  
 }
