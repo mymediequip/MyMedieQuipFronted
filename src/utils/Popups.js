@@ -16,9 +16,9 @@ export const GetStarted=(props)=>{
                 <h2>Get Started</h2>
                 <b><i onClick={handleClose} class="bi bi-x-lg"></i></b>
             </div>
-            <p className={styles.getStartInd}>Sign In with your mobile number To access your account</p>
+            <p className={styles.getStartInd}>Verify Your OTP To access your account</p>
             {
-                otpForm?<OtpVervicatonForm/>:<Login setOtpForm={setOtpForm}/>
+                otpForm?<OtpVervicatonForm/>:<Login setOtpForm={setOtpForm} />
             }
         </div>
     );

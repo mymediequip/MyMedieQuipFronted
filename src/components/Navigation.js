@@ -16,8 +16,8 @@ import {
 } from '../assets/images/index';
 
 export const Navigation=()=>{
-    const isLogin=useSelector((state)=>state.auth.isLogin);
-    // const isLogin=localStorage.getItem("token")
+    // const isLogin=useSelector((state)=>state.auth.isLogin);
+    const isLogin=localStorage.getItem("token")
     return(
         <div id="navigationBlur">
             <header className={styles.headContainer}>

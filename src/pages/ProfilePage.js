@@ -44,7 +44,7 @@ export const MyProfile=()=>{
    const handleUserDetails = async() => {
    const res = await postData("users/get_user_detail/" ,"", true)
    if(res?.status){
-    setPreviewImage(res?.data?.profile?.image)
+    setSelectedFile(res?.data?.profile?.image)
     formik.setValues({
       fname : res?.data?.profile?.first_name,
       pnumber : res?.data?.mobile,
@@ -62,7 +62,8 @@ export const MyProfile=()=>{
   useEffect(()=>{
     handleUserDetails()
   },[])
- 
+
+  
   
 
   
@@ -75,14 +76,14 @@ export const MyProfile=()=>{
         last_name : val?.lname,
         email : val?.email,
         mobile : val?.pnumber,
-        image : selectedFile,
+        image :  `http://13.53.198.145:8000/mmq_apps/static/upload/profile/${selectedFile}`,
         gstin : val?.gstin,
         location : val?.nationality,
         pan_no : val?.pancard,
         describe : val?.describe
       }
       console.log(data ,"data")
-      const res = await postData("users/add_profile/" , data , true)
+      const res = await postData("users/add_profile/" , formData , data , true)
       console.log(res,"res data")
       setTimeout(()=>{
         handleUserDetails()
@@ -93,21 +94,21 @@ export const MyProfile=()=>{
 
   const handleFileChange = (event) =>{
     const file = event.target.files[0];
-    console.log(file,"file")
-    setSelectedFile(file);
+    console.log(file.name,"file")
+    setSelectedFile(file); 
     // if (file) {
     //   const imageUrl = URL.createObjectURL(file);
     //   setPreviewImage(imageUrl);
     // }
   }
 
-  // useEffect(() => {
-  //   return () => {
-  //     if (previewImage) {
-  //       URL.revokeObjectURL(previewImage);
-  //     }
-  //   };
-  // }, [previewImage]);
+  useEffect(() => {
+    return () => {
+      if (previewImage) {
+        URL.revokeObjectURL(previewImage);
+      }
+    };
+  }, [previewImage]);
 
   const handleLinkClick = () => {
     if (fileInputRef.current) {
@@ -118,13 +119,12 @@ export const MyProfile=()=>{
       <div className={styles.row}>
         <h2>Personal Information</h2>
         <form 
-        action="" 
-        method="post" 
-        onSubmit={formik.handleSubmit}>
+           action="upload_endpoint" method="POST" encType="multipart/form-data"
+            onSubmit={formik.handleSubmit}>
           <div className={styles.column1}>
             <div 
             className={styles.image} 
-            style={{backgroundImage:`url(${previewImage ? previewImage : testimage2})`}}
+            style={{backgroundImage:`url(${selectedFile ? `http://13.53.198.145:8000${selectedFile}` : testimage2})`}}
             >
             </div>
               <a style={{cursor  : "pointer"}} onClick={handleLinkClick}>Edit Profile Image </a>

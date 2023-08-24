@@ -1,7 +1,7 @@
 
 const BaseURL = process.env.REACT_APP_BASEURL;
 
-const postData = async (url, body,isAuthenticated) => {
+const postData = async (url,body,isAuthenticated) => {
   const headers = {
     "Content-Type": "application/json",
     Accept: "application/json",

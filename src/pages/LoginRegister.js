@@ -7,6 +7,7 @@ import styles from '../assets/css/loginregister.module.css';
 import PhoneInput from 'react-phone-input-2';
 import OtpInput from 'react-otp-input';
 import 'react-phone-input-2/lib/style.css';
+import { Toaster ,toast } from '../utils/Toaster';
 import {
     loginBg,
     howWeWorks,
@@ -109,9 +110,20 @@ export const Login=(props)=>{
                 // mobile : "9716924981"
             }
             const res =  await postData("users/generateotp/" , data)
-            console.log(res,"res")
+            console.log(res?.data?.otp,"res")
             if(res?.status){
-                navigate("/user/verifyotp/" , {state : {opt : res?.data?.otp , number : mobile.length == 12 ? mobile.slice(2,12) : mobile}})
+                toast.success("Mobile Number verified !")
+                setTimeout(()=>{
+                    navigate("/user/verifyotp/" , {state : {otp : res?.data?.otp , number : mobile.length == 12 ? mobile.slice(2,12) : mobile}})
+                    if(props.setOtpForm){
+                        props.setOtpForm(true);
+                         return;
+                      }
+                    // if(isPhone){
+                    //      navigate("/user/verifyotp/")
+                    //     }
+
+                },2000)
             }
         }
         // if(validatePhone()){
@@ -122,7 +134,7 @@ export const Login=(props)=>{
         //     if(isPhone){
         //         navigate("/user/verifyotp/")
         //     }
-        // }
+        // // }
        
     }
 
@@ -132,6 +144,8 @@ export const Login=(props)=>{
 
     
     return(
+       <>
+       <Toaster/>
         <form className={styles.signupForm} onSubmit={handleLoginSubmition}>
             <div className={styles.loginOptions}>
                 <label onClick={()=>{setIsphone(true)}} style={isPhone?activeStyle:{}}>Mobile Number</label>
@@ -167,6 +181,7 @@ export const Login=(props)=>{
             <input type='submit' value={isPhone?"GET OTP":"Sign In"}/>
             <label style={{textAlign:"center"}} >Don’t have an account ? <NavLink to="#">Sign Up</NavLink></label>
         </form>
+       </>
     );
 };
 
@@ -194,21 +209,21 @@ export const OtpVervicatonForm=()=>{
         handleOtp()  
         const interval = setInterval(() => {
             if (otpTime.minute === 0 && otpTime.sec === 0) {
-              // Timer expired
+                // Timer expired
               clearInterval(interval);
               // Handle timer expiration if needed
             } else {
               if (otpTime.sec === 0) {
                 setOtpTime(prevTime => ({ minute: prevTime.minute - 1, sec: 59 }));
               } else {
-                setOtpTime(prevTime => ({ ...prevTime, sec: prevTime.sec - 1 }));
-              }
+                  setOtpTime(prevTime => ({ ...prevTime, sec: prevTime.sec - 1 }));
+                }
             }
           }, 1000);
           return () => {
             clearInterval(interval);
-          };
-    },[otpTime]);
+        };
+    },[otp]);
 
     const handleOtp = async() => {
         if(otp.length===6 && /^\d+$/.test(otp)){
@@ -219,11 +234,14 @@ export const OtpVervicatonForm=()=>{
            const res = await postData("users/verifyotp/",data)
            console.log(res,"otp")
            if(res?.status){
+            toast.success("Verified OTP SuccessFully !")
             dispatch(changeLoginStatus())
             localStorage.setItem("token" , res?.data.token)
             setTimeout(()=>{
                 navigate("/dashboard/");
-            },1000)
+            },2000)
+           }else{
+            toast.error("Please Check OTP !")
            }
         }
 
@@ -231,9 +249,12 @@ export const OtpVervicatonForm=()=>{
 
 
     return(
+
+        <>
+        <Toaster/>
         <div className={styles.otpVerifyCont}>
             <div>
-                <h4 style={{color:"black"}}>Verification Code</h4>
+                <h4 style={{color:"black"}}>Verification Code {preOtp}</h4>
                 <p>Enter the 6 digit OTP Send to you phone number</p>
             </div>
             <div className={styles.otp_digits}>
@@ -251,6 +272,7 @@ export const OtpVervicatonForm=()=>{
                 otpTime.minute===0 && otpTime.sec===0?<NavLink>Resend</NavLink>:""
             }
         </div>
+        </>
     );
 }
 // non components function
