@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../assets/css/postAdvt.module.css";
@@ -15,6 +15,7 @@ import {
 
 import {toast,ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRef } from "react";
 // toast.configure();
 
 export const PostAdvt = () => {
@@ -162,6 +163,7 @@ export const AdvtMedia = () => {
 };
 
 export const AdvtLocation = () => {
+
   const navigate = useNavigate();
   const selectedPostType = useSelector(
     (state) => state.addProd.prodAddData.selectedPostType
@@ -214,7 +216,7 @@ export const AdvtLocation = () => {
               {selectedPostType === "SPARE & ACCESSORIES" ? (
                 ""
               ) : (
-                <AdvtSpecialityDorpDown data={dropCat} />
+                <AdvtSpecialityDorpDown  data={dropCat} />
               )}
               <AdvtSpecialityDorpDown data={dropSpec} />
               {selectedPostType === "SPARE & ACCESSORIES" ? (
@@ -238,8 +240,16 @@ export const AdvtLocation = () => {
 
 const AdvtSpecialityDorpDown = (props) => {
   const [show, setShow] = useState(false);
+  const ref=useRef();
+  useEffect(()=>{
+      document.addEventListener("click",(e)=>{
+      if(ref.current && !ref.current.contains(e.target)){
+        setShow(false)
+      }
+    });
+  },[])
   return (
-    <div className={styles.speciality}>
+    <div className={styles.speciality} ref={ref}>
       <div className={styles.specTag}>
         <p>{props.data.title}</p>
       </div>

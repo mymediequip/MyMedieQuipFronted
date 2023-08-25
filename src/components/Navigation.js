@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect,useRef} from 'react';
 import {companyName} from '../assets/data/data';
 import { useSelector,useDispatch } from 'react-redux';
 import { changeLoginStatus } from '../app/Slices/AuthSlice';
@@ -76,14 +76,22 @@ const Location=(props)=>{
         event.preventDefault();
         setIsOpen(!isOpen);
     }
+    const ref=useRef();
+    useEffect(()=>{
+        document.addEventListener("click",(e)=>{
+        if(ref.current && !ref.current.contains(e.target)){
+            setIsOpen(false);
+        }
+      });
+    },[])
     return(
         <div>
-            <div className={styles.location} id="loc1" onClick={handleLocation}>
+            <div className={styles.location} id="loc1" onClick={handleLocation} ref={ref}>
                 <span>India</span>
                 <img src={downIcon} alt='>'/>
             </div>
             {
-                isOpen?<LocationDropDown handleLocation={handleLocation}/>:""
+                isOpen?<LocationDropDown handleLocation={handleLocation} />:""
             }
         </div>
     );
@@ -101,8 +109,9 @@ const LocationDropDown=(props)=>{
         {name:"Kolkata",bg:Jaipur},
         {name:"Bihar",bg:Jaipur}
     ];
+    
     return (
-        <div className={styles.locationCont}>
+        <div className={styles.locationCont} >
           <div className={styles.selectLocHead} >
             <a href="" onClick={props.handleLocation}>
               <img
@@ -182,8 +191,16 @@ const Explore=()=>{
     const handleClick=()=>{
         setIsOpen(!isOpen);
     }
+    const ref=useRef();
+    useEffect(()=>{
+        document.addEventListener("click",(e)=>{
+        if(ref.current && !ref.current.contains(e.target)){
+            setIsOpen(false)
+        }
+      });
+    },[])
     return(
-        <div className={styles.exploreCont}>
+        <div className={styles.exploreCont} ref={ref}>
             <div className={styles.exploreHead} onClick={handleClick}>
                 <span>Explore</span>
                 <img src={downIcon} alt='>'/>
@@ -281,7 +298,7 @@ const Humberger=()=>{
         {name:"USED EQUIPMENTS",path:"/"},
         {name:"NEW EQUIPMENTS",path:"/"},
         {name:"SERVICES",path:"/"},
-        {name:"SPARE and ACCESSORIES",path:"/"},
+        {name:"SPARE & ACCESSORIES",path:"/"},
         {name:"FOR DISTRIBUTION",path:"/"},
         {name:"CONTACT US",path:"/"},
         {name:"POST ADVERT",path:"/"}

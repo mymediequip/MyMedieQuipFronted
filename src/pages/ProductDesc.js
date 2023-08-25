@@ -103,7 +103,13 @@ const ProductData=()=>{
                         <h3>₹ 50000</h3>
                         <p>(Plus Shipping and VAT tax included)</p>
                     </div>
+                    
                     <NavLink className={styles.contactSellar} onClick={sellarClick}>Contact Seller</NavLink>
+
+                    <div className={styles.prodDesclaimer}>
+                        <b style={{fontSize:"15px"}}>Disclaimer : </b>
+                        <span style={{fontSize:"14px"}}>Product details are submitted by the seller. MyMedieQuip will carry out inspection and give you inspection report before you purchase.</span>
+                    </div>
                 </div>
             </div>
             {
@@ -243,6 +249,22 @@ const RelatedProd=()=>{
 };
 
 const ReviewForm=()=>{
+    const [ratinsStars,setRatingStar]=useState(new Array(5).fill(false));
+    const handleStars=(e)=>{
+        let curr=parseInt(e.currentTarget.name);
+        for(let i=0;i<=curr;i++){
+            if(ratinsStars[i]){
+                for(let j=curr;j<5;j++){
+                    ratinsStars[j]=false;
+                }
+            }
+            else{
+                ratinsStars[i]=true;
+            }
+        }
+        console.log(ratinsStars)
+        setRatingStar([...ratinsStars]);
+    }
     return (
       <div>
         <div className={styles.reviewFormCont}>
@@ -251,31 +273,18 @@ const ReviewForm=()=>{
           <div className={styles.giveRatingCont}>
             <p className={styles.onlyStarCol}>STAR RATING</p>
             <div className={styles.giveRatingImg}>
-              <img
-                className={styles.ratingStar}
-                src={unfilStar}
-                alt=""
-              />
-              <img
-                className={styles.ratingStar}
-                src={unfilStar}
-                alt=""
-              />
-              <img
-                className={styles.ratingStar}
-                src={unfilStar}
-                alt=""
-              />
-              <img
-                className={styles.ratingStar}
-                src={unfilStar}
-                alt=""
-              />
-              <img
-                className={styles.ratingStar}
-                src={unfilStar}
-                alt=""
-              />
+              {ratinsStars.map((value, index) => {
+                return (
+                  <img
+                    onClick={handleStars}
+                    key={index}
+                    name={index}
+                    className={styles.ratingStar}
+                    src={value?star:unfilStar}
+                    alt="..."
+                  />
+                );
+              })}
             </div>
           </div>
 

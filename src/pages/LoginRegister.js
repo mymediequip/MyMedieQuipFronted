@@ -124,13 +124,7 @@ export const Login=(props)=>{
         //     }
         // }
        
-    }
-
-
-
-   
-
-    
+    }    
     return(
         <form className={styles.signupForm} onSubmit={handleLoginSubmition}>
             <div className={styles.loginOptions}>
@@ -176,6 +170,7 @@ export const OtpVervicatonForm=()=>{
    const preNumber = location?.state?.number
    console.log(preNumber , preOtp)
     const [otp, setOtp] = useState("");
+    const [otpError,setOtpError]=useState(false);
     const [otpTime,setOtpTime]=useState({minute:4,sec:59});
     const navigate=useNavigate();
     const dispatch=useDispatch();
@@ -225,6 +220,9 @@ export const OtpVervicatonForm=()=>{
                 navigate("/dashboard/");
             },1000)
            }
+           else{
+            setOtpError(true);
+           }
         }
 
     }
@@ -236,6 +234,7 @@ export const OtpVervicatonForm=()=>{
                 <h4 style={{color:"black"}}>Verification Code</h4>
                 <p>Enter the 6 digit OTP Send to you phone number</p>
             </div>
+            { otpError && <p style={{color:"red"}}>Invalid OTP</p> }
             <div className={styles.otp_digits}>
                 <OtpInput
                     value={otp}

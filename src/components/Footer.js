@@ -141,7 +141,7 @@ export const MobileBottomNavbar=()=>{
         <i class="bi bi-box2"></i>
         <span>Sell</span>
       </NavLink>
-      <NavLink to="/user/login/">
+      <NavLink to="/user/login/" style={activateLink}>
         <i class="bi bi-person"></i>
         <span>Profile</span>
       </NavLink>
