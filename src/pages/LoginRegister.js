@@ -16,6 +16,7 @@ import {
     googleLogin,
 } from '../assets/images/index';
 import { postData } from '../services';
+import { getUserData } from '../app/Slices/UserData';
 
 
 export const LoginRegister=()=>{
@@ -110,31 +111,21 @@ export const Login=(props)=>{
                 // mobile : "9716924981"
             }
             const res =  await postData("users/generateotp/" , data)
-            console.log(res?.data?.otp,"res")
             if(res?.status){
                 toast.success("Mobile Number verified !")
                 setTimeout(()=>{
-                    navigate("/user/verifyotp/" , {state : {otp : res?.data?.otp , number : mobile.length == 12 ? mobile.slice(2,12) : mobile}})
                     if(props.setOtpForm){
                         props.setOtpForm(true);
-                         return;
+                        props.setotp(res?.data?.otp)
+                        props.setNumber(mobile.length == 12 ? mobile.slice(2,12) : mobile)
+                        return;
+                      }else{
+                      navigate("/user/verifyotp/" , {state : {otp : res?.data?.otp , number : mobile.length == 12 ? mobile.slice(2,12) : mobile}})
                       }
-                    // if(isPhone){
-                    //      navigate("/user/verifyotp/")
-                    //     }
 
                 },2000)
             }
         }
-        // if(validatePhone()){
-        //     if(props.setOtpForm){
-        //         props.setOtpForm(true);
-        //         return;
-        //     }
-        //     if(isPhone){
-        //         navigate("/user/verifyotp/")
-        //     }
-        // // }
        
     }
 
@@ -185,11 +176,10 @@ export const Login=(props)=>{
     );
 };
 
-export const OtpVervicatonForm=()=>{
+export const OtpVervicatonForm=({getOtp,number})=>{
    const location  =  useLocation()
    const preOtp = location?.state?.otp
    const preNumber = location?.state?.number
-   console.log(preNumber , preOtp)
     const [otp, setOtp] = useState("");
     const [otpTime,setOtpTime]=useState({minute:4,sec:59});
     const navigate=useNavigate();
@@ -223,21 +213,21 @@ export const OtpVervicatonForm=()=>{
           return () => {
             clearInterval(interval);
         };
-    },[otp]);
+    },[otpTime]);
 
     const handleOtp = async() => {
         if(otp.length===6 && /^\d+$/.test(otp)){
             let data = {
-                mobile : preNumber,
-                otp : otp 
+                mobile : preNumber || number,
+                otp : otp || getOtp
             }
            const res = await postData("users/verifyotp/",data)
-           console.log(res,"otp")
            if(res?.status){
             toast.success("Verified OTP SuccessFully !")
             dispatch(changeLoginStatus())
-            localStorage.setItem("token" , res?.data.token)
+            dispatch(getUserData(res?.data))
             setTimeout(()=>{
+                localStorage.setItem("token" , res?.data.token)
                 navigate("/dashboard/");
             },2000)
            }else{
@@ -254,7 +244,7 @@ export const OtpVervicatonForm=()=>{
         <Toaster/>
         <div className={styles.otpVerifyCont}>
             <div>
-                <h4 style={{color:"black"}}>Verification Code {preOtp}</h4>
+                <h4 style={{color:"black"}}>Verification Code {preOtp || getOtp}</h4>
                 <p>Enter the 6 digit OTP Send to you phone number</p>
             </div>
             <div className={styles.otp_digits}>

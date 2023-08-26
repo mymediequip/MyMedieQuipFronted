@@ -78,7 +78,7 @@ export const prodAddSlice = createSlice({
     setCompatibleModels : (state,action)=>{
       state.prodAddData.Compatible_Models=action.payload
     },
-    clearProdAddData : (state,action)=>{
+    clearProdAddData : (state)=>{
       state.prodAddData = {
         selectedPostType:null,
         prodImgs:[],

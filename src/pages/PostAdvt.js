@@ -55,6 +55,9 @@ export const SelectAdvtType = () => {
   );
 
   console.log(selectedPostType,"selectedPostType")
+  
+
+  
 
   const handleContinue=(event)=>{
     event.preventDefault();
@@ -71,8 +74,7 @@ export const SelectAdvtType = () => {
     <div className={styles.selectAdvtCont}>
       <h3>Post Your AD</h3>
       <div className={styles.slectTypes}>
-        {selectTypes.map((value, index) => {
-          
+        {selectTypes?.map((value, index) => {
           return (
             <span 
               onClick={changeColor}
@@ -127,8 +129,12 @@ export const AdvtMedia = () => {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate("/post/location/");
-    window.scrollTo(0, 0);
+    if(selectedImages.length > 0 && selectedVideos?.length > 0) {
+      navigate("/post/location/");
+      window.scrollTo(0, 0);
+    }else{
+      toast.error("image and video not empty !")
+    }
   };
 
   const handleImageRemove = (imageId) => {
@@ -145,6 +151,8 @@ export const AdvtMedia = () => {
 
   
   return (
+   <>
+   <ToastContainer/>
     <React.Fragment>
       <NavLink to="/post/" onClick={handleClearData} className={styles.postBack}>
         <img src={arrLeft} alt="..." />
@@ -206,6 +214,7 @@ export const AdvtMedia = () => {
         <input type="submit" className={styles.advtContinue} value="continue" />
       </form>
     </React.Fragment>
+   </>
   );
 };
 
@@ -216,8 +225,6 @@ const dispatch =  useDispatch()
 const equipName  =  useSelector((state)=>state.addProd.prodAddData.Equip_name)
 const equipDescript =  useSelector((state)=>state.addProd.prodAddData.prod_desc)
 const CompatibleModel =  useSelector((state)=>state.addProd.prodAddData.Compatible_Models)
-
-
 
 
 const handleChange = (event) =>{
@@ -362,10 +369,16 @@ export const AdvtPrice = () => {
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate("/post/specifications/");
-    window.scrollTo(0, 0);
+    if(equipCondition && equipPrice && equipNegot && equipDescript){
+      navigate("/post/specifications/");
+      window.scrollTo(0, 0);
+    }else{
+      toast.error("all fields are mandatories")
+    }
   };
   return (
+   <>
+   <ToastContainer/>
     <React.Fragment>
       <NavLink to="/post/location/" className={styles.postBack}>
         <img src={arrLeft} alt="..." />
@@ -441,24 +454,26 @@ export const AdvtPrice = () => {
         </div>
       </form>
     </React.Fragment>
+   </>
   );
 };
 
 export const AdvtProdData = () => {
   const dispatch = useDispatch()
+  const [isValid, setIsValid] = useState(true);
   const ManufacturingYear = useSelector((state) => state.addProd.prodAddData.purchase_year);
   const specifications = useSelector((state) => state.addProd.prodAddData.specifications);
-  const spe = useSelector((state) => state.addProd.prodAddData);
   const equipPrice =  useSelector((state)=>state.addProd.prodAddData.price)
   const equipNegot =  useSelector((state)=>state.addProd.prodAddData.negotiable)
   const prodPrice =  useSelector((state)=>state.addProd.prodAddData.Prod_price)
+  const allData =  useSelector((state)=>state.addProd.prodAddData)
+
+  console.log(specifications,"sp")
 
 
-  console.log(spe,"specifications")
 
   const handleChange = (event) =>{
     const {name,value} = event.target
-  
     dispatch(setEquipSpecification({ name , value}))
   }
 
@@ -466,8 +481,30 @@ export const AdvtProdData = () => {
   const selectedPostType = useSelector(
     (state) => state.addProd.prodAddData.selectedPostType
   );
-  const handleSubmit=(val)=>{
-    // event.preventDefault();
+  const handleSubmit=(event)=>{  
+    event.preventDefault();
+    const data = {
+      post_type : 1,
+      image : allData?.prodImgs,
+      video : allData?.prodVideos,
+      equip_name : allData?.Equip_name,
+      category : "cate",
+      location : "location",
+      speciality_name : "speciality_name",
+      equip_condition : allData?.condition,
+      asking_price : allData?.price,
+      negotiable_type : allData?.negotiable,
+      description : allData?.prod_desc,
+      year : allData?.purchase_year,
+      brand:allData?.specifications?.brand,
+      model:allData?.specifications?.model,
+      warranty: allData?.specifications?.waranty,
+      existing_amc: allData?.specifications?.amc_cme,
+      other_details:"nothing",
+      user : "ee0654b0-96d5-4aaa-a39a-caa9b901cf80",
+      
+    }
+    console.log(data,"data")
     // toast.success("Your AD listed Successfully",{autoClose:2000});
   }
   return (
@@ -479,7 +516,7 @@ export const AdvtProdData = () => {
 
       <form className={styles.advtDataCont} onClick={handleSubmit}>
         {(() => {
-          return getAddProdScreen3(selectedPostType , ManufacturingYear , dispatch ,setManufacturingYear , equipPrice ,setEuipPrice , equipNegot , setEuipNegot , prodPrice ,setProdPrice);
+          return getAddProdScreen3(selectedPostType , ManufacturingYear , dispatch ,setManufacturingYear , equipPrice ,setEuipPrice , equipNegot , setEuipNegot , prodPrice ,setProdPrice ,isValid ,setIsValid);
         })()}
         <p>Product Specifications</p>
         <div className={styles.advtDetails}>
@@ -499,11 +536,11 @@ export const AdvtProdData = () => {
               <div className={styles.advtRadio}>
                 <span>Under Warranty :</span>
                 <div>
-                  <input type="radio" name="waranty"  value="yes" checked={specifications?.waranty === "yes"} onChange={handleChange} />
+                  <input type="radio" name="waranty"  value="yes" checked={specifications?.waranty == "yes"} onChange={handleChange} />
                   <span>YES</span>
                 </div>
                 <div>
-                  <input type="radio" name="waranty" value="no" checked={specifications?.waranty === "no"} onChange={handleChange}  />
+                  <input type="radio" name="waranty" value="no" checked={specifications?.waranty ==  "no"} onChange={handleChange}  />
                   <span>NO</span>
                 </div>
               </div>
@@ -511,11 +548,11 @@ export const AdvtProdData = () => {
               <div className={styles.advtRadio}>
                 <span>Existing AMC/CME :</span>
                 <div>
-                  <input type="radio" name="amc_cme" value="yes" checked={specifications?.amc_cme=== "yes"} onChange={handleChange} />
+                  <input type="radio" name="amc_cme" value="yes" checked={specifications?.amc_cme == "yes"} onChange={handleChange} />
                   <span>YES</span>
                 </div>
                 <div>
-                  <input type="radio" name="amc_cme" value="no" checked={specifications?.amc_cme === "no"} onChange={handleChange}/>
+                  <input type="radio" name="amc_cme" value="no" checked={specifications?.amc_cme == "no"} onChange={handleChange}/>
                   <span>NO</span>
                 </div>
               </div>
@@ -572,7 +609,12 @@ const getAddProdScreen2 = (selectedType , handleLocation , equipDescript , setEu
   }
 };
 
-const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufacturingYear , equipPrice ,setEuipPrice ,  equipNegot , setEuipNegot , prodPrice ,setProdPrice) => {
+const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufacturingYear , equipPrice ,setEuipPrice ,  equipNegot , setEuipNegot , prodPrice ,setProdPrice,isValid ,setIsValid) => {
+  const handleYear = (val) =>{
+    const isValidYear = /^\d{4}$/.test(val);
+    dispatch(setManufacturingYear(val))
+    setIsValid(isValidYear);
+  }
   if (selectedType === "NEW") {
     return (
       <React.Fragment>
@@ -620,8 +662,9 @@ const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufa
     return (
       <div className={styles.specificYear}>
         <p>Manufacturing/ Purchase Year</p>
-        <input type="month" name="purchase_year" placeholder="Select the year" value={ManufacturingYear}
-            onChange={(e)=>dispatch(setManufacturingYear(e.target.value))} />
+       <input type="text" name="purchase_year" placeholder="Select the year" value={ManufacturingYear}
+            onChange={(e)=>handleYear(e.target.value)} />
+         {!isValid && <p style={{ color: 'red' }}>Please enter a valid year (e.g., 2023)</p>}
       </div>
     );
   } else if (selectedType === "SPARE & ACCESSORIES") {

@@ -13,6 +13,7 @@ import {
 import { postData } from '../services';
 
 export const Hero=(props)=>{
+   
     const heroStyle={
         backgroundImage:`url(${hero})`,
         backgroundSize:"cover",
@@ -35,15 +36,24 @@ export const Hero=(props)=>{
 };
 
 const Catogories=()=>{
+const [filterEquip ,setFilterEquip] =  useState("")
+ const handleChange = (event) =>{
+       setFilterEquip(event.target.value)
+    }
+ console.log(filterEquip,"filterEquip")
 const [categories ,setCategories] =  useState([])
 const handleProductCatLists = async() =>{
-const res = await postData("product/category/menulist/")
-console.log(res)
+const data = {
+    q : filterEquip
+}
+console.log(data,"data")
+const res = await postData("product/category/menulist/" , data)
+console.log(res?.data,"res")
 setCategories(res?.data)
 } 
 useEffect(()=>{
     handleProductCatLists()
-},[])
+},[filterEquip])
 
 const handleItemClick = equipment => {
     // Handle the item click here, e.g., update state, show details, etc.
@@ -54,7 +64,7 @@ const handleItemClick = equipment => {
         <div className={styles.catogories_container}>
             <div className={styles.upper_part}>
                 <span>FILTER</span>
-                <Search/>
+                <Search handleChange={handleChange} />
                 <p>EQUIPMENT</p>
             </div> 
             <div className={styles.lower_part}>
@@ -69,7 +79,8 @@ const handleItemClick = equipment => {
 };
 
 const CatItem=({equipment , onItemClick , pic})=>{
-    const [isExpanded, setIsExpanded] = useState(false);
+ const [isExpanded, setIsExpanded] = useState(false);
+ console.log(isExpanded,"si")
   const handleNodeClick = () => {
     if (equipment?.children?.length > 0) {
       setIsExpanded(!isExpanded);
@@ -81,7 +92,7 @@ const CatItem=({equipment , onItemClick , pic})=>{
         <div className={styles.cat_item} >
             <div >
             <div className={styles.cat_inner}>
-                <img src={!isExpanded ? pic : minus} alt='...' onClick={handleNodeClick} className={styles.in_img}/>
+                <img src={equipment?.children.length > 0 ? pic : minus} alt='...' onClick={handleNodeClick} className={styles.in_img}/>
                 <span>{equipment.name}</span>
             </div>
             {

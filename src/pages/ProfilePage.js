@@ -1,14 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from '../assets/css/profile.module.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, json } from 'react-router-dom';
 import { Logout } from '../components/Navigation';
 import { testimage2 } from '../assets/images';
 import { useFormik } from 'formik';
 import * as yup from "yup"
 import { emailSchema, fnameSchema, gstinSchema, lnameSchema, nationalitySchema, pancardSchema, pnumberSchema } from '../utils/validation';
-import {postData } from '../services';
+import {postData, postDataFIle } from '../services';
+import { toast } from 'react-toastify';
+import { Toaster } from '../utils/Toaster';
+import { useDispatch } from 'react-redux';
+import { getProfileImage } from '../app/Slices/UserData';
 
 export const MyProfile=()=>{
+  const dispatch  =  useDispatch()
+  
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
@@ -44,7 +50,8 @@ export const MyProfile=()=>{
    const handleUserDetails = async() => {
    const res = await postData("users/get_user_detail/" ,"", true)
    if(res?.status){
-    setSelectedFile(res?.data?.profile?.image)
+    setPreviewImage(res?.data?.profile?.image)
+    dispatch(getProfileImage(res?.data?.profile?.image))
     formik.setValues({
       fname : res?.data?.profile?.first_name,
       pnumber : res?.data?.mobile,
@@ -63,52 +70,36 @@ export const MyProfile=()=>{
     handleUserDetails()
   },[])
 
-  
-  
-
-  
 
   const handleSubmitForm = async(val) =>{
-    const formData = new FormData();
-    formData.append('image', selectedFile);
-      const data = {
-        first_name : val?.fname,
-        last_name : val?.lname,
-        email : val?.email,
-        mobile : val?.pnumber,
-        image :  `http://13.53.198.145:8000/mmq_apps/static/upload/profile/${selectedFile}`,
-        gstin : val?.gstin,
-        location : val?.nationality,
-        pan_no : val?.pancard,
-        describe : val?.describe
-      }
-      console.log(data ,"data")
-      const res = await postData("users/add_profile/" , formData , data , true)
-      console.log(res,"res data")
-      setTimeout(()=>{
-        handleUserDetails()
-      },1000)
-      
-    
+      const formData = new FormData();
+      formData.append('first_name', val?.fname);
+      formData.append('last_name', val?.lname);
+      formData.append('email', val?.email);
+      formData.append('mobile', val?.pnumber);
+      formData.append('gstin', val?.gstin);
+      formData.append('location', val?.nationality);
+      formData.append('pan_no', val?.pancard);
+      formData.append('describe', val?.describe);
+      if(selectedFile){
+        formData.append('image', selectedFile);
+       }
+
+        const res = await postDataFIle("users/add_profile/" , formData , true)
+        console.log(res)
+        if(res.status){
+          setSelectedFile(null)
+          toast.success("Profile Updated SuccessFully !")
+          handleUserDetails()
+        }
   }
 
   const handleFileChange = (event) =>{
     const file = event.target.files[0];
     console.log(file.name,"file")
     setSelectedFile(file); 
-    // if (file) {
-    //   const imageUrl = URL.createObjectURL(file);
-    //   setPreviewImage(imageUrl);
-    // }
   }
 
-  useEffect(() => {
-    return () => {
-      if (previewImage) {
-        URL.revokeObjectURL(previewImage);
-      }
-    };
-  }, [previewImage]);
 
   const handleLinkClick = () => {
     if (fileInputRef.current) {
@@ -116,6 +107,8 @@ export const MyProfile=()=>{
     }
   };
     return (
+    <>
+    <Toaster/>
       <div className={styles.row}>
         <h2>Personal Information</h2>
         <form 
@@ -124,7 +117,7 @@ export const MyProfile=()=>{
           <div className={styles.column1}>
             <div 
             className={styles.image} 
-            style={{backgroundImage:`url(${selectedFile ? `http://13.53.198.145:8000${selectedFile}` : testimage2})`}}
+            style={{backgroundImage:`url(${previewImage ? `http://13.53.198.145:8000${previewImage}` : testimage2})`}}
             >
             </div>
               <a style={{cursor  : "pointer"}} onClick={handleLinkClick}>Edit Profile Image </a>
@@ -212,6 +205,7 @@ export const MyProfile=()=>{
           </div>
         </form>
       </div>
+    </>
     );
 };
 export const DashboardMenu=()=>{

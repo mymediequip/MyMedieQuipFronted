@@ -6,6 +6,9 @@ import { useState } from 'react';
 
 export const GetStarted=(props)=>{
     const [otpForm,setOtpForm]=useState(false);
+    const [otp ,setotp] =  useState("")
+    const [number ,setNumber] =  useState("")
+
     const handleClose=()=>{
         props.setGetStart(false);
         props.setBlur(false);
@@ -16,9 +19,9 @@ export const GetStarted=(props)=>{
                 <h2>Get Started</h2>
                 <b><i onClick={handleClose} class="bi bi-x-lg"></i></b>
             </div>
-            <p className={styles.getStartInd}>Verify Your OTP To access your account</p>
+            <p className={styles.getStartInd}>Verify Your OTP  To access your account</p>
             {
-                otpForm?<OtpVervicatonForm/>:<Login setOtpForm={setOtpForm} />
+                otpForm?<OtpVervicatonForm getOtp={otp} number={number} />:<Login setOtpForm={setOtpForm}  setotp={setotp} setNumber={setNumber}/>
             }
         </div>
     );

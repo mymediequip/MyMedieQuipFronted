@@ -25,23 +25,28 @@ const postData = async (url,body,isAuthenticated) => {
   }
 };
 
-const getData = async (path) => {
-//   const Token = localStorage.getItem("token");
-  const response = await fetch(`${BaseURL}/${path}`, {
-    mode: "cors",
-    method: "GET",
-    headers: {
-      Authorization: localStorage.getItem("token"),
-      "Content-Type": "application/json",
-    },
-  });
+const postDataFIle = async (url,formData,isAuthenticated) => {
+  const headers = {
+    Accept: "application/json",
+  };
 
+  if (isAuthenticated) {
+    const token = localStorage.getItem("token");
+    headers.Authorization = `Token ${token}`;
+  }
+  const response = await fetch(`${BaseURL}/${url}`, {
+    mode: "cors",
+    method: "POST",
+    headers: headers,
+    body: formData,
+  });
   try {
-    const result2 = await response.json();
-    return result2;
+    const result1 = await response.json();
+    return result1;
   } catch (e) {
-    console.error(e);
+    console.error(e,"error");
   }
 };
 
-export { postData, getData };
+
+export { postData ,postDataFIle };
