@@ -4,6 +4,8 @@
     min-height: 400px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: 
 }
 .postBack{
     display: flex;
@@ -17,7 +19,7 @@
     width: 22px;
 }
 .selectAdvtCont{
-    width: 80vw;
+    /* width: 80vw; */
     margin: auto;
     text-align: center;
 }
@@ -453,11 +455,21 @@
     margin-left: -22px;
     padding-left: 25px;
 }
+.advtPostSeCont{
+    display: flex;
+}
+.advtPostSeCont img{
+    height: 560px;
+    width: 50vw
+}
 
 /* Mobile Responsiveness */
 @media(max-width:900px){
     .advtPriceCont{
         width: 70vw;
+    }
+    .postFlowChart{
+        display:none;
     }
 }
 
@@ -486,5 +498,6 @@
     .specialtCont{
         margin-top: 20px;
     }
+    
   
 }

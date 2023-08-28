@@ -62,11 +62,7 @@ export const MyProfile=()=>{
   useEffect(()=>{
     handleUserDetails()
   },[])
- 
   
-
-  
-
   const handleSubmitForm = async(val) =>{
     const formData = new FormData();
     formData.append('image', selectedFile);
@@ -132,7 +128,7 @@ export const MyProfile=()=>{
               type="file"
               accept="image/*"
               ref={fileInputRef}
-              style={{ display: 'none' }}
+              style={{ display: 'none'}}
               onChange={handleFileChange}
       />
               <h4 className={styles.discribe}>WHATS BEST DECRIBES YOU</h4>

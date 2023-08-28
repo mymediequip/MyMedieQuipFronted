@@ -78,6 +78,9 @@ export const Signup=()=>{
 };
 
 export const Login=(props)=>{
+    const location=useLocation()
+    const navigateTo=location?.state?.navigateTo;
+
     const [isPhone,setIsphone]=useState(true);
     const [phoneError, setPhoneError] = useState('');
     const [mobile,setMobile]=useState("");
@@ -111,7 +114,7 @@ export const Login=(props)=>{
             const res =  await postData("users/generateotp/" , data)
             console.log(res,"res")
             if(res?.status){
-                navigate("/user/verifyotp/" , {state : {opt : res?.data?.otp , number : mobile.length === 12 ? mobile.slice(2,12) : mobile}})
+                navigate("/user/verifyotp/" , {state : {opt : res?.data?.otp , number : mobile.length === 12 ? mobile.slice(2,12) : mobile,navigateTo:navigateTo}})
             }
         }
         // if(validatePhone()){
@@ -166,8 +169,9 @@ export const Login=(props)=>{
 
 export const OtpVervicatonForm=()=>{
    const location  =  useLocation()
-   const preOtp = location?.state?.otp
-   const preNumber = location?.state?.number
+   const preOtp = location?.state?.otp;
+   const preNumber = location?.state?.number;
+   const navigateTo=location?.state?.navigateTo?location?.state?.navigateTo:"/dashboard/";
    console.log(preNumber , preOtp)
     const [otp, setOtp] = useState("");
     const [otpError,setOtpError]=useState(false);
@@ -217,7 +221,7 @@ export const OtpVervicatonForm=()=>{
             dispatch(changeLoginStatus())
             localStorage.setItem("token" , res?.data.token)
             setTimeout(()=>{
-                navigate("/dashboard/");
+                navigate(navigateTo);
             },1000)
            }
            else{

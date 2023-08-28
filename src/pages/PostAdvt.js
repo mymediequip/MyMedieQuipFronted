@@ -11,6 +11,7 @@ import {
   location,
   postDropdown,
   videoIcon,
+  mFlowChart
 } from "../assets/images/index";
 
 import {toast,ToastContainer} from 'react-toastify';
@@ -64,25 +65,28 @@ export const SelectAdvtType = () => {
     }
   };
   return (
-    <div className={styles.selectAdvtCont}>
-      <h3>Post Your Adv</h3>
-      <div className={styles.slectTypes}>
-        {selectTypes.map((value, index) => {
-          return (
-            <span 
-              onClick={changeColor}
-              key={index}
-              style={selectedPostType===value?selectStyle:{}}
-            >
-              {value}
-            </span>
-          );
-        })}
+    <div className={styles.advtPostSeCont}>
+      <img src={mFlowChart} alt="..." className={styles.postFlowChart}/>
+      <div className={styles.selectAdvtCont}>
+        <h3>Post Your Adv</h3>
+        <div className={styles.slectTypes}>
+          {selectTypes.map((value, index) => {
+            return (
+              <span 
+                onClick={changeColor}
+                key={index}
+                style={selectedPostType===value?selectStyle:{}}
+              >
+                {value}
+              </span>
+            );
+          })}
+        </div>
+        <NavLink to='/post/media/' onClick={handleContinue} className={styles.advtContinue}>
+          Continue
+        </NavLink>
+        <ToastContainer/>
       </div>
-      <NavLink to='/post/media/' onClick={handleContinue} className={styles.advtContinue}>
-        Continue
-      </NavLink>
-      <ToastContainer/>
     </div>
   );
 };

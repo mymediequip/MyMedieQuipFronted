@@ -4,6 +4,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import { changeLoginStatus } from '../app/Slices/AuthSlice';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styles from '../assets/css/navigation.module.css';
+import { ToastContainer, toast} from 'react-toastify';
 import {
     downIcon,
     searchIcon,
@@ -172,8 +173,28 @@ const BuyBtn=()=>{
 };
 
 const SellBtn=()=>{
+    const isLogin=useSelector((state)=>state.auth.isLogin);
+    const navigate=useNavigate();
+    const handlClick=(e)=>{
+        e.preventDefault();
+        if(!isLogin){
+            navigate("/user/login/" ,{state:{navigateTo:"/post/"}});
+            toast.info("Please login to procced",{autoClose:2000});
+        }
+        else{
+            navigate("/post/");
+        }
+    }
     return(
-        <NavLink className={styles.SellBtn} to="/post/">Sell</NavLink>
+        <React.Fragment>
+            <NavLink 
+            onClick={handlClick}
+            className={styles.SellBtn} 
+            to=''>
+                Sell
+            </NavLink>
+            <ToastContainer/>
+        </React.Fragment>
     )
 };
 
