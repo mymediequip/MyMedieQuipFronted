@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../assets/css/postAdvt.module.css";
-import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories } from "../app/Slices/ProdAddSlice";
+import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories, fetchCategoriesName, setCategories } from "../app/Slices/ProdAddSlice";
 
 import {
   ImageUpload,
@@ -223,19 +223,25 @@ export const AdvtLocation = () => {
 const [lat,setlat] = useState(null)
 const [long,setlong] = useState(null)
 const [searchName,setSearchName] = useState("")
-
+const [parent,setParent] = useState([])
 const dispatch =  useDispatch()
 const equipName  =  useSelector((state)=>state.addProd.prodAddData.Equip_name)
 const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
+const parentName =  useSelector((state)=>state.addProd.prodAddData.Parent_Name)
+
 const CompatibleModel =  useSelector((state)=>state.addProd.prodAddData.Compatible_Models)
 const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
 const prodLocation =  useSelector((state)=>state.addProd.prodAddData.Equip_location)
 
-console.log(categories?.parent,"cat")
+let data = []
+ categories?.forEach((el)=>{
+    data.push(el?.parent)
+})
 
 
 useEffect(()=>{
 dispatch(fetchCategories(searchName))
+dispatch(fetchCategoriesName(data))
 },[searchName])
   
  const handleProdCondition = (event) =>{
@@ -280,7 +286,7 @@ const handleLocation = () =>{
   const dropCat = {
     title: "Category",
     placeholder: "Select the equipment Categories",
-    dataList: ["Lorem ipsum dolor sit amet", "Lorem ipsum dolor sit amet"],
+    dataList: parentName,
   };
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -345,7 +351,15 @@ const handleLocation = () =>{
 };
 
 const AdvtSpecialityDorpDown = (props) => {
+  const dispatch  = useDispatch()
+  const categoriesId = useSelector((state)=>state.addProd.prodAddData.categories)
+  console.log(categoriesId,"cate")
   const [show, setShow] = useState(false);
+
+
+  const handleCategoriesName = (event) =>{
+    dispatch(setCategories(Number(event.target.value)))
+  }
   const ref=useRef();
   useEffect(()=>{
       document.addEventListener("click",(e)=>{
@@ -368,9 +382,9 @@ const AdvtSpecialityDorpDown = (props) => {
         <div className={styles.checkBox}>
           {props.data.dataList.map((value, index) => {
             return (
-              <div className={styles.checkboxCont} key={index}>
-                <input type="checkbox" id="checkbox1" />
-                <label for="checkbox1">{value}</label>
+              <div className={styles.checkboxCont} key={value.id}>
+                <input type="checkbox" id="categories" value={value?.id} checked={categoriesId?.includes(value.id)} name="categories" onChange={handleCategoriesName}  />
+                <label for="checkbox1">{value?.name}</label>
               </div>
             );
           })}
@@ -415,15 +429,15 @@ export const AdvtPrice = () => {
         <h3 className={styles.title}>Equipment Condition</h3>
         <div className={styles.radios}>
           <div>
-            <input type="radio" value="Good" name="condition" checked={prodCondition?.condition == "Good"} onChange={handleProdCondition}  />
+            <input type="radio" value="1" name="condition" checked={prodCondition?.condition == "1"} onChange={handleProdCondition}  />
             <label className={styles.rdt}>Good</label>
           </div>
           <div>
-            <input className={styles.rd} type="radio" value="Excellent" name="condition" checked={prodCondition?.condition == "Excellent"} onChange={handleProdCondition} o />
+            <input className={styles.rd} type="radio" value="2" name="condition" checked={prodCondition?.condition == "2"} onChange={handleProdCondition} o />
             <label className={styles.rdt}>Excellent</label>
           </div>
           <div>
-            <input className={styles.rd} type="radio" value="As Good as New" name="condition" checked={prodCondition?.condition == "As Good as New"} onChange={handleProdCondition}  />
+            <input className={styles.rd} type="radio" value="3" name="condition" checked={prodCondition?.condition == "3"} onChange={handleProdCondition}  />
             <label className={styles.rdt}>As Good as New</label>
           </div>
         </div>
@@ -444,15 +458,15 @@ export const AdvtPrice = () => {
           </div>
           <div className={styles.radios}>
             <div>
-              <input type="radio" value="Negotiable" name="negotiable" onChange={handleProdCondition}  checked={prodCondition?.negotiable == "Negotiable"} />
+              <input type="radio" value="1" name="negotiable" onChange={handleProdCondition}  checked={prodCondition?.negotiable == "1"} />
               <label className={styles.rdt}>Negotiable</label>
             </div>
             <div>
               <input
                 className={styles.rd1}
                 type="radio"
-                value="Slightly Negotiable"
-                name="negotiable" onChange={handleProdCondition}  checked={prodCondition?.negotiable == "Slightly Negotiable"}
+                value="2"
+                name="negotiable" onChange={handleProdCondition}  checked={prodCondition?.negotiable == "2"}
               />
               <label className={styles.rdt}>Slightly Negotiable</label>
             </div>
@@ -460,9 +474,9 @@ export const AdvtPrice = () => {
               <input
                 className={styles.rd1}
                 type="radio"
-                value="Non-Negotiable"
+                value="3"
                 name="negotiable"
-                onChange={handleProdCondition}  checked={prodCondition?.negotiable == "Non-Negotiable"}
+                onChange={handleProdCondition}  checked={prodCondition?.negotiable == "3"}
               />
               <label className={styles.rdt}>Non-Negotiable</label>
             </div>
@@ -497,7 +511,7 @@ export const AdvtProdData = () => {
   const equipNegot =  useSelector((state)=>state.addProd.prodAddData.negotiable)
   const prodPrice =  useSelector((state)=>state.addProd.prodAddData.Prod_price)
   const allData =  useSelector((state)=>state.addProd.prodAddData)
-  console.log(prodCondition)
+  console.log(prodPrice)
 
 
 
@@ -521,7 +535,7 @@ export const AdvtProdData = () => {
       video : allData?.prodVideos,
       equip_name : allData?.Equip_name,
       equip_Location : allData?.Equip_location,
-      category : "cate",
+      category : allData?.categories,
       location : "location",
       speciality_name : "speciality_name",
       equip_condition : allData?.prodCondition?.condition,
@@ -647,6 +661,10 @@ const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufa
     const {name,value} = event.target
     dispatch(setEquipCondition({...prodCondition ,name,value}))
   }
+
+  const handleProdPrice = (event) =>{
+    dispatch(setProdPrice(Number(event.target.value)))
+  }
  
 
   const handleYear = (val) =>{
@@ -674,15 +692,15 @@ const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufa
         </div>
         <div className={styles.radiosSpec}>
           <div>
-            <input type="radio" value="Negotiable" name="negotiable" checked={prodCondition?.negotiable == "Negotiable"} onChange={handleProdCondition}  />
+            <input type="radio" value="1" name="negotiable" checked={prodCondition?.negotiable == "1"} onChange={handleProdCondition}  />
             <label className={styles.rdt}>Negotiable</label>
           </div>
           <div>
             <input
               className={styles.rd1}
               type="radio"
-              value="Slightly Negotiable"
-              name="negotiable" checked={prodCondition?.negotiable == "Slightly Negotiable"} onChange={handleProdCondition}
+              value="2"
+              name="negotiable" checked={prodCondition?.negotiable == "2"} onChange={handleProdCondition}
             />
             <label className={styles.rdt}>Slightly Negotiable</label>
           </div>
@@ -690,8 +708,8 @@ const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufa
             <input
               className={styles.rd1}
               type="radio"
-              value="Non-Negotiable"
-              name="negotiable" checked={prodCondition?.negotiable == "Non-Negotiable"} onChange={handleProdCondition}
+              value="3"
+              name="negotiable" checked={prodCondition?.negotiable == "3"} onChange={handleProdCondition}
             />
             <label className={styles.rdt}>Non-Negotiable</label>
           </div>
@@ -721,7 +739,7 @@ const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufa
             id={styles.rupee}
             value={prodPrice}
             name="Prod_price"
-            onChange={(e)=>dispatch(setProdPrice(e.target.value))}
+            onChange={handleProdPrice}
           />
         </div>
       </React.Fragment>

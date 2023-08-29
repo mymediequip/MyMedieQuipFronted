@@ -10,10 +10,12 @@ export const prodAddSlice = createSlice({
         prodVideos:[],
         Equip_name:null,
         Equip_categories:[],
+        Parent_Name:[],
+        categories:[],
         Equip_spacality:null,
         Equip_location:null,
         Compatible_Models:null,
-        Prod_price:null,
+        Prod_price:0,
         specialtiey:null,
         location:{
             lang:null,
@@ -58,13 +60,27 @@ export const prodAddSlice = createSlice({
     setEquipmentName : (state,action)=>{
       state.prodAddData.Equip_name=action.payload
     },
+    setCategories: (state,action)=>{
+      const categoryId = action.payload;
+    const index = state.prodAddData.categories?.indexOf(categoryId);
+
+    if (index === -1) {
+      // Category was not selected, add it
+      state.prodAddData.categories?.push(categoryId);
+    } else {
+      // Category was selected, remove it
+      state.prodAddData.categories?.splice(index, 1);
+    }
+    },
     setEquip_Location : (state,action)=>{
       state.prodAddData.Equip_location=action.payload
     },
     fetchEuipCategories : (state,action)=>{
       state.prodAddData.Equip_categories=action.payload
     },
-
+    fetchParentName : (state,action)=>{
+      state.prodAddData.Parent_Name=action.payload
+    },
     setManufacturingYear : (state,action)=>{
       state.prodAddData.purchase_year=action.payload
     },
@@ -89,6 +105,8 @@ export const prodAddSlice = createSlice({
         prodVideos:[],
         Equip_name:null,
         Equip_categories:[],
+        Parent_Name:[],
+        categories:[],
         Equip_spacality:null,
         Equip_location:null,
         Compatible_Models:null,
@@ -119,22 +137,30 @@ export const prodAddSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setType , addImg , removeImg ,addVideos ,removeVideo , setEquipmentName ,setManufacturingYear ,setEquipSpecification , setCompatibleModels ,setProdPrice ,clearProdAddData ,setEquipCondition ,setEquip_Location , fetchEuipCategories} = prodAddSlice.actions
+export const { setType , addImg , removeImg ,addVideos ,removeVideo , setEquipmentName ,setManufacturingYear ,setEquipSpecification , setCompatibleModels ,setProdPrice ,clearProdAddData ,setEquipCondition ,setEquip_Location , fetchEuipCategories , fetchParentName , setCategories} = prodAddSlice.actions
 
 // Asynchronous thunk action
-export const fetchCategories = (Equip_name ,id)=>async(dispatch)=>{
+export const fetchCategories = (Equip_name)=>async(dispatch)=>{
  const data  = {
    q : Equip_name 
-  //  parent : id
  }
- console.log(id,"id")
   try {
     const res = await postData("product/category/menulist/" , data)
-    console.log(res.data,"res redux")
     dispatch(fetchEuipCategories(res?.data))
   } catch (error) {
     console.log(error,"error")
   }
 }
+export const fetchCategoriesName = (id)=>async(dispatch)=>{
+  const data  = {
+    id : id
+  }
+   try {
+     const res = await postData("product/category/menulist/" , data)
+     dispatch(fetchParentName(res?.data))
+   } catch (error) {
+     console.log(error,"error")
+   }
+ }
 
 export default prodAddSlice.reducer
