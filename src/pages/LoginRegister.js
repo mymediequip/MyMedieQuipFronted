@@ -6,6 +6,7 @@ import { changeLoginStatus } from '../app/Slices/AuthSlice';
 import styles from '../assets/css/loginregister.module.css';
 import PhoneInput from 'react-phone-input-2';
 import OtpInput from 'react-otp-input';
+import { Loader } from '../components/Loader';
 import 'react-phone-input-2/lib/style.css';
 import {
     loginBg,
@@ -172,6 +173,7 @@ export const OtpVervicatonForm=()=>{
    const preOtp = location?.state?.otp;
    const preNumber = location?.state?.number;
    const navigateTo=location?.state?.navigateTo?location?.state?.navigateTo:"/dashboard/";
+   const [showLoader,setLoader]=useState(false);
    console.log(preNumber , preOtp)
     const [otp, setOtp] = useState("");
     const [otpError,setOtpError]=useState(false);
@@ -207,15 +209,21 @@ export const OtpVervicatonForm=()=>{
           return () => {
             clearInterval(interval);
           };
-    },[otpTime]);
+    },[otp]);
 
     const handleOtp = async() => {
+        // if(otpError){
+        //     return;
+        // }
         if(otp.length===6 && /^\d+$/.test(otp)){
             let data = {
                 mobile : preNumber,
                 otp : otp 
             }
-           const res = await postData("users/verifyotp/",data)
+            setLoader(true);
+           const res = await postData("users/verifyotp/",data);
+           setLoader(false);
+
            console.log(res,"otp")
            if(res?.status){
             dispatch(changeLoginStatus())
@@ -233,27 +241,30 @@ export const OtpVervicatonForm=()=>{
 
 
     return(
-        <div className={styles.otpVerifyCont}>
-            <div>
-                <h4 style={{color:"black"}}>Verification Code</h4>
-                <p>Enter the 6 digit OTP Send to you phone number</p>
+        <React.Fragment>
+            <div className={styles.otpVerifyCont}>
+                <div>
+                    <h4 style={{color:"black"}}>Verification Code</h4>
+                    <p>Enter the 6 digit OTP Send to you phone number</p>
+                </div>
+                { otpError && <p style={{color:"red"}}>Invalid OTP</p> }
+                <div className={styles.otp_digits}>
+                    <OtpInput
+                        value={otp}
+                        onChange={setOtp}
+                        numInputs={6}
+                        inputStyle={styleInpute}
+                        renderSeparator={<span></span>}
+                        renderInput={(props) => <input {...props}/>}
+                    />
+                </div>
+                <p>Code Expire in 0{otpTime.minute}:{otpTime.sec%10===otpTime.sec?"0"+otpTime.sec:otpTime.sec} </p>
+                {
+                    otpTime.minute===0 && otpTime.sec===0?<NavLink>Resend</NavLink>:""
+                }
             </div>
-            { otpError && <p style={{color:"red"}}>Invalid OTP</p> }
-            <div className={styles.otp_digits}>
-                <OtpInput
-                    value={otp}
-                    onChange={setOtp}
-                    numInputs={6}
-                    inputStyle={styleInpute}
-                    renderSeparator={<span></span>}
-                    renderInput={(props) => <input {...props} />}
-                />
-            </div>
-            <p>Code Expire in 0{otpTime.minute}:{otpTime.sec%10===otpTime.sec?"0"+otpTime.sec:otpTime.sec} </p>
-            {
-                otpTime.minute===0 && otpTime.sec===0?<NavLink>Resend</NavLink>:""
-            }
-        </div>
+            { showLoader && <Loader/>}
+        </React.Fragment>
     );
 }
 // non components function
