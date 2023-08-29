@@ -51,7 +51,7 @@ export const MyProfile=()=>{
    const res = await postData("users/get_user_detail/" ,"", true)
    if(res?.status){
     setPreviewImage(res?.data?.profile?.image)
-    dispatch(getProfileImage(res?.data?.profile?.image))
+    dispatch(getProfileImage(res?.data?.profile?.profile_image))
     formik.setValues({
       fname : res?.data?.profile?.first_name,
       pnumber : res?.data?.mobile,
@@ -60,7 +60,7 @@ export const MyProfile=()=>{
       lname : res?.data?.profile?.last_name,
       email : res?.data?.email,
       pancard :res?.data?.profile?.pan_no ,
-      describe :res?.data?.profile?.describe
+      // describe :res?.data?.profile?.describe
 
     })
    }
@@ -71,7 +71,7 @@ export const MyProfile=()=>{
   },[])
 
 
-  const handleSubmitForm = async(val) =>{
+  const handleSubmitForm = async(val) =>{ 
       const formData = new FormData();
       formData.append('first_name', val?.fname);
       formData.append('last_name', val?.lname);
@@ -80,13 +80,12 @@ export const MyProfile=()=>{
       formData.append('gstin', val?.gstin);
       formData.append('location', val?.nationality);
       formData.append('pan_no', val?.pancard);
-      formData.append('describe', val?.describe);
+      // formData.append('describe', val?.describe);
       if(selectedFile){
         formData.append('image', selectedFile);
        }
 
         const res = await postDataFIle("users/add_profile/" , formData , true)
-        console.log(res)
         if(res.status){
           setSelectedFile(null)
           toast.success("Profile Updated SuccessFully !")
@@ -96,7 +95,6 @@ export const MyProfile=()=>{
 
   const handleFileChange = (event) =>{
     const file = event.target.files[0];
-    console.log(file.name,"file")
     setSelectedFile(file); 
   }
 
@@ -128,7 +126,7 @@ export const MyProfile=()=>{
               style={{ display: 'none' }}
               onChange={handleFileChange}
       />
-              <h4 className={styles.discribe}>WHATS BEST DECRIBES YOU</h4>
+              {/* <h4 className={styles.discribe}>WHATS BEST DECRIBES YOU</h4>
             <div className={styles.radios}>
               <div>
                 <input
@@ -154,14 +152,14 @@ export const MyProfile=()=>{
                 />
                 <label className={styles.rdt}>SELLER</label>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className={styles.column2}>
             <div className={styles.col21}>
-              <label className={styles.name}>First Name</label>
+              <label className={styles.name}>First Name <span style={{color : "red"}}>*</span></label>
               <input className={styles.nameField} type="text" name="fname" onChange={formik.handleChange}  onBlur={formik.handleBlur} value={formik.values.fname}/>
               {formik.errors.fname && formik.touched.fname && (<div style={{color : 'red'}}>{formik.errors.fname}</div>)}
-              <label className={styles.name}>Phone Number</label>
+              <label className={styles.name}>Phone Number <span style={{color : "red"}}>*</span></label>
               <input
                 className={styles.nameField}
                 type="number"
@@ -169,7 +167,7 @@ export const MyProfile=()=>{
                 onChange={formik.handleChange}  onBlur={formik.handleBlur} value={formik.values.pnumber}
               />
                {formik.errors.pnumber && formik.touched.pnumber && (<div style={{color : 'red'}}>{formik.errors.pnumber}</div>)}
-              <label className={styles.name}>Nationality</label>
+              <label className={styles.name}>City <span style={{color : "red"}}>*</span></label>
               <input
                 className={styles.nameField}
                 type="text"
@@ -180,7 +178,7 @@ export const MyProfile=()=>{
               {formik.errors.nationality && formik.touched.nationality && (<div style={{color : 'red'}}>{formik.errors.nationality}</div>)}
               <label className={styles.name}>GSTIN Number</label>
               <input className={styles.nameField} type="text" name="gstin" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.gstin}  />
-              {formik.errors.gstin && formik.touched.gstin && (<div style={{color : 'red'}}>{formik.errors.gstin}</div>)}
+              {/* {formik.errors.gstin && formik.touched.gstin && (<div style={{color : 'red'}}>{formik.errors.gstin}</div>)} */}
               <div className={styles.btnContainer}>
                 <button   type="submit" className={styles.btn}>
                   SAVE CHANGE
@@ -192,13 +190,13 @@ export const MyProfile=()=>{
               
             </div>
             <div className={styles.col22}>
-              <label className={styles.nameC}>Last Name</label>
+              <label className={styles.nameC}>Last Name <span style={{color : "red"}}>*</span></label>
               <input className={styles.nameField} type="text" name="lname"  onChange={formik.handleChange}  onBlur={formik.handleBlur} value={formik.values.lname} />
               {formik.errors.lname && formik.touched.lname && (<div style={{color : 'red'}}>{formik.errors.lname}</div>)}
-              <label className={styles.nameC}>Email</label>
+              <label className={styles.nameC}>Email <span style={{color : "red"}}>*</span></label>
               <input className={styles.nameField} type="email" name="email" onChange={formik.handleChange}  onBlur={formik.handleBlur} value={formik.values.email} />
               {formik.errors.email && formik.touched.email && (<div style={{color : 'red'}}>{formik.errors.email}</div>)}
-              <label className={styles.nameC}>Pan Card Number</label>
+              <label className={styles.nameC}>Pan Card Number <span style={{color : "red"}}>*</span></label>
               <input className={styles.nameField} type="text" name="pancard" onChange={formik.handleChange}  onBlur={formik.handleBlur} value={formik.values.pancard} />
               {formik.errors.pancard && formik.touched.pancard && (<div style={{color : 'red'}}>{formik.errors.pancard}</div>)}
             </div>

@@ -107,7 +107,7 @@ export const Login=(props)=>{
         event.preventDefault();
         if (validatePhone()){
             const data = {
-                mobile : mobile.length == 12 ? mobile.slice(2,12) : mobile
+                mobile : mobile.length === 12 ? mobile.slice(2,12) : mobile
                 // mobile : "9716924981"
             }
             const res =  await postData("users/generateotp/" , data)
@@ -127,13 +127,7 @@ export const Login=(props)=>{
             }
         }
        
-    }
-
-
-
-   
-
-    
+    }    
     return(
        <>
        <Toaster/>
@@ -181,6 +175,7 @@ export const OtpVervicatonForm=({getOtp,number})=>{
    const preOtp = location?.state?.otp
    const preNumber = location?.state?.number
     const [otp, setOtp] = useState("");
+    const [otpError,setOtpError]=useState(false);
     const [otpTime,setOtpTime]=useState({minute:4,sec:59});
     const navigate=useNavigate();
     const dispatch=useDispatch();
@@ -196,24 +191,27 @@ export const OtpVervicatonForm=({getOtp,number})=>{
 
    
     useEffect(()=>{
-        handleOtp()  
         const interval = setInterval(() => {
             if (otpTime.minute === 0 && otpTime.sec === 0) {
                 // Timer expired
-              clearInterval(interval);
-              // Handle timer expiration if needed
+                clearInterval(interval);
+                // Handle timer expiration if needed
             } else {
-              if (otpTime.sec === 0) {
-                setOtpTime(prevTime => ({ minute: prevTime.minute - 1, sec: 59 }));
-              } else {
-                  setOtpTime(prevTime => ({ ...prevTime, sec: prevTime.sec - 1 }));
+                if (otpTime.sec === 0) {
+                    setOtpTime(prevTime => ({ minute: prevTime.minute - 1, sec: 59 }));
+                } else {
+                    setOtpTime(prevTime => ({ ...prevTime, sec: prevTime.sec - 1 }));
                 }
             }
-          }, 1000);
-          return () => {
+        }, 1000);
+        return () => {
             clearInterval(interval);
         };
     },[otpTime]);
+
+    useEffect(()=>{
+      handleOtp()
+    },[otp])
 
     const handleOtp = async() => {
         if(otp.length===6 && /^\d+$/.test(otp)){
@@ -223,6 +221,7 @@ export const OtpVervicatonForm=({getOtp,number})=>{
             }
            const res = await postData("users/verifyotp/",data)
            if(res?.status){
+            setOtpError(false)
             toast.success("Verified OTP SuccessFully !")
             dispatch(changeLoginStatus())
             dispatch(getUserData(res?.data))
@@ -231,8 +230,9 @@ export const OtpVervicatonForm=({getOtp,number})=>{
                 navigate("/dashboard/");
             },2000)
            }else{
-            toast.error("Please Check OTP !")
+            setOtpError(true)
            }
+           
         }
 
     }
@@ -247,6 +247,7 @@ export const OtpVervicatonForm=({getOtp,number})=>{
                 <h4 style={{color:"black"}}>Verification Code {preOtp || getOtp}</h4>
                 <p>Enter the 6 digit OTP Send to you phone number</p>
             </div>
+            { otpError && <p style={{color:"red"}}>Invalid OTP</p> }
             <div className={styles.otp_digits}>
                 <OtpInput
                     value={otp}

@@ -55,7 +55,6 @@ export const NewProducts=(props)=>{
       updateDisplayedData();
     },[currentIndex])
 
-    console.log(currentIndex,"currentIndex" , currentPage)
     const cardData=[
         {title:"Product Title",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
         {title:"Product Title",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},

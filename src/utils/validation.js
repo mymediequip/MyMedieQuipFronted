@@ -14,7 +14,7 @@ export const emailSchema = yup.string().matches(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+
 
 export const nationalitySchema = yup.string().required(); 
 
-export const gstinSchema = yup.string().matches(gstinRegex).required(); 
+export const gstinSchema = yup.string().matches(gstinRegex); 
 
 export const pancardSchema = yup.string().matches(panRegex).required(); 
 

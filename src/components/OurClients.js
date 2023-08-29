@@ -20,7 +20,6 @@ export const OurClients=()=>{
 
   const handleClientListData = async()=>{
     const res = await postData("master/list_ourclient/")
-    console.log(res?.data)
     if(res.status){
       setClientList(res?.data)
     }
@@ -50,7 +49,6 @@ export const OurClients=()=>{
     updateDisplayedData();
   }, [currentIndex , clientList]);
  
-  console.log(currentIndex ,displayedData , "ourclient")
 
     return(
         <div className={styles.testMaincCont}>

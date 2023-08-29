@@ -11,6 +11,8 @@ import {
     downIcon
 } from '../assets/images/index';
 import { postData } from '../services';
+import { fetchCategories } from '../app/Slices/ProdAddSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const Hero=(props)=>{
    
@@ -36,24 +38,18 @@ export const Hero=(props)=>{
 };
 
 const Catogories=()=>{
+const dispatch =  useDispatch()
+const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
+
 const [filterEquip ,setFilterEquip] =  useState("")
  const handleChange = (event) =>{
        setFilterEquip(event.target.value)
     }
- console.log(filterEquip,"filterEquip")
-const [categories ,setCategories] =  useState([])
-const handleProductCatLists = async() =>{
-const data = {
-    q : filterEquip
-}
-console.log(data,"data")
-const res = await postData("product/category/menulist/" , data)
-console.log(res?.data,"res")
-setCategories(res?.data)
-} 
+
 useEffect(()=>{
-    handleProductCatLists()
+    dispatch(fetchCategories(filterEquip))
 },[filterEquip])
+      
 
 const handleItemClick = equipment => {
     // Handle the item click here, e.g., update state, show details, etc.
@@ -80,7 +76,6 @@ const handleItemClick = equipment => {
 
 const CatItem=({equipment , onItemClick , pic})=>{
  const [isExpanded, setIsExpanded] = useState(false);
- console.log(isExpanded,"si")
   const handleNodeClick = () => {
     if (equipment?.children?.length > 0) {
       setIsExpanded(!isExpanded);

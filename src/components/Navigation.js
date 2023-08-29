@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect,useRef} from 'react';
 import {companyName} from '../assets/data/data';
 import { useSelector,useDispatch } from 'react-redux';
 import { changeLoginStatus } from '../app/Slices/AuthSlice';
@@ -77,14 +77,22 @@ const Location=(props)=>{
         event.preventDefault();
         setIsOpen(!isOpen);
     }
+    const ref=useRef();
+    useEffect(()=>{
+        document.addEventListener("click",(e)=>{
+        if(ref.current && !ref.current.contains(e.target)){
+            setIsOpen(false);
+        }
+      });
+    },[])
     return(
         <div>
-            <div className={styles.location} id="loc1" onClick={handleLocation}>
+            <div className={styles.location} id="loc1" onClick={handleLocation} ref={ref}>
                 <span>India</span>
                 <img src={downIcon} alt='>'/>
             </div>
             {
-                isOpen?<LocationDropDown handleLocation={handleLocation}/>:""
+                isOpen?<LocationDropDown handleLocation={handleLocation} />:""
             }
         </div>
     );
@@ -102,8 +110,9 @@ const LocationDropDown=(props)=>{
         {name:"Kolkata",bg:Jaipur},
         {name:"Bihar",bg:Jaipur}
     ];
+    
     return (
-        <div className={styles.locationCont}>
+        <div className={styles.locationCont} >
           <div className={styles.selectLocHead} >
             <a href="" onClick={props.handleLocation}>
               <img
@@ -193,8 +202,16 @@ const Explore=()=>{
     const handleClick=()=>{
         setIsOpen(!isOpen);
     }
+    const ref=useRef();
+    useEffect(()=>{
+        document.addEventListener("click",(e)=>{
+        if(ref.current && !ref.current.contains(e.target)){
+            setIsOpen(false)
+        }
+      });
+    },[])
     return(
-        <div className={styles.exploreCont}>
+        <div className={styles.exploreCont} ref={ref}>
             <div className={styles.exploreHead} onClick={handleClick}>
                 <span>Explore</span>
                 <img src={downIcon} alt='>'/>
@@ -232,7 +249,8 @@ const LoginBtn=()=>{
 };
 
 const ProfileDropDown=()=>{
-    const profile_image =  useSelector((state)=>state?.userData?.profile_image)
+    const profile_image =  useSelector((state)=>state?.profileData?.profile_image)
+    console.log(profile_image ,"profile_image")
     const [isOpen,setIsOpen]=useState(false);
     const profileLinks=[
         {title:"Profile",path:"/"},
@@ -246,7 +264,7 @@ const ProfileDropDown=()=>{
     return(
         <div className={styles.exploreCont}>
             <div className={styles.profileHead} onClick={handleClick} >
-                <img src={profile_image ? `http://13.53.198.145:8000${profile_image}` :testimage2} style={{width:"45px",height:"45px" , borderRadius : "50%"}} alt='Dashboard'/>
+                <img src={profile_image ? profile_image :testimage2} style={{width:"45px",height:"45px" , borderRadius : "50%"}} alt='Dashboard'/>
                 <img style={{cursor : 'pointer'}} src={downIcon} alt='>'/>
             </div>
             {
@@ -293,7 +311,7 @@ const Humberger=()=>{
         {name:"USED EQUIPMENTS",path:"/"},
         {name:"NEW EQUIPMENTS",path:"/"},
         {name:"SERVICES",path:"/"},
-        {name:"SPARE and ACCESSORIES",path:"/"},
+        {name:"SPARE & ACCESSORIES",path:"/"},
         {name:"FOR DISTRIBUTION",path:"/"},
         {name:"CONTACT US",path:"/"},
         {name:"POST ADVERT",path:"/"}
