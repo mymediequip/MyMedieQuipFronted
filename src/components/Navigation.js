@@ -17,8 +17,9 @@ import {
 } from '../assets/images/index';
 
 export const Navigation=()=>{
-    const isLogin=useSelector((state)=>state.auth.isLogin);
-    // const isLogin=localStorage.getItem("token")
+    
+    // const isLogin=useSelector((state)=>state.auth.isLogin);
+    const isLogin=localStorage.getItem("token")
     return(
         <div id="navigationBlur">
             <header className={styles.headContainer}>
@@ -26,7 +27,7 @@ export const Navigation=()=>{
                 <img className={styles.logo} src={process.env.PUBLIC_URL+"/logo.png"} alt={companyName}/>
                 </NavLink>
                 <Location/>
-                <Search/>
+                <Search />
                 <BuyBtn/>
                 <SellBtn/>
                 <Explore/>
@@ -157,11 +158,21 @@ const LocationDropDown=(props)=>{
     );
 };
 
-export const Search=()=>{
+export const Search=({handleChange })=>{
+    const handleKeyPress = (e) =>{
+        const  {key, keyCode} = e;
+        if(keyCode == 13){
+            e.preventDefault()
+        }
+    }
+    const handleSubmit = (e) =>{
+        e.preventDefault()
+    }
+
     return(
-        <form className={styles.search}>
-            <input type='text' placeholder='Find medical instrument..'/>
-            <input type='submit' value="Search"/>
+        <form className={styles.search} onSubmit={handleSubmit} >
+            <input type='text' placeholder='Find medical instrument..' onChange={handleChange} onKeyDown={handleKeyPress} />
+            <input  type='submit' value="Search" />
         </form>
     );
 };
@@ -259,6 +270,8 @@ const LoginBtn=()=>{
 };
 
 const ProfileDropDown=()=>{
+    const profile_image =  useSelector((state)=>state?.profileData?.profile_image)
+    console.log(profile_image ,"profile_image")
     const [isOpen,setIsOpen]=useState(false);
     const profileLinks=[
         {title:"Profile",path:"/"},
@@ -272,7 +285,7 @@ const ProfileDropDown=()=>{
     return(
         <div className={styles.exploreCont}>
             <div className={styles.profileHead} onClick={handleClick} >
-                <img src={testimage2} style={{width:"45px",height:"45px"}} alt='Dashboard'/>
+                <img src={profile_image ? profile_image :testimage2} style={{width:"45px",height:"45px" , borderRadius : "50%"}} alt='Dashboard'/>
                 <img style={{cursor : 'pointer'}} src={downIcon} alt='>'/>
             </div>
             {
