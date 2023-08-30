@@ -1,7 +1,7 @@
 import React, { useState ,useEffect,useRef} from 'react';
 import {companyName} from '../assets/data/data';
 import { useSelector,useDispatch } from 'react-redux';
-import { changeLoginStatus } from '../app/Slices/AuthSlice';
+import { changeLocation, changeLoginStatus } from '../app/Slices/AuthSlice';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styles from '../assets/css/navigation.module.css';
 import { ToastContainer, toast} from 'react-toastify';
@@ -17,9 +17,8 @@ import {
 } from '../assets/images/index';
 
 export const Navigation=()=>{
-    
     const isLogin=useSelector((state)=>state.auth.isLogin);
-    // const isLogin=localStorage.getItem("token")
+    const token=localStorage.getItem("token")
     return(
         <div id="navigationBlur">
             <header className={styles.headContainer}>
@@ -33,7 +32,7 @@ export const Navigation=()=>{
                 <Explore/>
                 <Speciality/>
                 {
-                    isLogin  ? <ProfileDropDown/> : <LoginBtn/>
+                    token   ? <ProfileDropDown/> : <LoginBtn/>
                 }
                 <div style={{display:"flex",alignItems:"center"}}>
                     <AddToCart/>
@@ -184,12 +183,12 @@ const BuyBtn=()=>{
 };
 
 const SellBtn=()=>{
-    const isLogin=useSelector((state)=>state.auth.isLogin);
-    console.log(isLogin,"islogin")
+    // const isLogin=useSelector((state)=>state.auth.isLogin);
+    const token =  localStorage.getItem("token")
     const navigate=useNavigate();
     const handlClick=(e)=>{
         e.preventDefault();
-        if(!isLogin){
+        if(!token){
             navigate("/user/login/" ,{state:{navigateTo:"/post/"}});
             toast.info("Please login to procced",{autoClose:2000});
         }
@@ -272,7 +271,6 @@ const LoginBtn=()=>{
 
 const ProfileDropDown=()=>{
     const profile_image =  useSelector((state)=>state?.profileData?.profile_image)
-    console.log(profile_image ,"profile_image")
     const [isOpen,setIsOpen]=useState(false);
     const profileLinks=[
         {title:"Profile",path:"/"},
@@ -296,21 +294,23 @@ const ProfileDropDown=()=>{
                     return <NavLink to={values.path} onClick={handleClick} key={index}>{values.title}</NavLink>
                 })
                 }
-                <Logout />
+                <Logout setIsOpen={setIsOpen} />
                 </div>:""
             }
         </div>
     );
 };
 
-export const Logout=()=>{
+export const Logout=({setIsOpen})=>{
     const dispatch=useDispatch();
     const navigate=useNavigate();
 
     const logout=(event)=>{
         event.preventDefault();
+        dispatch(changeLoginStatus(false));
+        dispatch(changeLocation(false));
         localStorage.removeItem("token")
-        dispatch(changeLoginStatus());
+        setIsOpen(false)
         navigate("/");
     }
     return(

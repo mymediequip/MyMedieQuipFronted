@@ -14,7 +14,7 @@ import { getProfileImage } from '../app/Slices/UserData';
 
 export const MyProfile=()=>{
   const dispatch  =  useDispatch()
-  
+     
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
@@ -90,6 +90,8 @@ export const MyProfile=()=>{
           setSelectedFile(null)
           toast.success("Profile Updated SuccessFully !")
           handleUserDetails()
+        }else{
+          toast.error(res.msg)
         }
   }
 

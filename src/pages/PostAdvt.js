@@ -100,6 +100,9 @@ export const SelectAdvtType = () => {
 };
 
 export const AdvtMedia = () => {
+  const selectedPostType = useSelector(
+    (state) => state.addProd.prodAddData.selectedPostType
+  );
   const selectedImages = useSelector(
     (state) => state.addProd.prodAddData.prodImgs
   );
@@ -151,8 +154,12 @@ export const AdvtMedia = () => {
 
   const handleClearData = () => {
       dispatch(clearProdAddData());
-    
   };
+  useEffect(()=>{
+    if(!selectedPostType){
+      navigate("/post/")
+    }
+    },[selectedPostType])
 
   
   return (
@@ -229,6 +236,10 @@ const [long,setlong] = useState(null)
 const [searchName,setSearchName] = useState("")
 const [parent,setParent] = useState([])
 const dispatch =  useDispatch()
+const navigate = useNavigate();
+  const selectedPostType = useSelector(
+    (state) => state.addProd.prodAddData.selectedPostType
+  );
 const equipName  =  useSelector((state)=>state.addProd.prodAddData.Equip_name)
 const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
 const parentName =  useSelector((state)=>state.addProd.prodAddData.Parent_Name)
@@ -277,10 +288,7 @@ const handleLocation = () =>{
 
 
 
-  const navigate = useNavigate();
-  const selectedPostType = useSelector(
-    (state) => state.addProd.prodAddData.selectedPostType
-  );
+  
 
   const dropSpec = {
     title: "Speciality",
@@ -302,9 +310,16 @@ const handleLocation = () =>{
     }
     window.scrollTo(0, 0);
   };
+
+  useEffect(()=>{
+  if(!selectedPostType){
+    navigate("/post/")
+  }
+  },[selectedPostType])
+
   return (
     <React.Fragment>
-      <NavLink to="/post/media/" className={styles.postBack}>
+      <NavLink to="/post/media/"  className={styles.postBack}>
         <img src={arrLeft} alt="..." />
         <span>Back</span>
       </NavLink>
@@ -337,8 +352,8 @@ const handleLocation = () =>{
               <AdvtSpecialityDorpDown data={dropSpec} />
               {selectedPostType === "SPARE & ACCESSORIES" ? (
                 <div className={styles.prodComptaible}>
-                  <label for="lname">Compatible Models</label>
-                  <input type="text" id="lname" name="lname" style={{padding:"11px",borderRadius:"5px"}}/>
+                  <label for="lname">Product Details</label>
+                  <input type="text" id="prod_desc" name="prod_desc" value={prodCondition?.prod_desc} onChange={handleProdCondition} style={{padding:"11px",borderRadius:"5px"}}/>
                 </div>
               ) : (
                 ""
@@ -356,11 +371,20 @@ const handleLocation = () =>{
 
 const AdvtSpecialityDorpDown = (props) => {
   const dispatch  = useDispatch()
+  const navigate = useNavigate()
+  const selectedPostType = useSelector(
+    (state) => state.addProd.prodAddData.selectedPostType
+  );
   const categoriesId = useSelector((state)=>state.addProd.prodAddData.categories)
   console.log(categoriesId,"cate")
   const [show, setShow] = useState(false);
 
 
+  useEffect(()=>{
+    if(!selectedPostType){
+      navigate("/post/")
+    }
+  },[selectedPostType])
   const handleCategoriesName = (event) =>{
     dispatch(setCategories(Number(event.target.value)))
   }
@@ -400,9 +424,18 @@ const AdvtSpecialityDorpDown = (props) => {
 
 export const AdvtPrice = () => {
   const dispatch =  useDispatch()
+  const navigate = useNavigate();
   const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
+  const selectedPostType = useSelector(
+    (state) => state.addProd.prodAddData.selectedPostType
+  );
 
 
+  useEffect(()=>{
+    if(!selectedPostType){
+      navigate("/post/")
+    }
+  },[selectedPostType])
   
  const handleProdCondition = (event) =>{
   const {name,value} = event.target
@@ -410,7 +443,6 @@ export const AdvtPrice = () => {
 }
 
 
-  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     if(prodCondition){
@@ -504,6 +536,7 @@ export const AdvtPrice = () => {
 
 export const AdvtProdData = () => {
   const dispatch = useDispatch()
+  const navigate =  useNavigate()
   const [isValid, setIsValid] = useState(true);
   const selectedPostType = useSelector(
     (state) => state.addProd.prodAddData.selectedPostType
@@ -511,24 +544,29 @@ export const AdvtProdData = () => {
   const ManufacturingYear = useSelector((state) => state.addProd.prodAddData.purchase_year);
   const specifications = useSelector((state) => state.addProd.prodAddData.specifications);
   const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
-  const equipPrice =  useSelector((state)=>state.addProd.prodAddData.price)
-  const equipNegot =  useSelector((state)=>state.addProd.prodAddData.negotiable)
+  // const equipPrice =  useSelector((state)=>state.addProd.prodAddData.price)
+  // const equipNegot =  useSelector((state)=>state.addProd.prodAddData.negotiable)
   const prodPrice =  useSelector((state)=>state.addProd.prodAddData.Prod_price)
   const allData =  useSelector((state)=>state.addProd.prodAddData)
   console.log(prodPrice)
 
 
 
+  useEffect(()=>{
+    if(!selectedPostType){
+      navigate("/post/")
+    }
+  },[selectedPostType])
 
   const handleChange = (event) =>{
     const {name,value} = event.target
     dispatch(setEquipSpecification({...specifications , name , value}))
   }
 
-  const handleProdCondition = (event) =>{
-    const {name,value} = event.target
-    dispatch(setEquipCondition({...prodCondition ,name,value}))
-  }
+  // const handleProdCondition = (event) =>{
+  //   const {name,value} = event.target
+  //   dispatch(setEquipCondition({...prodCondition ,name,value}))
+  // }
   
 
   const handleSubmit=(event)=>{  
@@ -557,16 +595,23 @@ export const AdvtProdData = () => {
     console.log(data,"data")
     // toast.success("Your AD listed Successfully",{autoClose:2000});
   }
+  const handleNavigate = () =>{
+    if(selectedPostType=="NEW" || selectedPostType =="SPARE & ACCESSORIES" || selectedPostType=="SERVICES"){
+      navigate("/post/location/")
+    }else{
+      navigate("/post/pricing/")
+    }
+  }
   return (
     <React.Fragment>
-      <NavLink to="/post/pricing/" className={styles.postBack}>
+      <div onClick={handleNavigate} className={styles.postBack}>
         <img src={arrLeft} alt="..." />
         <span>Back</span>
-      </NavLink>
+      </div>
 
       <form className={styles.advtDataCont} onSubmit={handleSubmit}>
         {(() => {
-          return getAddProdScreen3(selectedPostType , ManufacturingYear , dispatch ,setManufacturingYear , equipPrice  , equipNegot  , prodPrice ,setProdPrice ,isValid ,setIsValid ,prodCondition );
+          return getAddProdScreen3(selectedPostType , ManufacturingYear , dispatch ,setManufacturingYear  , prodPrice ,setProdPrice ,isValid ,setIsValid ,prodCondition );
         })()}
         <p>Product Specifications</p>
         <div className={styles.advtDetails}>
@@ -661,6 +706,7 @@ const getAddProdScreen2 = (selectedType , handleLocation ,dispatch ,CompatibleMo
 
 const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufacturingYear , prodPrice ,setProdPrice,isValid ,setIsValid ,prodCondition ) => {
  
+ 
   const handleProdCondition = (event) =>{
     const {name,value} = event.target
     dispatch(setEquipCondition({...prodCondition ,name,value}))
@@ -696,7 +742,7 @@ const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufa
         </div>
         <div className={styles.radiosSpec}>
           <div>
-            <input type="radio" value="1" name="negotiable" checked={prodCondition?.negotiable == "1"} onChange={handleProdCondition}  />
+            <input type="radio" value="1" name="negotiable" checked={prodCondition?.negotiable === "1"} onChange={handleProdCondition}  />
             <label className={styles.rdt}>Negotiable</label>
           </div>
           <div>
@@ -704,7 +750,7 @@ const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufa
               className={styles.rd1}
               type="radio"
               value="2"
-              name="negotiable" checked={prodCondition?.negotiable == "2"} onChange={handleProdCondition}
+              name="negotiable" checked={prodCondition?.negotiable === "2"} onChange={handleProdCondition}
             />
             <label className={styles.rdt}>Slightly Negotiable</label>
           </div>
@@ -713,7 +759,7 @@ const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufa
               className={styles.rd1}
               type="radio"
               value="3"
-              name="negotiable" checked={prodCondition?.negotiable == "3"} onChange={handleProdCondition}
+              name="negotiable" checked={prodCondition?.negotiable === "3"} onChange={handleProdCondition}
             />
             <label className={styles.rdt}>Non-Negotiable</label>
           </div>
@@ -726,7 +772,7 @@ const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufa
         <p>Manufacturing/ Purchase Year</p>
        <input type="text" name="purchase_year" placeholder="Select the year" value={ManufacturingYear}
             onChange={(e)=>handleYear(e.target.value)} />
-         {/* {!isValid && <p style={{ color: 'red' }}>Please enter a valid year (e.g., 2023)</p>} */}
+         {!isValid && <p style={{ color: 'red' }}>Please enter a valid year (e.g., 2023)</p>}
       </div>
     );
   } else if (selectedType === "SPARE & ACCESSORIES") {

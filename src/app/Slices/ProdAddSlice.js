@@ -15,7 +15,7 @@ export const prodAddSlice = createSlice({
         Equip_spacality:null,
         Equip_location:null,
         Compatible_Models:null,
-        Prod_price:0,
+        Prod_price:null,
         specialtiey:null,
         location:{
             lang:null,

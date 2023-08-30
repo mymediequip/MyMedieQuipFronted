@@ -65,7 +65,7 @@ const handleItemClick = equipment => {
             </div> 
             <div className={styles.lower_part}>
                 {
-                    categories?.map((topLevelEquipment,index)=>{
+                    categories?.slice()?.sort((a, b) => a.name.localeCompare(b.name))?.map((topLevelEquipment)=>{
                         return <CatItem key={topLevelEquipment.id} pic={plus_symbol} equipment={topLevelEquipment} onItemClick={handleItemClick}/> 
                     })
                 }
