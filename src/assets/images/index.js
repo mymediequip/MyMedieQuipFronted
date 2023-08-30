@@ -53,7 +53,15 @@ import ImageUpload from './ImageUpload.png';
 import videoIcon from './videoPlay.webp';
 import filledStar from './filledStar.png';
 import mFlowChart from './mFlowChart.png';
+import contBtn from './contBtn.png';
+import atcBtn from './actBtn.png';
+import whatsBtn from './whatsAppBtn.png';
+import dummyMap from './mapDumy.png';
 export {
+    dummyMap,
+    contBtn,
+    atcBtn,
+    whatsBtn,
     filledStar,
     mFlowChart,
     videoIcon,

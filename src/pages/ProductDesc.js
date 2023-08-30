@@ -8,6 +8,10 @@ import * as yup from "yup";
 import {emailSchema, fnameSchema} from '../utils/validation';
 import { useState } from 'react';
 import {
+    dummyMap,
+    contBtn,
+    atcBtn,
+    whatsBtn,
     unfilStar,
     rightMove,
     homeIcon,
@@ -90,13 +94,12 @@ const ProductData=()=>{
                     
                     <div>
                         <div className={styles.pd_links}>
-                            <h4>Seller</h4>
-                            <NavLink>
-                                    <img src={location} alt='...' style={{width:"20px"}}/>
-                                    <span>New Delhi</span>
-                            </NavLink>
+                            <div className={styles.sellerName}>
+                                <img src={testimage2} alt='...'/>
+                                <p>Mr Avdhesh</p>
+                            </div>
+                            <span>17/08/2023</span>
                         </div>
-                        <p>Lorem ipsone dummy text</p>
                     </div>
 
                     <div>
@@ -109,12 +112,33 @@ const ProductData=()=>{
                         <p>(Plus Shipping and VAT tax included)</p>
                     </div>
                     
-                    <NavLink className={styles.contactSellar} onClick={sellarClick}>Contact Seller</NavLink>
+                    <div className={styles.prodActLinks}>
+                        <NavLink className={styles.contactSellar} onClick={sellarClick}>
+                            <img src={contBtn} height="15px" alt='...'/>
+                            <span>CONTACT SELLER</span>
+                        </NavLink>
+                        <NavLink style={{backgroundColor:"#2EB943"}} className={styles.contactSellar} onClick={sellarClick}>
+                            <img src={whatsBtn} height="15px" alt='...'/>
+                            <span>CHAT ON WHATSAPP</span>
+                        </NavLink>
+                        <NavLink style={{backgroundColor:"#FFDD75",color:"black"}} className={styles.contactSellar} onClick={sellarClick}>
+                            <img src={atcBtn} height="15px" alt='...'/>
+                            <span>CLICK TO BUY NOW</span>
+                        </NavLink>
+
+                    </div>
+                    
+                    <div className={styles.prodLocation}>
+                        <b style={{color:"#019C89"}}>Posted in</b>
+                        <span>Rt Nagar , Bengaluru, Karnataka</span>
+                        <img src={dummyMap} alt='...'/>
+                    </div>
 
                     <div className={styles.prodDesclaimer}>
                         <b style={{fontSize:"15px"}}>Disclaimer : </b>
                         <span style={{fontSize:"14px"}}>Product details are submitted by the seller. MyMedieQuip will carry out inspection and give you inspection report before you purchase.</span>
                     </div>
+
                 </div>
             </div>
             {
@@ -239,7 +263,7 @@ const RelatedProd=()=>{
           <h3 className={styles.relprod}>RELATED PRODUCTS</h3>
           <hr className={styles.line2} />
         </div>
-        <div style={{position:"relative"}}>
+        <div style={{position:"relative",marginBottom:"40px"}}>
             <img src={swipetestleft} alt='...' className={styles.rlatedProdPrev}/>
             <div className={styles.rowws}>
                 <RelatedProdCard/>

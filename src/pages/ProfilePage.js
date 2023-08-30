@@ -69,31 +69,6 @@ export const MyProfile=()=>{
   useEffect(()=>{
     handleUserDetails()
   },[])
-<<<<<<< HEAD
-  
-  const handleSubmitForm = async(val) =>{
-    const formData = new FormData();
-    formData.append('image', selectedFile);
-      const data = {
-        first_name : val?.fname,
-        last_name : val?.lname,
-        email : val?.email,
-        mobile : val?.pnumber,
-        image : selectedFile,
-        gstin : val?.gstin,
-        location : val?.nationality,
-        pan_no : val?.pancard,
-        describe : val?.describe
-      }
-      console.log(data ,"data")
-      const res = await postData("users/add_profile/" , data , true)
-      console.log(res,"res data")
-      setTimeout(()=>{
-        handleUserDetails()
-      },1000)
-      
-    
-=======
 
 
   const handleSubmitForm = async(val) =>{ 
@@ -116,7 +91,6 @@ export const MyProfile=()=>{
           toast.success("Profile Updated SuccessFully !")
           handleUserDetails()
         }
->>>>>>> c4832dec86db755c6d1603d34544a70b890bc01c
   }
 
   const handleFileChange = (event) =>{
@@ -149,7 +123,7 @@ export const MyProfile=()=>{
               type="file"
               accept="image/*"
               ref={fileInputRef}
-              style={{ display: 'none'}}
+              style={{ display: 'none' }}
               onChange={handleFileChange}
       />
               {/* <h4 className={styles.discribe}>WHATS BEST DECRIBES YOU</h4>

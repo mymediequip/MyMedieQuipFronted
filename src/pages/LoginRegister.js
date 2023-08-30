@@ -116,9 +116,6 @@ export const Login=(props)=>{
             }
             const res =  await postData("users/generateotp/" , data)
             if(res?.status){
-<<<<<<< HEAD
-                navigate("/user/verifyotp/" , {state : {opt : res?.data?.otp , number : mobile.length === 12 ? mobile.slice(2,12) : mobile,navigateTo:navigateTo}})
-=======
                 toast.success("Mobile Number verified !")
                 setTimeout(()=>{
                     if(props.setOtpForm){
@@ -127,11 +124,10 @@ export const Login=(props)=>{
                         props.setNumber(mobile.length == 12 ? mobile.slice(2,12) : mobile)
                         return;
                       }else{
-                      navigate("/user/verifyotp/" , {state : {otp : res?.data?.otp , number : mobile.length == 12 ? mobile.slice(2,12) : mobile}})
+                      navigate("/user/verifyotp/" , {state : {otp : res?.data?.otp , number : mobile.length == 12 ? mobile.slice(2,12) : mobile,navigateTo:navigateTo}})
                       }
 
                 },2000)
->>>>>>> c4832dec86db755c6d1603d34544a70b890bc01c
             }
         }
        
@@ -180,16 +176,11 @@ export const Login=(props)=>{
 
 export const OtpVervicatonForm=({getOtp,number})=>{
    const location  =  useLocation()
-<<<<<<< HEAD
    const preOtp = location?.state?.otp;
    const preNumber = location?.state?.number;
    const navigateTo=location?.state?.navigateTo?location?.state?.navigateTo:"/dashboard/";
    const [showLoader,setLoader]=useState(false);
    console.log(preNumber , preOtp)
-=======
-   const preOtp = location?.state?.otp
-   const preNumber = location?.state?.number
->>>>>>> c4832dec86db755c6d1603d34544a70b890bc01c
     const [otp, setOtp] = useState("");
     const [otpError,setOtpError]=useState(false);
     const [otpTime,setOtpTime]=useState({minute:4,sec:59});
@@ -222,13 +213,8 @@ export const OtpVervicatonForm=({getOtp,number})=>{
         }, 1000);
         return () => {
             clearInterval(interval);
-<<<<<<< HEAD
-          };
-    },[otp]);
-=======
         };
     },[otpTime]);
->>>>>>> c4832dec86db755c6d1603d34544a70b890bc01c
 
     useEffect(()=>{
       handleOtp()
@@ -243,35 +229,24 @@ export const OtpVervicatonForm=({getOtp,number})=>{
                 mobile : preNumber || number,
                 otp : otp || getOtp
             }
-<<<<<<< HEAD
             setLoader(true);
            const res = await postData("users/verifyotp/",data);
            setLoader(false);
 
-           console.log(res,"otp")
-=======
-           const res = await postData("users/verifyotp/",data)
->>>>>>> c4832dec86db755c6d1603d34544a70b890bc01c
+           
            if(res?.status){
             setOtpError(false)
             toast.success("Verified OTP SuccessFully !")
             dispatch(changeLoginStatus())
-            dispatch(getUserData(res?.data))
+            dispatch(getUserData(res?.data));
             setTimeout(()=>{
-<<<<<<< HEAD
+                localStorage.setItem("token" , res?.data.token)
                 navigate(navigateTo);
-            },1000)
+            },2000)
            }
            else{
-            setOtpError(true);
-=======
-                localStorage.setItem("token" , res?.data.token)
-                navigate("/dashboard/");
-            },2000)
-           }else{
-            setOtpError(true)
->>>>>>> c4832dec86db755c6d1603d34544a70b890bc01c
-           }
+                setOtpError(true);
+            }
            
         }
 
@@ -279,7 +254,6 @@ export const OtpVervicatonForm=({getOtp,number})=>{
 
 
     return(
-<<<<<<< HEAD
         <React.Fragment>
             <div className={styles.otpVerifyCont}>
                 <div>
@@ -304,33 +278,6 @@ export const OtpVervicatonForm=({getOtp,number})=>{
             </div>
             { showLoader && <Loader/>}
         </React.Fragment>
-=======
-
-        <>
-        <Toaster/>
-        <div className={styles.otpVerifyCont}>
-            <div>
-                <h4 style={{color:"black"}}>Verification Code {preOtp || getOtp}</h4>
-                <p>Enter the 6 digit OTP Send to you phone number</p>
-            </div>
-            { otpError && <p style={{color:"red"}}>Invalid OTP</p> }
-            <div className={styles.otp_digits}>
-                <OtpInput
-                    value={otp}
-                    onChange={setOtp}
-                    numInputs={6}
-                    inputStyle={styleInpute}
-                    renderSeparator={<span></span>}
-                    renderInput={(props) => <input {...props} />}
-                />
-            </div>
-            <p>Code Expire in 0{otpTime.minute}:{otpTime.sec%10===otpTime.sec?"0"+otpTime.sec:otpTime.sec} </p>
-            {
-                otpTime.minute===0 && otpTime.sec===0?<NavLink>Resend</NavLink>:""
-            }
-        </div>
-        </>
->>>>>>> c4832dec86db755c6d1603d34544a70b890bc01c
     );
 }
 // non components function

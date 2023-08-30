@@ -73,7 +73,6 @@ export const SelectAdvtType = () => {
     }
   };
   return (
-<<<<<<< HEAD
     <div className={styles.advtPostSeCont}>
       <img src={mFlowChart} alt="..." className={styles.postFlowChart}/>
       <div className={styles.selectAdvtCont}>
@@ -95,22 +94,6 @@ export const SelectAdvtType = () => {
           Continue
         </NavLink>
         <ToastContainer/>
-=======
-    <div className={styles.selectAdvtCont}>
-      <h3>Post Your Adv</h3>
-      <div className={styles.slectTypes}>
-        {selectTypes?.map((value, index) => {
-          return (
-            <span 
-              onClick={changeColor}
-              key={index}
-              style={selectedPostType===value?selectStyle:{}}
-            >
-              {value}
-            </span>
-          );
-        })}
->>>>>>> c4832dec86db755c6d1603d34544a70b890bc01c
       </div>
     </div>
   );
@@ -173,70 +156,94 @@ export const AdvtMedia = () => {
 
   
   return (
-   <>
-   <ToastContainer/>
-    <React.Fragment>
-      <NavLink to="/post/" onClick={handleClearData} className={styles.postBack}>
-        <img src={arrLeft} alt="..." />
-        <span>Back</span>
-      </NavLink>
-      <form className={styles.advtMediaCont} onSubmit={handleSubmit}>
-        <div className={styles.advtAllMedie}>
-          <div>
-            <h4>Upload Product Image</h4>
-            <div className={styles.advtImgs} style={{display  : "flex"}}>
-            <label for="inputimg">
-                <input
-                  type="file"
-                  id="inputimg"
-                  accept="image/*"
-                  onChange={handlImages}
-                  name="image"
-                />
-                <img src={ImageUpload} alt="Upload" />
-              </label>
-              {selectedImages.map((value, index) => {
-                return (
-                  <div style={{margin : "10px" ,display : 'flex' }}>
-                    <img src={value?.imageUrl} key={value?.id} />
-                    <p style={{cursor : 'pointer'}} onClick={()=>handleImageRemove(value?.id)}>X</p>
-                    </div>
-                );
-              })}
-            
+    <>
+      <ToastContainer />
+      <React.Fragment>
+        <NavLink
+          to="/post/"
+          onClick={handleClearData}
+          className={styles.postBack}
+        >
+          <img src={arrLeft} alt="..." />
+          <span>Back</span>
+        </NavLink>
+        <form className={styles.advtMediaCont} onSubmit={handleSubmit}>
+          <div className={styles.advtAllMedie}>
+            <div>
+              <h4>Upload Product Image</h4>
+              <div className={styles.advtImgs}>
+                <div style={{display:"flex",alignItems:"center",flexWrap:"wrap"}}>
+                  <label for="inputimg">
+                    <input
+                      type="file"
+                      id="inputimg"
+                      accept="image/*"
+                      onChange={handlImages}
+                      name="image"
+                    />
+                    <img src={ImageUpload} alt="Upload" />
+                  </label>
+                  {selectedImages.map((value, index) => {
+                    return (
+                      <div style={{ margin: "10px", display: "flex" }}>
+                        <img src={value?.imageUrl} key={value?.id} />
+                        <p
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleImageRemove(value?.id)}
+                        >
+                          X
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div>
-            <h4>Upload Product Video</h4>
-            <div className={styles.advtImgs} style={{display : "flex" , flexDirection : 'row'}} >
-              {selectedVideos?.map((value, index) => {
-                return (
-                 <div style={{margin : "10px"}}>
-                  <p style={{cursor : 'pointer'}} onClick={()=>handleVideoRemove(value?.id)}>X</p>
-                   <video key={value?.id}>
-                    <source src={value?.imageUrl} type="video/mp4" />
-                  </video>
-                 </div>
-                );
-              })}
-              <label for="inputVideo">
-                <input
-                  type="file"
-                  id="inputVideo"
-                  accept="video/*"
-                  onChange={handlImages}
-                  name="video"
-                />
-                <img src={videoIcon} alt="Upload" />
-              </label>
+            <div>
+              <h4>Upload Product Video</h4>
+              <div
+                className={styles.advtImgs}
+              >
+                <div style={{display:"flex",alignItems:"center",flexWrap:"wrap"}}>
+                <label for="inputVideo">
+                  <input
+                    type="file"
+                    id="inputVideo"
+                    accept="video/*"
+                    onChange={handlImages}
+                    name="video"
+                  />
+                  <img src={videoIcon} alt="Upload" />
+                </label>
+                {selectedVideos?.map((value, index) => {
+                  return (
+                    <div style={{ margin: "10px" }}>
+                      <video key={value?.id}>
+                        <source src={value?.imageUrl} type="video/mp4" />
+                      </video>
+                      <span
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleVideoRemove(value?.id)}
+                      >
+                        X
+                      </span>
+                    </div>
+                  );
+                })}
+                
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <input type="submit" className={styles.advtContinue} value="continue" />
-      </form>
-    </React.Fragment>
-   </>
+          <input
+            type="submit"
+            className={styles.advtContinue}
+            value="continue"
+          />
+        </form>
+      </React.Fragment>
+    </>
   );
 };
 
@@ -281,13 +288,11 @@ const handleLocation = () =>{
         console.log(error , "error getting location")
       }
     )
+    console.log(lat,long);
   }else{
     console.log("Gelocation is not available");
   }
 }
-
-
-
   const navigate = useNavigate();
   const selectedPostType = useSelector(
     (state) => state.addProd.prodAddData.selectedPostType
@@ -348,7 +353,7 @@ const handleLocation = () =>{
               <AdvtSpecialityDorpDown data={dropSpec} />
               {selectedPostType === "SPARE & ACCESSORIES" ? (
                 <div className={styles.prodComptaible}>
-                  <label for="lname">Compatible Models</label>
+                  <label for="lname">Product Details</label>
                   <input type="text" id="lname" name="lname" style={{padding:"11px",borderRadius:"5px"}}/>
                 </div>
               ) : (

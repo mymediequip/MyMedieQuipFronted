@@ -281,9 +281,17 @@ const ProfileDropDown=()=>{
     const handleClick=()=>{
         setIsOpen(!isOpen);
     };
+    const ref=useRef();
+    useEffect(()=>{
+        document.addEventListener("click",(e)=>{
+        if(ref.current && !ref.current.contains(e.target)){
+            setIsOpen(false)
+        }
+      });
+    },[])
     
     return(
-        <div className={styles.exploreCont}>
+        <div className={styles.exploreCont} ref={ref}>
             <div className={styles.profileHead} onClick={handleClick} >
                 <img src={profile_image ? profile_image :testimage2} style={{width:"45px",height:"45px" , borderRadius : "50%"}} alt='Dashboard'/>
                 <img style={{cursor : 'pointer'}} src={downIcon} alt='>'/>
@@ -295,7 +303,7 @@ const ProfileDropDown=()=>{
                     return <NavLink to={values.path} onClick={handleClick} key={index}>{values.title}</NavLink>
                 })
                 }
-                <Logout />
+                <Logout/>
                 </div>:""
             }
         </div>
