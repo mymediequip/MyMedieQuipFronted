@@ -8,7 +8,7 @@ export const fnameSchema = yup.string().min(2).max(30).required()
 
 export const lnameSchema = yup.string().min(2).max(30).required()
 
-export const pnumberSchema = yup.string().matches(/^[0-9]{10}$/).required()
+export const pnumberSchema = yup.string().matches(/^[0-9]{12}$/).required("Please Enter Mobile Number")
 
 export const emailSchema = yup.string().matches(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/).required(); 
 
