@@ -4,6 +4,8 @@ import { NavLink, Outlet } from 'react-router-dom';
 import styles from '../assets/css/prod_desc.module.css';
 import { RelatedProdCard } from '../components/Cards';
 import { GetStarted,BackgroundBlur } from '../utils/Popups';
+import * as yup from "yup";
+import {emailSchema, fnameSchema} from '../utils/validation';
 import { useState } from 'react';
 import {
     unfilStar,
@@ -16,8 +18,11 @@ import {
     star,
     location,
     video_Advt,
+    filledStar,
     testimage2,
 } from '../assets/images/index';
+import { useFormik } from 'formik';
+import { ToastContainer, toast } from 'react-toastify';
 
 export const ProductDescription=()=>{
     return(
@@ -250,26 +255,64 @@ const RelatedProd=()=>{
 
 const ReviewForm=()=>{
     const [ratinsStars,setRatingStar]=useState(new Array(5).fill(false));
-    const handleStars=(e)=>{
-        let curr=parseInt(e.currentTarget.name);
-        for(let i=0;i<=curr;i++){
-            if(ratinsStars[i]){
-                for(let j=curr;j<5;j++){
-                    ratinsStars[j]=false;
+    const [ratingErr,setRatingErr]=useState(false);
+    const formik=useFormik({
+        initialValues:{
+            name:"",
+            email:"",
+            review:""
+        },
+        validationSchema : yup.object({
+            name  : fnameSchema,
+            email : emailSchema,
+            review:fnameSchema
+        }),
+        onSubmit : function (values){
+            handleSubmit(values);
+        }
+    });
+
+    const handleSubmit=(values)=>{
+        
+        // calculating user provided rating
+        let rating=(()=>{
+            let count=0;
+            for(let i=0;i<5;i++){
+                if(ratinsStars[i]){
+                    count+=1;
                 }
             }
-            else{
-                ratinsStars[i]=true;
-            }
+            return count;
+        })()
+
+        // rating validation
+        if(rating===0){
+            setRatingErr(true);
+            return;
         }
-        console.log(ratinsStars)
-        setRatingStar([...ratinsStars]);
+        setRatingErr(false);
+
+        toast.success("Rating Added successfully",{autoClose:2000});
     }
+
+    const handleStars = (e) => {
+      let curr = parseInt(e.currentTarget.name);
+      if (ratinsStars[curr]) {
+        for (let i = curr; i <= 4; i++) {
+          ratinsStars[i] = false;
+        }
+      } else {
+        for (let i = 0; i <= curr; i++) {
+          ratinsStars[i] = true;
+        }
+      }
+      setRatingStar([...ratinsStars]);
+    };
     return (
       <div>
         <div className={styles.reviewFormCont}>
           <h2 className={styles.ratingHeading}>ADD YOUR REVIEW HERE</h2>
-
+          {ratingErr && <p style={{color:"red",marginBottom:"10px"}}>Rating not provided</p>}
           <div className={styles.giveRatingCont}>
             <p className={styles.onlyStarCol}>STAR RATING</p>
             <div className={styles.giveRatingImg}>
@@ -280,64 +323,74 @@ const ReviewForm=()=>{
                     key={index}
                     name={index}
                     className={styles.ratingStar}
-                    src={value?star:unfilStar}
+                    src={value ? filledStar : unfilStar}
                     alt="..."
                   />
                 );
               })}
             </div>
           </div>
-
-          <form action="#" method="post" />
-          <div
-            className={
-              styles.form_group +
-              " " +
-              styles.forOneLine +
-              " " +
-              styles.rateFormCol
-            }
-          >
-            <div className={styles.rateFormName}>
-              <label for="name">NAME</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Enter your name"
-                required
-              />
+          
+          <form onSubmit={formik.handleSubmit} noValidate>
+            <div
+              className={
+                styles.form_group +
+                " " +
+                styles.forOneLine +
+                " " +
+                styles.rateFormCol
+              }
+            >
+              <div className={styles.rateFormName}>
+                <label for="name">NAME</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  onChange={formik.handleChange}
+                  value={formik.values.name}
+                  placeholder="Enter your name"
+                  required
+                />
+              </div>
+              {formik.errors.name && formik.touched.name && (<div style={{color : 'red'}}>{formik.errors.name}</div>)}
+              <div className={styles.form_group + " " + styles.rateFormName}>
+                <label for="email">EMAIL ID</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  onChange={formik.handleChange}
+                  value={formik.values.email}
+                  placeholder="Enter your email id"
+                  required
+                />
+              </div>
+              {formik.errors.email && formik.touched.email && (<div style={{color : 'red'}}>{formik.errors.email}</div>)}
             </div>
-            <div className={styles.form_group + " " + styles.rateFormName}>
-              <label for="email">EMAIL ID</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Enter your email id"
-                required
-              />
-            </div>
-          </div>
 
-          <div className={styles.form_group + " " + styles.rateFormCol}>
-            <label for="review">REVIEW</label>
-            <textarea
-              className={styles.DescPlaceholder}
-              id={styles.review}
-              name="review"
-              rows="4"
-              placeholder="Enter your review in this box"
-              required
-            ></textarea>
-          </div>
-          <input
-            className={styles.reviewSubmit}
-            type="submit"
-            value="Submit Response"
-          />
-          <form />
+            <div className={styles.form_group + " " + styles.rateFormCol}>
+              <label for="review">REVIEW</label>
+              <textarea
+                className={styles.DescPlaceholder}
+                id={styles.review}
+                name="review"
+                rows="4"
+                placeholder="Enter your review in this box"
+                onChange={formik.handleChange}
+                value={formik.values.review}
+                required
+              ></textarea>
+            </div>
+            {formik.errors.review && formik.touched.review && (<div style={{color : 'red'}}>{formik.errors.review}</div>)}
+            <input
+              className={styles.reviewSubmit}
+              type="submit"
+              value="Submit Response"
+            />
+          </form>
         </div>
+        <ToastContainer/>
       </div>
     );
 }

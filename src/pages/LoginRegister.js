@@ -6,6 +6,7 @@ import { changeLoginStatus } from '../app/Slices/AuthSlice';
 import styles from '../assets/css/loginregister.module.css';
 import PhoneInput from 'react-phone-input-2';
 import OtpInput from 'react-otp-input';
+import { Loader } from '../components/Loader';
 import 'react-phone-input-2/lib/style.css';
 import { Toaster ,toast } from '../utils/Toaster';
 import {
@@ -80,6 +81,9 @@ export const Signup=()=>{
 };
 
 export const Login=(props)=>{
+    const location=useLocation()
+    const navigateTo=location?.state?.navigateTo;
+
     const [isPhone,setIsphone]=useState(true);
     const [phoneError, setPhoneError] = useState('');
     const [mobile,setMobile]=useState("");
@@ -120,7 +124,7 @@ export const Login=(props)=>{
                         props.setNumber(mobile.length == 12 ? mobile.slice(2,12) : mobile)
                         return;
                       }else{
-                      navigate("/user/verifyotp/" , {state : {otp : res?.data?.otp , number : mobile.length == 12 ? mobile.slice(2,12) : mobile}})
+                      navigate("/user/verifyotp/" , {state : {otp : res?.data?.otp , number : mobile.length == 12 ? mobile.slice(2,12) : mobile , navigateTo : navigateTo}})
                       }
 
                 },2000)
@@ -172,8 +176,11 @@ export const Login=(props)=>{
 
 export const OtpVervicatonForm=({getOtp,number})=>{
    const location  =  useLocation()
-   const preOtp = location?.state?.otp
-   const preNumber = location?.state?.number
+   const preOtp = location?.state?.otp;
+   const preNumber = location?.state?.number;
+   const navigateTo= location?.state?.navigateTo ?   location?.state?.navigateTo : "/dashboard/";
+   const [showLoader,setLoader]=useState(false);
+   console.log(location , "navigateTo")
     const [otp, setOtp] = useState("");
     const [otpError,setOtpError]=useState(false);
     const [otpTime,setOtpTime]=useState({minute:4,sec:59});
@@ -208,6 +215,7 @@ export const OtpVervicatonForm=({getOtp,number})=>{
             clearInterval(interval);
         };
     },[otpTime]);
+         
 
     useEffect(()=>{
       handleOtp()
@@ -219,18 +227,23 @@ export const OtpVervicatonForm=({getOtp,number})=>{
                 mobile : preNumber || number,
                 otp : otp || getOtp
             }
-           const res = await postData("users/verifyotp/",data)
+            setLoader(true);
+           const res = await postData("users/verifyotp/",data);
+           setLoader(false);
+
+           console.log(res,"otp")
            if(res?.status){
             setOtpError(false)
             toast.success("Verified OTP SuccessFully !")
             dispatch(changeLoginStatus())
             dispatch(getUserData(res?.data))
             setTimeout(()=>{
-                localStorage.setItem("token" , res?.data.token)
-                navigate("/dashboard/");
-            },2000)
-           }else{
-            setOtpError(true)
+                localStorage.setItem("token" , res?.data?.token)
+                navigate(navigateTo);
+            },1000)
+           }
+           else{
+            setOtpError(true);
            }
            
         }

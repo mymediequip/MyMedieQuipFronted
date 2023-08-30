@@ -51,7 +51,11 @@ import Jaipur from './jaipur.png';
 import postDropdown from './post_dropdown.png';
 import ImageUpload from './ImageUpload.png';
 import videoIcon from './videoPlay.webp';
+import filledStar from './filledStar.png';
+import mFlowChart from './mFlowChart.png';
 export {
+    filledStar,
+    mFlowChart,
     videoIcon,
     postDropdown,
     ImageUpload,
