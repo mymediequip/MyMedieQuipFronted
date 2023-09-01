@@ -4,7 +4,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../assets/css/postAdvt.module.css";
 import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories, fetchCategoriesName, setCategories } from "../app/Slices/ProdAddSlice";
-
+import GeoCode from "react-geocode"
 import {
   ImageUpload,
   arrLeft,
@@ -18,6 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRef } from "react";
 // toast.configure();
 import { equipmentName } from "../utils/validation";
+import axios from "axios";
 
 export const PostAdvt = () => {
   return (
@@ -259,6 +260,7 @@ const [lat,setlat] = useState(null)
 const [long,setlong] = useState(null)
 const [searchName,setSearchName] = useState("")
 const [parent,setParent] = useState([])
+const [address, setAddress] = useState('');
 const dispatch =  useDispatch()
 const navigate = useNavigate();
   const selectedPostType = useSelector(
@@ -278,6 +280,8 @@ let data = []
 })
 
 
+
+
 useEffect(()=>{
 dispatch(fetchCategories(searchName))
 dispatch(fetchCategoriesName(data))
@@ -294,6 +298,8 @@ const handleChange = (event) =>{
   setSearchName(newName)
   dispatch(setEquipmentName(newName));
 }
+
+
 const handleLocation = () =>{
   if("geolocation" in navigator){
     navigator.geolocation.getCurrentPosition(
@@ -310,6 +316,48 @@ const handleLocation = () =>{
     console.log("Gelocation is not available");
   }
 }
+
+console.log(lat ,long)
+
+useEffect(() => {
+  // const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
+  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${long}&format=json`;;
+
+  axios
+    .get(API_URL)
+    .then(response => {
+      console.log(response?.data,"res")
+       dispatch(setEquip_Location(response?.data?.display_name))
+    })
+    .catch(error => {
+      console.error('Error fetching address:', error);
+    });
+}, [lat, long]);
+
+
+// useEffect(() => {
+//   const API_KEY = 'AIzaSyADGoHCfvvOG_3Ym3WxRD-yg4-3-KvR8xA';
+//   const API_URL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${API_KEY}`;
+
+//   axios
+//     .get(API_URL)
+//     .then(response => {
+//       console.log(response,"res")
+//       // if (response.data.results.length > 0) {
+//       //   setAddress(response.data.results[0].formatted_address);
+//       // } else {
+//       //   setAddress('Address not found');
+//       // }
+//     })
+//     .catch(error => {
+//       console.error('Error fetching address:', error);
+//     });
+// }, [lat, long]);
+
+
+
+
+
  
 
   const dropSpec = {
@@ -362,7 +410,7 @@ const handleLocation = () =>{
               {/* {formik.errors.equipment_name && formik.touched.equipment_name && (<div style={{color : 'red'}}>{formik.errors.equipment_name}</div>)} */}
 
               {(() => {
-                return getAddProdScreen2(selectedPostType ,handleLocation  , dispatch , CompatibleModel , setCompatibleModels , prodCondition , handleProdCondition , prodLocation);
+                return getAddProdScreen2(selectedPostType ,handleLocation   , dispatch , CompatibleModel , setCompatibleModels , prodCondition , handleProdCondition , prodLocation);
               })()}
             </div>
             <div className={styles.specialtCont}>
@@ -693,7 +741,7 @@ export const AdvtProdData = () => {
 /*++++++++++++++++++++++++ Non Components ++++++++++++++++++++++++++++++++++*/
 
 
-const getAddProdScreen2 = (selectedType , handleLocation ,dispatch ,CompatibleModel , setCompatibleModels ,prodCondition , handleProdCondition  , prodLocation) => {
+const getAddProdScreen2 = (selectedType , handleLocation  ,dispatch ,CompatibleModel , setCompatibleModels ,prodCondition , handleProdCondition  , prodLocation) => {
   if (selectedType === "NEW") {
     return (
       <div className={styles.prodDiscr}>
