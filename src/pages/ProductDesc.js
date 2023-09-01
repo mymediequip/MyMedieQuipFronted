@@ -256,6 +256,33 @@ export const ProductReviewCard=()=>{
 };
 
 const RelatedProd=()=>{
+    const relatedProd=[
+        {title:"Prod 1",des:"space for a small product description.space for a small product",price:"2000"},
+        {title:"Prod 2",des:"space for a small product description.space for a small product",price:"3000"},
+        {title:"Prod 3",des:"space for a small product description.space for a small product",price:"4000"},
+        {title:"Prod 4",des:"space for a small product description.space for a small product",price:"5000"},
+        {title:"Prod 5",des:"space for a small product description.space for a small product",price:"6000"},
+        {title:"Prod 6",des:"space for a small product description.space for a small product",price:"2000"},
+        {title:"Prod 7",des:"space for a small product description.space for a small product",price:"3000"},
+        {title:"Prod 8",des:"space for a small product description.space for a small product",price:"4000"},
+        {title:"Prod 9",des:"space for a small product description.space for a small product",price:"5000"},
+        {title:"Prod 10",des:"space for a small product description.space for a small product",price:"6000"}
+    ];
+    const [prodData,setProdData]=useState(relatedProd.slice(0,4));
+    const [p_pointer,setPointer]=useState({left:0,right:4});
+    // using two pointer
+    const shiftProducts=(e)=>{
+        let name=e.currentTarget.name;
+        if(name==="prev" && p_pointer.left>0){
+            setProdData(relatedProd.slice(p_pointer.left-=1,p_pointer.right-=1));
+        }
+        if(name==="next" && p_pointer.right<relatedProd.length){
+            setProdData(relatedProd.slice(p_pointer.left+=1,p_pointer.right+=1));
+        }  
+        console.log(p_pointer.left,p_pointer.right);
+
+    }
+
     return (
       <React.Fragment>
         <div className={styles.hzline}>
@@ -264,14 +291,16 @@ const RelatedProd=()=>{
           <hr className={styles.line2} />
         </div>
         <div style={{position:"relative",marginBottom:"40px"}}>
-            <img src={swipetestleft} alt='...' className={styles.rlatedProdPrev}/>
+            <img src={swipetestleft} alt='...' onClick={shiftProducts} name="prev" className={styles.rlatedProdPrev}/>
             <div className={styles.rowws}>
-                <RelatedProdCard/>
-                <RelatedProdCard/>
-                <RelatedProdCard/>
-                <RelatedProdCard/>
+                {
+                    prodData.map((value,id)=>{
+                        return <RelatedProdCard data={value} key={id}/>   
+                    })
+                }
+                
             </div>
-            <img src={nextArow} className={styles.rlatedProdNext} alt='...'/>
+            <img src={nextArow} onClick={shiftProducts} className={styles.rlatedProdNext} name="next" alt='...'/>
         </div>
       </React.Fragment>
     );

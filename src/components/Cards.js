@@ -106,7 +106,7 @@ export const NewProductsCard = (props) => {
   );
 }; 
 
-export const RelatedProdCard=()=>{
+export const RelatedProdCard=(props)=>{
   return (
     <div className={styles.column}>
       <div className={styles.imagess}>
@@ -117,12 +117,12 @@ export const RelatedProdCard=()=>{
           style={{ width: "100%", height: "100%" }}
         />
         <div className={styles.contain}>
-          <h5 className={styles.prodtitle}>Product Title</h5>
+          <h5 className={styles.prodtitle}>{props.data.title}</h5>
           <p className={styles.containDis}>
             {" "}
-            space for a small product description.space for a small product
+            {props.data.des}
           </p>
-          <h4 className={styles.pprice}>₹ 50000</h4>
+          <h4 className={styles.pprice}>₹ {props.data.price}</h4>
         </div>
       </div>
     </div>

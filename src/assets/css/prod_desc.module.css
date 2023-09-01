@@ -278,12 +278,14 @@
     left: -8px;
     z-index: 1;
     top: 45%;
+    cursor: pointer;
 }
 .rlatedProdNext{
     height: 25px;
     position: absolute;
     right: -8px;
     z-index: 1;
+    cursor: pointer;
     top: 45%;
 }
 
