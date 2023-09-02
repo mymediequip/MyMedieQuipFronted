@@ -1,12 +1,14 @@
 import React from 'react';
+
 import { DashboardAdvt } from '../components/Advt';
 import { NavLink, Outlet, useNavigate} from 'react-router-dom';
 import styles from '../assets/css/prod_desc.module.css';
 import { RelatedProdCard } from '../components/Cards';
 import { GetStarted,BackgroundBlur } from '../utils/Popups';
 import * as yup from "yup";
+import { SocialShare } from '../utils/Popups';
 import {emailSchema, fnameSchema} from '../utils/validation';
-import { useState } from 'react';
+import { useRef, useState ,useEffect} from 'react';
 import {
     dummyMap,
     contBtn,
@@ -53,6 +55,7 @@ const ProductData=()=>{
 
     
 
+    const [openSocial,setOpenSocial]=useState(false);
     const sellarClick=(event)=>{
         event.preventDefault();
             setBlur(true); 
@@ -61,11 +64,20 @@ const ProductData=()=>{
             navigate("" ,{state:{navigateTo: "products/xray-machine/"}});
     };
 
-    
-
+    const handleSocial=(e)=>{
+        setOpenSocial(!openSocial);
+    }
     const prodImgStyle={
         backgroundImage:`url(${pngwing})`,
     };
+    const ref=useRef();
+    useEffect(()=>{
+        document.addEventListener("click",(e)=>{
+        if(ref.current && !ref.current.contains(e.target)){
+            setOpenSocial(false);
+        }
+      });
+    },[])
     return(
         <React.Fragment>
             <div className={styles.prod_path}>
@@ -100,16 +112,22 @@ const ProductData=()=>{
                                 <img src={star} alt='...'/> 
                             </div>
                         </div>
-                        <NavLink>
-                                <img src={pdShare} alt='...' style={{width:"80px"}}/>
-                        </NavLink>
+                        {/* <SocialShare/> */}
+                        <div style={{display:"flex",gap:"20px"}}>
+                            <img src={pdShare} ref={ref} alt='...' onClick={handleSocial} style={{width:"80px" , cursor : 'pointer'}}/>
+                            {
+                                openSocial && (<div className={styles.socialShare}>
+                                    <SocialShare />
+                                </div>)
+                            }
+                        </div>
                     </div>
                     
                     <div>
                         <div className={styles.pd_links}>
                             <div className={styles.sellerName}>
                                 <img src={testimage2} alt='...'/>
-                                <p>Mr Avdhesh</p>
+                                <p>Mr Daniel</p>
                             </div>
                             <span>17/08/2023</span>
                         </div>
@@ -278,6 +296,33 @@ export const ProductReviewCard=()=>{
 };
 
 const RelatedProd=()=>{
+    const relatedProd=[
+        {title:"Prod 1",des:"space for a small product description.space for a small product",price:"2000"},
+        {title:"Prod 2",des:"space for a small product description.space for a small product",price:"3000"},
+        {title:"Prod 3",des:"space for a small product description.space for a small product",price:"4000"},
+        {title:"Prod 4",des:"space for a small product description.space for a small product",price:"5000"},
+        {title:"Prod 5",des:"space for a small product description.space for a small product",price:"6000"},
+        {title:"Prod 6",des:"space for a small product description.space for a small product",price:"2000"},
+        {title:"Prod 7",des:"space for a small product description.space for a small product",price:"3000"},
+        {title:"Prod 8",des:"space for a small product description.space for a small product",price:"4000"},
+        {title:"Prod 9",des:"space for a small product description.space for a small product",price:"5000"},
+        {title:"Prod 10",des:"space for a small product description.space for a small product",price:"6000"}
+    ];
+    const [prodData,setProdData]=useState(relatedProd.slice(0,4));
+    const [p_pointer,setPointer]=useState({left:0,right:4});
+    // using two pointer
+    const shiftProducts=(e)=>{
+        let name=e.currentTarget.name;
+        if(name==="prev" && p_pointer.left>0){
+            setProdData(relatedProd.slice(p_pointer.left-=1,p_pointer.right-=1));
+        }
+        if(name==="next" && p_pointer.right<relatedProd.length){
+            setProdData(relatedProd.slice(p_pointer.left+=1,p_pointer.right+=1));
+        }  
+        console.log(p_pointer.left,p_pointer.right);
+
+    }
+
     return (
       <React.Fragment>
         <div className={styles.hzline}>
@@ -286,14 +331,16 @@ const RelatedProd=()=>{
           <hr className={styles.line2} />
         </div>
         <div style={{position:"relative",marginBottom:"40px"}}>
-            <img src={swipetestleft} alt='...' className={styles.rlatedProdPrev}/>
+            <img src={swipetestleft} alt='...' onClick={shiftProducts} name="prev" className={styles.rlatedProdPrev}/>
             <div className={styles.rowws}>
-                <RelatedProdCard/>
-                <RelatedProdCard/>
-                <RelatedProdCard/>
-                <RelatedProdCard/>
+                {
+                    prodData.map((value,id)=>{
+                        return <RelatedProdCard data={value} key={id}/>   
+                    })
+                }
+                
             </div>
-            <img src={nextArow} className={styles.rlatedProdNext} alt='...'/>
+            <img src={nextArow} onClick={shiftProducts} className={styles.rlatedProdNext} name="next" alt='...'/>
         </div>
       </React.Fragment>
     );

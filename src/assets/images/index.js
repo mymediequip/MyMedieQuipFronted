@@ -56,8 +56,14 @@ import mFlowChart from './mFlowChart.png';
 import contBtn from './contBtn.png';
 import atcBtn from './actBtn.png';
 import whatsBtn from './whatsAppBtn.png';
+import whatsApp2 from './whatsapp2.png';
 import dummyMap from './mapDumy.png';
+import twitter2 from './twitter2.png';
+import email2 from './mail2.png';
 export {
+    twitter2,
+    email2,
+    whatsApp2,
     dummyMap,
     contBtn,
     atcBtn,

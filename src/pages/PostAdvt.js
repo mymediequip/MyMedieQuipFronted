@@ -30,7 +30,7 @@ export const PostAdvt = () => {
 };
 
 export const SelectAdvtType = () => {
-  const selectTypes = ["USED", "NEW", "SPARE & ACCESSORIES", "SERVICES"];
+  const selectTypes = ["PRE-OWNED", "NEW", "SPARE & ACCESSORIES", "SERVICES"];
   const [prevSelected, setPrevSelected] = useState(false);
   const navigate=useNavigate();
   const dispatch = useDispatch();
@@ -368,7 +368,7 @@ useEffect(() => {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(selectedPostType==="USED"){
+    if(selectedPostType==="PRE-OWNED"){
       navigate("/post/pricing/");
     }
     else{
@@ -688,9 +688,7 @@ export const AdvtProdData = () => {
   const handleSubmit=async(event)=>{  
     event.preventDefault();
     const data = {
-      post_type : selectedPostType == "USED" ? 1 : selectedPostType == "NEW"  ? 2 : selectedPostType == "SPARE & ACCESSORIES" ? 3 : selectedPostType == "SERVICES" ? 4 : ""  ,
-      // user : "4f9cb064-6c82-4668-8542-f03696424174",
-      user : userId,
+      post_type : selectedPostType == "PRE-OWNED" ? 1 : selectedPostType == "NEW"  ? 2 : selectedPostType == "SPARE & ACCESSORIES" ? 3 : selectedPostType == "SERVICES" ? 4 : ""  ,
       image : allData?.prodImgs,
       video : allData?.prodVideos,
       equip_name : allData?.Equip_name,
@@ -802,7 +800,7 @@ const getAddProdScreen2 = (selectedType , handleLocation  ,dispatch ,CompatibleM
         <textarea value={prodCondition?.prod_desc} className={styles.tetAr} typeof="textarea" name="prod_desc" onChange={handleProdCondition} />
       </div>
     );
-  } else if (selectedType === "USED") {
+  } else if (selectedType === "PRE-OWNED") {
     return (
       <React.Fragment>
         <label for="lname">Where is the Equipment</label>
@@ -885,7 +883,7 @@ const getAddProdScreen3 = (selectedType, ManufacturingYear , dispatch ,setManufa
         </div>
       </React.Fragment>
     );
-  } else if (selectedType === "USED") {
+  } else if (selectedType === "PRE-OWNED") {
     return (
       <div className={styles.specificYear}>
         <p>Manufacturing/ Purchase Year</p>

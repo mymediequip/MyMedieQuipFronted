@@ -145,6 +145,28 @@
     margin: 4px;
 }
 /* Products Meta Data*/
+.socialShare{
+    display: flex;
+    justify-content: space-around;
+    /* flex-direction: column; */
+    /* align-items: flex-start; */
+    gap: 8px;
+    position: absolute;
+    margin-top: 33px;
+    right: 8vw;
+    z-index: 2;
+    /* background-color: #FFFFFF; */
+    /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
+}
+.socialShare button{
+    width: fit-content;
+}
+.socialShare img{
+    width: 30px;
+}
+
+
+
 .ptitle {
     color: #2A2A29;
     margin-bottom: 23px;
@@ -278,12 +300,14 @@
     left: -8px;
     z-index: 1;
     top: 45%;
+    cursor: pointer;
 }
 .rlatedProdNext{
     height: 25px;
     position: absolute;
     right: -8px;
     z-index: 1;
+    cursor: pointer;
     top: 45%;
 }
 
