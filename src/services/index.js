@@ -25,6 +25,28 @@ const postData = async (url,body,isAuthenticated) => {
   }
 };
 
+
+const postData1 = async (url,body) => {
+  const headers = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  };
+
+const token = localStorage.getItem("token");
+headers.Authorization = `Token ${token}`;
+  const response = await fetch(`${BaseURL}/${url}`, {
+    mode: "cors",
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(body),
+  });
+  try {
+    const result1 = await response.json();
+    return result1;
+  } catch (e) {
+    console.error(e,"error");
+  }
+};
 const postDataFIle = async (url,formData,isAuthenticated) => {
   const headers = {
     Accept: "application/json",
@@ -49,4 +71,4 @@ const postDataFIle = async (url,formData,isAuthenticated) => {
 };
 
 
-export { postData ,postDataFIle };
+export { postData ,postDataFIle  , postData1};

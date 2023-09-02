@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../assets/css/postAdvt.module.css";
-import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories, fetchCategoriesName, setCategories } from "../app/Slices/ProdAddSlice";
+import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories, fetchCategoriesName, setCategories, fetchSpecialityName, setSpecality } from "../app/Slices/ProdAddSlice";
 import GeoCode from "react-geocode"
 import {
   ImageUpload,
@@ -19,6 +19,7 @@ import { useRef } from "react";
 // toast.configure();
 import { equipmentName } from "../utils/validation";
 import axios from "axios";
+import { postData } from "../services";
 
 export const PostAdvt = () => {
   return (
@@ -269,6 +270,7 @@ const navigate = useNavigate();
 const equipName  =  useSelector((state)=>state.addProd.prodAddData.Equip_name)
 const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
 const parentName =  useSelector((state)=>state.addProd.prodAddData.Parent_Name)
+const specialityName =  useSelector((state)=>state.addProd.prodAddData.specialtiey_name)
 
 const CompatibleModel =  useSelector((state)=>state.addProd.prodAddData.Compatible_Models)
 const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
@@ -278,14 +280,17 @@ let data = []
  categories?.forEach((el)=>{
     data.push(el?.parent)
 })
-
-
-
+console.log(specialityName)
 
 useEffect(()=>{
 dispatch(fetchCategories(searchName))
 dispatch(fetchCategoriesName(data))
 },[searchName])
+
+
+useEffect(()=>{
+  dispatch(fetchSpecialityName())
+},[dispatch])
   
  const handleProdCondition = (event) =>{
   const {name,value} = event.target
@@ -363,7 +368,7 @@ useEffect(() => {
   const dropSpec = {
     title: "Speciality",
     placeholder: "Select the medical specialty",
-    dataList: ["Lorem ipsum dolor sit amet", "Lorem ipsum dolor sit amet"],
+    dataList: specialityName,
   };
   const dropCat = {
     title: "Category",
@@ -417,7 +422,7 @@ useEffect(() => {
               {selectedPostType === "SPARE & ACCESSORIES" ? (
                 ""
               ) : (
-                <AdvtSpecialityDorpDown  data={dropCat} />
+                <AdvtCategoriesDorpDown  data={dropCat} />
               )}
               <AdvtSpecialityDorpDown data={dropSpec} />
               {selectedPostType === "SPARE & ACCESSORIES" ? (
@@ -439,7 +444,7 @@ useEffect(() => {
   );
 };
 
-const AdvtSpecialityDorpDown = (props) => {
+const AdvtCategoriesDorpDown = (props) => {
   const dispatch  = useDispatch()
   const navigate = useNavigate()
   const selectedPostType = useSelector(
@@ -482,6 +487,60 @@ const AdvtSpecialityDorpDown = (props) => {
             return (
               <div className={styles.checkboxCont} key={value.id}>
                 <input type="checkbox" id="categories" value={value?.id} checked={categoriesId?.includes(value.id)} name="categories" onChange={handleCategoriesName}  />
+                <label for="checkbox1">{value?.name}</label>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+
+const AdvtSpecialityDorpDown = (props) => {
+  const dispatch  = useDispatch()
+  const navigate = useNavigate()
+  const selectedPostType = useSelector(
+    (state) => state.addProd.prodAddData.selectedPostType
+  );
+  const Speciality = useSelector((state)=>state.addProd.prodAddData.specility)
+  console.log(Speciality,"cate")
+  const [show, setShow] = useState(false);
+
+
+  useEffect(()=>{
+    if(!selectedPostType){
+      navigate("/post/")
+    }
+  },[selectedPostType])
+  const handleCategoriesName = (event) =>{
+    dispatch(setSpecality(event.target.value))
+  }
+  const ref=useRef();
+  useEffect(()=>{
+      document.addEventListener("click",(e)=>{
+      if(ref.current && !ref.current.contains(e.target)){
+        setShow(false)
+      }
+    });
+  },[])
+  return (
+    <div className={styles.speciality} ref={ref}>
+      <div className={styles.specTag}>
+        <p>{props.data.title}</p>
+      </div>
+      <div className={styles.selectEquipDiv} onClick={() => setShow(!show)}>
+        <p>{props.data.placeholder}</p>
+        <img className={styles.dropDownImage} src={postDropdown} alt="..." />
+      </div>
+
+      {show && (
+        <div className={styles.checkBox}>
+          {props.data.dataList.map((value, index) => {
+            return (
+              <div className={styles.checkboxCont} key={value.id}>
+                <input type="checkbox" id="specility" value={value?.name} checked={Speciality?.includes(value?.name)} name="specility" onChange={handleCategoriesName}  />
                 <label for="checkbox1">{value?.name}</label>
               </div>
             );
@@ -614,11 +673,9 @@ export const AdvtProdData = () => {
   const ManufacturingYear = useSelector((state) => state.addProd.prodAddData.purchase_year);
   const specifications = useSelector((state) => state.addProd.prodAddData.specifications);
   const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
-  // const equipPrice =  useSelector((state)=>state.addProd.prodAddData.price)
-  // const equipNegot =  useSelector((state)=>state.addProd.prodAddData.negotiable)
+  const userId =  useSelector((state)=>state.profileData.UserData.uid)
   const prodPrice =  useSelector((state)=>state.addProd.prodAddData.Prod_price)
   const allData =  useSelector((state)=>state.addProd.prodAddData)
-  console.log(prodPrice)
 
 
 
@@ -639,17 +696,18 @@ export const AdvtProdData = () => {
   // }
   
 
-  const handleSubmit=(event)=>{  
+  const handleSubmit=async(event)=>{  
     event.preventDefault();
     const data = {
       post_type : selectedPostType == "USED" ? 1 : selectedPostType == "NEW"  ? 2 : selectedPostType == "SPARE & ACCESSORIES" ? 3 : selectedPostType == "SERVICES" ? 4 : ""  ,
+      // user : "4f9cb064-6c82-4668-8542-f03696424174",
+      user : userId,
       image : allData?.prodImgs,
       video : allData?.prodVideos,
       equip_name : allData?.Equip_name,
       equip_Location : allData?.Equip_location,
-      category : allData?.categories,
-      location : "location",
-      speciality_name : "speciality_name",
+      pk : allData?.categories,
+      speciality_name : allData?.specility[0],
       equip_condition : allData?.prodCondition?.condition,
       asking_price : allData?.prodCondition?.price,
       negotiable_type : allData?.prodCondition?.negotiable,
@@ -657,13 +715,15 @@ export const AdvtProdData = () => {
       year : allData?.purchase_year,
       brand:allData?.specifications?.brand,
       model:allData?.specifications?.model,
-      warranty: allData?.specifications?.waranty,
-      existing_amc: allData?.specifications?.amc_cme,
+      // warranty: allData?.specifications?.waranty,
+      warranty: 5,
+      // existing_amc: allData?.specifications?.amc_cme,
+      existing_amc: 1,
       other_details: allData?.specifications?.other_details,
-      user : "ee0654b0-96d5-4aaa-a39a-caa9b901cf80",
     }
     console.log(data,"data")
-    // toast.success("Your AD listed Successfully",{autoClose:2000});
+    const res =  await postData("product/add/" , data , true)
+    console.log(res,"res")
   }
   const handleNavigate = () =>{
     if(selectedPostType=="NEW" || selectedPostType =="SPARE & ACCESSORIES" || selectedPostType=="SERVICES"){

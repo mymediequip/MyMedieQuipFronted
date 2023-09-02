@@ -84,7 +84,6 @@ export const Login=(props)=>{
     const location=useLocation()
     const dispatch =  useDispatch()
     const navigateTo=location?.state?.navigateTo;
-
     const [isPhone,setIsphone]=useState(true);
     const [phoneError, setPhoneError] = useState('');
     const [mobile,setMobile]=useState("");
@@ -118,7 +117,7 @@ export const Login=(props)=>{
             const res =  await postData("users/generateotp/" , data)
             if(res?.status){
                 toast.success("Mobile Number verified !")
-                dispatch(changeLocation(true))
+                dispatch(changeLocation())
                 setTimeout(()=>{
                     if(props.setOtpForm){
                         props.setOtpForm(true);
@@ -176,15 +175,20 @@ export const Login=(props)=>{
     );
 };
 
-export const OtpVervicatonForm=({getOtp,number})=>{
-    const reLoadPage = useSelector((state)=>state.auth.onReload)
-   const location  =  useLocation()
-   const preOtp = location?.state?.otp;
-   const preNumber = location?.state?.number;
-   const navigateTo= location?.state?.navigateTo ?   location?.state?.navigateTo : "/dashboard/";
-    const [otp, setOtp] = useState("");
-    const [otpError,setOtpError]=useState(false);
-    const [otpTime,setOtpTime]=useState({minute:4,sec:59});
+export const OtpVervicatonForm=({getOtp,number,setotp , setGetStart ,setBlur})=>{
+     const reLoadPage = useSelector((state)=>state.auth.onReload)
+     const location  =  useLocation()
+     let  preOtp = location?.state?.otp;
+     let  preNumber = location?.state?.number;
+     const [otp, setOtp] = useState("");
+     const [resendotp, setresendotp] = useState("");
+     const [reset, setreset] = useState(false);
+     const [num, setnum] = useState("");
+     const [nav, setnav] = useState("");
+     const [otpError,setOtpError]=useState(false);
+     const [otpTime,setOtpTime]=useState({minute:4,sec:59});
+     
+     const navigateTo= location?.state?.navigateTo ?   location?.state?.navigateTo  : nav ? nav : "/dashboard/";
 
     const navigate=useNavigate();
     const dispatch=useDispatch();
@@ -221,29 +225,51 @@ export const OtpVervicatonForm=({getOtp,number})=>{
         return () => {
             clearInterval(interval);
         };
-    },[otpTime]);
+    },[otpTime ,reset]);
          
 
     useEffect(()=>{
       handleOtp()
     },[otp])
 
+    const handleResend = async(num ,otp , navigate) =>{
+        setnum(num)
+        setnav(navigate)
+        const data = {
+            mobile :  num
+        }
+        const res =  await postData("users/generateotp/" , data)
+        if(res.status){
+            setreset(true)
+            if(getOtp){
+                setotp(res?.data?.otp)
+            }
+            if(otp){
+             setresendotp(res?.data?.otp)
+            }
+        }
+    }
+
     const handleOtp = async() => {
         if(otp.length===6 && /^\d+$/.test(otp)){
             let data = {
-                mobile : preNumber || number,
-                otp : otp || getOtp
+                mobile : preNumber || number || num,
+                otp : otp || getOtp 
             }
            const res = await postData("users/verifyotp/",data);
            if(res?.status){
-            setOtpError(false)
-            dispatch(changeLocation(false))
+               setOtpError(false)
             toast.success("Verified OTP SuccessFully !")
             localStorage.setItem("token" , res?.data?.token)
             setTimeout(()=>{
                 dispatch(getUserData(res?.data))
                 dispatch(changeLoginStatus(true))
-                navigate(navigateTo);
+                if(navigateTo == "products/xray-machine/"){
+                    setGetStart(false)
+                    setBlur(false)
+                }else{
+                    navigate(navigateTo);
+                }
             },2000)
            }
            else{
@@ -252,14 +278,14 @@ export const OtpVervicatonForm=({getOtp,number})=>{
         }
     }
 
-
+   
     return(
 
         <>
         <Toaster/>
         <div className={styles.otpVerifyCont}>
             <div>
-                <h4 style={{color:"black"}}>Verification Code {preOtp || getOtp}</h4>
+                <h4 style={{color:"black"}}>Verification Code {preOtp || getOtp || resendotp}</h4>
                 <p>Enter the 6 digit OTP Send to you phone number</p>
             </div>
             { otpError && <p style={{color:"red"}}>Invalid OTP</p> }
@@ -275,7 +301,7 @@ export const OtpVervicatonForm=({getOtp,number})=>{
             </div>
             <p>Code Expire in 0{otpTime.minute}:{otpTime.sec%10===otpTime.sec?"0"+otpTime.sec:otpTime.sec} </p>
             {
-                otpTime.minute===0 && otpTime.sec===0?<NavLink>Resend</NavLink>:""
+                otpTime.minute===0 && otpTime.sec===0?<NavLink onClick={()=>handleResend(preNumber || number , preOtp , navigateTo)}>Resend</NavLink>:""
             }
         </div>
         </>

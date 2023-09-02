@@ -11,7 +11,7 @@ export const loginSlice = createSlice({
       state.isLogin=!state.isLogin;
     },
     changeLocation: (state) => {
-      state.onReload=!state.isLogin;
+      state.onReload=!state.onReload;
     },
   },
 })

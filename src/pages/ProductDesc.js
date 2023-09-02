@@ -1,6 +1,6 @@
 import React from 'react';
 import { DashboardAdvt } from '../components/Advt';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate} from 'react-router-dom';
 import styles from '../assets/css/prod_desc.module.css';
 import { RelatedProdCard } from '../components/Cards';
 import { GetStarted,BackgroundBlur } from '../utils/Popups';
@@ -20,13 +20,13 @@ import {
     swipetestleft,
     pdShare,
     star,
-    location,
     video_Advt,
     filledStar,
     testimage2,
 } from '../assets/images/index';
 import { useFormik } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 export const ProductDescription=()=>{
     return(
@@ -40,15 +40,28 @@ export const ProductDescription=()=>{
 }; 
 
 const ProductData=()=>{
+    // const lg  =  useSelector((state)=>state.auth)
+    // console.log(lg,"lg")
+    const navigate  =  useNavigate()
+    let isLogin = localStorage.getItem("token")
     const [getStart,setGetStart]=useState(false);
     const [isBlur,setBlur]=useState(false);
 
+
+    const phoneNumber = '+919716924981'; // Replace with the actual phone number
+    const encodedPhoneNumber = encodeURIComponent(phoneNumber);
+
+    
+
     const sellarClick=(event)=>{
         event.preventDefault();
-        setBlur(true); 
-        window.scrollTo(0,0);
-        setGetStart(!getStart);
+            setBlur(true); 
+            window.scrollTo(0,0);
+            setGetStart(!getStart);
+            navigate("" ,{state:{navigateTo: "products/xray-machine/"}});
     };
+
+    
 
     const prodImgStyle={
         backgroundImage:`url(${pngwing})`,
@@ -117,10 +130,19 @@ const ProductData=()=>{
                             <img src={contBtn} height="15px" alt='...'/>
                             <span>CONTACT SELLER</span>
                         </NavLink>
-                        <NavLink style={{backgroundColor:"#2EB943"}} className={styles.contactSellar} onClick={sellarClick}>
+                        {
+                            isLogin ? 
+                            <NavLink to={`https://wa.me/${encodedPhoneNumber}`} target='_blank' style={{backgroundColor:"#2EB943"}} className={styles.contactSellar} >
                             <img src={whatsBtn} height="15px" alt='...'/>
                             <span>CHAT ON WHATSAPP</span>
+                        </NavLink> : 
+                        <NavLink  style={{backgroundColor:"#2EB943"}} onClick={sellarClick} className={styles.contactSellar} >
+                        <img src={whatsBtn} height="15px" alt='...'/>
+                        <span>CHAT ON WHATSAPP</span>
                         </NavLink>
+
+                        }
+                        
                         <NavLink style={{backgroundColor:"#FFDD75",color:"black"}} className={styles.contactSellar} onClick={sellarClick}>
                             <img src={atcBtn} height="15px" alt='...'/>
                             <span>CLICK TO BUY NOW</span>

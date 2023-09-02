@@ -18,6 +18,8 @@ export const MyProfile=()=>{
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [blob, setblob] = useState(null);
+
 
   const formik = useFormik({
     initialValues:{
@@ -77,7 +79,11 @@ export const MyProfile=()=>{
       formData.append('last_name', val?.lname);
       formData.append('email', val?.email);
       formData.append('mobile', val?.pnumber);
-      formData.append('gstin', val?.gstin);
+      if(!val?.gstin){
+        formData.append('gstin', "");
+      }else{
+        formData.append('gstin', val?.gstin);
+      }
       formData.append('location', val?.nationality);
       formData.append('pan_no', val?.pancard);
       // formData.append('describe', val?.describe);
@@ -98,6 +104,8 @@ export const MyProfile=()=>{
   const handleFileChange = (event) =>{
     const file = event.target.files[0];
     setSelectedFile(file); 
+    const imageUrl = URL.createObjectURL(file)
+    setblob(imageUrl)
   }
 
 
@@ -117,7 +125,7 @@ export const MyProfile=()=>{
           <div className={styles.column1}>
             <div 
             className={styles.image} 
-            style={{backgroundImage:`url(${previewImage ? `http://13.53.198.145:8000${previewImage}` : testimage2})`}}
+            style={{backgroundImage:`url(${blob ?   blob  : testimage2 ? testimage2  :  `http://13.53.198.145:8000${previewImage}` })`}}
             >
             </div>
               <a style={{cursor  : "pointer"}} onClick={handleLinkClick}>Edit Profile Image </a>

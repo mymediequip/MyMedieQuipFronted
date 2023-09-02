@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { postData } from '../../services';
+import { postData, postData1 } from '../../services';
 
 export const prodAddSlice = createSlice({
   name: 'prodAdd',
@@ -11,7 +11,9 @@ export const prodAddSlice = createSlice({
         Equip_name:null,
         Equip_categories:[],
         Parent_Name:[],
+        specialtiey_name:[],
         categories:[],
+        specility:[],
         Equip_spacality:null,
         Equip_location:null,
         Compatible_Models:null,
@@ -62,7 +64,7 @@ export const prodAddSlice = createSlice({
     },
     setCategories: (state,action)=>{
       const categoryId = action.payload;
-    const index = state.prodAddData.categories?.indexOf(categoryId);
+      const index = state.prodAddData.categories?.indexOf(categoryId);
 
     if (index === -1) {
       // Category was not selected, add it
@@ -70,6 +72,18 @@ export const prodAddSlice = createSlice({
     } else {
       // Category was selected, remove it
       state.prodAddData.categories?.splice(index, 1);
+    }
+    },
+    setSpecality: (state,action)=>{
+      const specialityName = action.payload;
+      const index = state.prodAddData.specility?.indexOf(specialityName);
+
+    if (index === -1) {
+      // Category was not selected, add it
+      state.prodAddData.specility?.push(specialityName);
+    } else {
+      // Category was selected, remove it
+      state.prodAddData.specility?.splice(index, 1);
     }
     },
     setEquip_Location : (state,action)=>{
@@ -80,6 +94,9 @@ export const prodAddSlice = createSlice({
     },
     fetchParentName : (state,action)=>{
       state.prodAddData.Parent_Name=action.payload
+    },
+    fetchSpecialName : (state,action)=>{
+      state.prodAddData.specialtiey_name=action.payload
     },
     setManufacturingYear : (state,action)=>{
       state.prodAddData.purchase_year=action.payload
@@ -106,7 +123,9 @@ export const prodAddSlice = createSlice({
         Equip_name:null,
         Equip_categories:[],
         Parent_Name:[],
+        specialtiey_name:[],
         categories:[],
+        specility:[],
         Equip_spacality:null,
         Equip_location:null,
         Compatible_Models:null,
@@ -137,7 +156,7 @@ export const prodAddSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setType , addImg , removeImg ,addVideos ,removeVideo , setEquipmentName ,setManufacturingYear ,setEquipSpecification , setCompatibleModels ,setProdPrice ,clearProdAddData ,setEquipCondition ,setEquip_Location , fetchEuipCategories , fetchParentName , setCategories} = prodAddSlice.actions
+export const { setType , addImg , removeImg ,addVideos ,removeVideo , setEquipmentName ,setManufacturingYear ,setEquipSpecification , setCompatibleModels ,setProdPrice ,clearProdAddData ,setEquipCondition ,setEquip_Location , fetchEuipCategories , fetchParentName , setCategories ,fetchSpecialName , setSpecality} = prodAddSlice.actions
 
 // Asynchronous thunk action
 export const fetchCategories = (Equip_name)=>async(dispatch)=>{
@@ -145,7 +164,7 @@ export const fetchCategories = (Equip_name)=>async(dispatch)=>{
    q : Equip_name 
  }
   try {
-    const res = await postData("product/category/menulist/" , data)
+    const res = await postData("product/category/menulist/" , data )
     dispatch(fetchEuipCategories(res?.data))
   } catch (error) {
     console.log(error,"error")
@@ -158,6 +177,14 @@ export const fetchCategoriesName = (id)=>async(dispatch)=>{
    try {
      const res = await postData("product/category/menulist/" , data)
      dispatch(fetchParentName(res?.data))
+   } catch (error) {
+     console.log(error,"error")
+   }
+ }
+ export const fetchSpecialityName = ()=>async(dispatch)=>{
+   try {
+     const res = await postData1("product/speciality/lists/")
+     dispatch(fetchSpecialName(res?.data))
    } catch (error) {
      console.log(error,"error")
    }

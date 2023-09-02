@@ -183,7 +183,6 @@ const BuyBtn=()=>{
 };
 
 const SellBtn=()=>{
-    // const isLogin=useSelector((state)=>state.auth.isLogin);
     const token =  localStorage.getItem("token")
     const navigate=useNavigate();
     const handlClick=(e)=>{
@@ -315,9 +314,9 @@ export const Logout=({setIsOpen})=>{
 
     const logout=(event)=>{
         event.preventDefault();
+        localStorage.removeItem("token")
         dispatch(changeLoginStatus(false));
         dispatch(changeLocation(false));
-        localStorage.removeItem("token")
         setIsOpen(false)
         navigate("/");
     }
