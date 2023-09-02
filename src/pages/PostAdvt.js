@@ -58,14 +58,12 @@ export const SelectAdvtType = () => {
     (state) => state.addProd.prodAddData.selectedPostType
   );
 
-  console.log(selectedPostType,"selectedPostType")
   
 
   
 
   const handleContinue=(event)=>{
     event.preventDefault();
-    console.log(selectedPostType);
     // if not choosed any post advt type
     if(!selectedPostType){
       toast.info("Please Select AD Type",{autoClose:2000});
@@ -111,7 +109,6 @@ export const AdvtMedia = () => {
   const selectedVideos = useSelector(
     (state) => state.addProd.prodAddData.prodVideos
     );
-    console.log(selectedVideos,"selectedVideos")
   
 
   const dispatch =  useDispatch()
@@ -125,10 +122,8 @@ export const AdvtMedia = () => {
   }
   const handlImages = (event) => {
     const current = event.target;
-    console.log(current.files[0]);
     const imageId = generateUniqueId()
     const imageUrl = URL.createObjectURL(current.files[0])
-    console.log(imageId)
     if (current.name === "image") {
       dispatch(addImg({id : imageId , imageUrl}))
     }
@@ -280,7 +275,6 @@ let data = []
  categories?.forEach((el)=>{
     data.push(el?.parent)
 })
-console.log(specialityName)
 
 useEffect(()=>{
 dispatch(fetchCategories(searchName))
@@ -316,13 +310,11 @@ const handleLocation = () =>{
         console.log(error , "error getting location")
       }
     )
-    console.log(lat,long);
   }else{
     console.log("Gelocation is not available");
   }
 }
 
-console.log(lat ,long)
 
 useEffect(() => {
   // const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
@@ -331,7 +323,6 @@ useEffect(() => {
   axios
     .get(API_URL)
     .then(response => {
-      console.log(response?.data,"res")
        dispatch(setEquip_Location(response?.data?.display_name))
     })
     .catch(error => {
@@ -451,7 +442,6 @@ const AdvtCategoriesDorpDown = (props) => {
     (state) => state.addProd.prodAddData.selectedPostType
   );
   const categoriesId = useSelector((state)=>state.addProd.prodAddData.categories)
-  console.log(categoriesId,"cate")
   const [show, setShow] = useState(false);
 
 
@@ -505,7 +495,6 @@ const AdvtSpecialityDorpDown = (props) => {
     (state) => state.addProd.prodAddData.selectedPostType
   );
   const Speciality = useSelector((state)=>state.addProd.prodAddData.specility)
-  console.log(Speciality,"cate")
   const [show, setShow] = useState(false);
 
 
@@ -818,9 +807,9 @@ const getAddProdScreen2 = (selectedType , handleLocation  ,dispatch ,CompatibleM
       <React.Fragment>
         <label for="lname">Where is the Equipment</label>
         <input type="text" id="Equip_location" name="Equip_location" value={prodLocation} onChange={(e)=>dispatch(setEquip_Location(e.target.value))} />
-        <div onClick={handleLocation}  className={styles.locSelect}>
-          <img className={styles.locationPng} src={location} alt="..." />
-          <p  className={styles.forAlign}>Find the current location</p>
+        <div  className={styles.locSelect}>
+          <img onClick={handleLocation}  className={styles.locationPng} src={location} alt="..." />
+          <p onClick={handleLocation}  className={styles.forAlign}>Find the current location</p>
         </div>
       </React.Fragment>
     );
