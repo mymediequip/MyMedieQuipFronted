@@ -1,12 +1,14 @@
 import React from 'react';
+
 import { DashboardAdvt } from '../components/Advt';
 import { NavLink, Outlet } from 'react-router-dom';
 import styles from '../assets/css/prod_desc.module.css';
 import { RelatedProdCard } from '../components/Cards';
 import { GetStarted,BackgroundBlur } from '../utils/Popups';
 import * as yup from "yup";
+import { SocialShare } from '../utils/Popups';
 import {emailSchema, fnameSchema} from '../utils/validation';
-import { useState } from 'react';
+import { useRef, useState ,useEffect} from 'react';
 import {
     dummyMap,
     contBtn,
@@ -42,7 +44,7 @@ export const ProductDescription=()=>{
 const ProductData=()=>{
     const [getStart,setGetStart]=useState(false);
     const [isBlur,setBlur]=useState(false);
-
+    const [openSocial,setOpenSocial]=useState(false);
     const sellarClick=(event)=>{
         event.preventDefault();
         setBlur(true); 
@@ -50,9 +52,20 @@ const ProductData=()=>{
         setGetStart(!getStart);
     };
 
+    const handleSocial=(e)=>{
+        setOpenSocial(!openSocial);
+    }
     const prodImgStyle={
         backgroundImage:`url(${pngwing})`,
     };
+    const ref=useRef();
+    useEffect(()=>{
+        document.addEventListener("click",(e)=>{
+        if(ref.current && !ref.current.contains(e.target)){
+            setOpenSocial(false);
+        }
+      });
+    },[])
     return(
         <React.Fragment>
             <div className={styles.prod_path}>
@@ -87,16 +100,22 @@ const ProductData=()=>{
                                 <img src={star} alt='...'/> 
                             </div>
                         </div>
-                        <NavLink>
-                                <img src={pdShare} alt='...' style={{width:"80px"}}/>
-                        </NavLink>
+                        {/* <SocialShare/> */}
+                        <div style={{display:"flex",gap:"20px"}}>
+                            <img src={pdShare} ref={ref} alt='...' onClick={handleSocial} style={{width:"80px"}}/>
+                            {
+                                openSocial && (<div className={styles.socialShare}>
+                                    <SocialShare />
+                                </div>)
+                            }
+                        </div>
                     </div>
                     
                     <div>
                         <div className={styles.pd_links}>
                             <div className={styles.sellerName}>
                                 <img src={testimage2} alt='...'/>
-                                <p>Mr Avdhesh</p>
+                                <p>Mr Daniel</p>
                             </div>
                             <span>17/08/2023</span>
                         </div>
