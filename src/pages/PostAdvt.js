@@ -258,6 +258,9 @@ const navigate = useNavigate();
   const selectedPostType = useSelector(
     (state) => state.addProd.prodAddData.selectedPostType
   );
+
+const allData  =  useSelector((state)=>state.addProd.prodAddData)
+console.log(allData)
 const equipName  =  useSelector((state)=>state.addProd.prodAddData.Equip_name)
 const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
 const parentName =  useSelector((state)=>state.addProd.prodAddData.Parent_Name)
@@ -340,10 +343,29 @@ useEffect(() => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if(selectedPostType==="PRE-OWNED"){
-      navigate("/post/pricing/");
-    }
-    else{
-      navigate("/post/specifications/");
+      if(equipName && allData?.categories?.length > 0  && allData?.specility?.length > 0 && prodLocation){
+        navigate("/post/pricing/");
+      }else{
+        toast.error("All Fields are mandatory !")
+      }
+    }else if(selectedPostType==="NEW"){
+      if(equipName && allData?.categories?.length > 0  && allData?.specility?.length > 0 && allData?.prodCondition?.prod_desc){
+        navigate("/post/specifications/");
+      }else{
+        toast.error("All Fields are mandatory !")
+      }
+    }else if(selectedPostType=== "SPARE & ACCESSORIES"){
+      if(equipName && allData?.Compatible_Models  && allData?.specility?.length > 0 && allData?.prodCondition?.prod_desc){
+        navigate("/post/specifications/");
+      }else{
+        toast.error("All Fields are mandatory !")
+      }
+    }else{
+      if(equipName && allData?.categories?.length > 0  && allData?.specility?.length > 0 ){
+        navigate("/post/specifications/");
+      }else{
+        toast.error("All Fields are mandatory !")
+      }
     }
     window.scrollTo(0, 0);
   };
@@ -514,12 +536,13 @@ const AdvtSpecialityDorpDown = (props) => {
 export const AdvtPrice = () => {
   const dispatch =  useDispatch()
   const navigate = useNavigate();
+const allData  =  useSelector((state)=>state.addProd.prodAddData)
   const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
   const selectedPostType = useSelector(
     (state) => state.addProd.prodAddData.selectedPostType
   );
 
-
+console.log(prodCondition)
   useEffect(()=>{
     if(!selectedPostType){
       navigate("/post/")
@@ -534,11 +557,11 @@ export const AdvtPrice = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(prodCondition){
+    if(prodCondition?.condition && prodCondition?.negotiable && prodCondition?.price && prodCondition?.prod_desc){
       navigate("/post/specifications/");
       window.scrollTo(0, 0);
     }else{
-      toast.error("all fields are mandatories")
+      toast.error("All fields are mandatory")
     }
   };
   return (
@@ -663,6 +686,7 @@ export const AdvtProdData = () => {
   formData.append("speciality_name" , allData?.specility)
   formData.append("equip_condition" , allData?.prodCondition?.condition ? allData?.prodCondition?.condition : "")
   formData.append("negotiable_type" ,allData?.prodCondition?.negotiable ? allData?.prodCondition?.negotiable : "")
+  formData.append("asking_price" ,allData?.prodCondition?.price ? allData?.prodCondition?.price : "")
   formData.append("description" , allData?.prodCondition?.prod_desc)
   formData.append("year" , allData?.purchase_year ? allData?.purchase_year : "")
   formData.append("brand" , allData?.specifications?.brand)
@@ -677,32 +701,6 @@ export const AdvtProdData = () => {
   formData.append("Compatible_Models" ,allData?.Compatible_Models)
   formData.append("Prod_price" ,allData?.Prod_price)
 
-
-    // const data = {
-    //   post_type : selectedPostType == "PRE-OWNED" ? 1 : selectedPostType == "NEW"  ? 2 : selectedPostType == "SPARE & ACCESSORIES" ? 3 : selectedPostType == "SERVICES" ? 4 : ""  ,
-    //   image : allData?.prodImgs,
-    //   video : allData?.prodVideos,
-    //   equip_name : allData?.Equip_name,
-    //   address : allData?.Equip_location,
-    //   category : allData?.categories,
-    //   speciality_name : allData?.specility,
-    //   equip_condition : allData?.prodCondition?.condition,
-    //   asking_price : allData?.prodCondition?.price,
-    //   negotiable_type : allData?.prodCondition?.negotiable,
-    //   description : allData?.prodCondition?.prod_desc,
-    //   year : allData?.purchase_year,
-    //   brand:allData?.specifications?.brand,
-    //   model:allData?.specifications?.model,
-    //   warranty: allData?.specifications?.waranty,
-    //   latitude: allData?.location?.lat,
-    //   existing_amc: allData?.specifications?.amc_cme,
-    //   longitude: allData?.location?.lang,
-    //   other_details: allData?.specifications?.other_details,
-    //   Compatible_Models : allData?.Compatible_Models,
-    //   Prod_price : allData?.Prod_price,
-     
-    // }
-    // console.log(data,"data")
     const res =  await postDataFIle("product/add/" , formData , true)
     console.log(res,"res")
     if(res.status){
