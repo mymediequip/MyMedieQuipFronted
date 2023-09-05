@@ -45,7 +45,7 @@ export const GetStarted=(props)=>{
             </div>
             <p className={styles.getStartInd}>Verify Your OTP  To access your account</p>
             {
-                otpForm?<OtpVervicatonForm getOtp={otp} number={number} />:<Login setOtpForm={setOtpForm}  setotp={setotp} setNumber={setNumber}/>
+                otpForm?<OtpVervicatonForm getOtp={otp} setotp={setotp} number={number} setGetStart={props.setGetStart} setBlur={props.setBlur} />:<Login setOtpForm={setOtpForm}  setotp={setotp} setNumber={setNumber}/>
             }
         </div>
     );

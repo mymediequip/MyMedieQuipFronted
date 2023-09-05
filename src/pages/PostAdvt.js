@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../assets/css/postAdvt.module.css";
-import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories, fetchCategoriesName, setCategories } from "../app/Slices/ProdAddSlice";
-
+import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories, fetchCategoriesName, setCategories, fetchSpecialityName, setSpecality, setLatLong } from "../app/Slices/ProdAddSlice";
+import GeoCode from "react-geocode"
 import {
   ImageUpload,
   arrLeft,
@@ -18,6 +18,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRef } from "react";
 // toast.configure();
 import { equipmentName } from "../utils/validation";
+import axios from "axios";
+import { postData, postDataFIle } from "../services";
 
 export const PostAdvt = () => {
   return (
@@ -56,14 +58,12 @@ export const SelectAdvtType = () => {
     (state) => state.addProd.prodAddData.selectedPostType
   );
 
-  console.log(selectedPostType,"selectedPostType")
   
 
   
 
   const handleContinue=(event)=>{
     event.preventDefault();
-    console.log(selectedPostType);
     // if not choosed any post advt type
     if(!selectedPostType){
       toast.info("Please Select AD Type",{autoClose:2000});
@@ -109,7 +109,6 @@ export const AdvtMedia = () => {
   const selectedVideos = useSelector(
     (state) => state.addProd.prodAddData.prodVideos
     );
-    console.log(selectedVideos,"selectedVideos")
   
 
   const dispatch =  useDispatch()
@@ -123,10 +122,8 @@ export const AdvtMedia = () => {
   }
   const handlImages = (event) => {
     const current = event.target;
-    console.log(current.files[0]);
     const imageId = generateUniqueId()
     const imageUrl = URL.createObjectURL(current.files[0])
-    console.log(imageId)
     if (current.name === "image") {
       dispatch(addImg({id : imageId , imageUrl}))
     }
@@ -255,19 +252,19 @@ export const AdvtMedia = () => {
 };
 
 export const AdvtLocation = () => {
-const [lat,setlat] = useState(null)
-const [long,setlong] = useState(null)
 const [searchName,setSearchName] = useState("")
-const [parent,setParent] = useState([])
 const dispatch =  useDispatch()
 const navigate = useNavigate();
   const selectedPostType = useSelector(
     (state) => state.addProd.prodAddData.selectedPostType
   );
+
+const allData  =  useSelector((state)=>state.addProd.prodAddData)
 const equipName  =  useSelector((state)=>state.addProd.prodAddData.Equip_name)
 const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
 const parentName =  useSelector((state)=>state.addProd.prodAddData.Parent_Name)
-
+const specialityName =  useSelector((state)=>state.addProd.prodAddData.specialtiey_name)
+const getLatLang =  useSelector((state)=>state.addProd.prodAddData.location)
 const CompatibleModel =  useSelector((state)=>state.addProd.prodAddData.Compatible_Models)
 const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
 const prodLocation =  useSelector((state)=>state.addProd.prodAddData.Equip_location)
@@ -277,11 +274,15 @@ let data = []
     data.push(el?.parent)
 })
 
-
 useEffect(()=>{
 dispatch(fetchCategories(searchName))
 dispatch(fetchCategoriesName(data))
 },[searchName])
+
+
+useEffect(()=>{
+  dispatch(fetchSpecialityName())
+},[dispatch])
   
  const handleProdCondition = (event) =>{
   const {name,value} = event.target
@@ -294,28 +295,44 @@ const handleChange = (event) =>{
   setSearchName(newName)
   dispatch(setEquipmentName(newName));
 }
+
+
 const handleLocation = () =>{
   if("geolocation" in navigator){
     navigator.geolocation.getCurrentPosition(
       position=>{
-        setlat(position.coords.latitude)
-        setlong(position.coords.longitude)
-      },
-      error =>{
+        const {latitude ,longitude} =  position.coords
+        dispatch(setLatLong({name : "lat" , value : latitude}))
+        dispatch(setLatLong({name : "lang" , value : longitude}))
+      },   error =>{
         console.log(error , "error getting location")
       }
     )
-    console.log(lat,long);
   }else{
     console.log("Gelocation is not available");
   }
 }
- 
+
+
+useEffect(() => {
+  // const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
+  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${getLatLang?.lat}&lon=${getLatLang?.lang}&format=json`;;
+
+  axios
+    .get(API_URL)
+    .then(response => {
+       dispatch(setEquip_Location(response?.data?.display_name))
+    })
+    .catch(error => {
+      console.error('Error fetching address:', error);
+    });
+}, [getLatLang]);
+
 
   const dropSpec = {
     title: "Speciality",
     placeholder: "Select the medical specialty",
-    dataList: ["Lorem ipsum dolor sit amet", "Lorem ipsum dolor sit amet"],
+    dataList: specialityName,
   };
   const dropCat = {
     title: "Category",
@@ -325,10 +342,29 @@ const handleLocation = () =>{
   const handleSubmit = (event) => {
     event.preventDefault();
     if(selectedPostType==="PRE-OWNED"){
-      navigate("/post/pricing/");
-    }
-    else{
-      navigate("/post/specifications/");
+      if(equipName && allData?.categories?.length > 0  && allData?.specility?.length > 0 && prodLocation){
+        navigate("/post/pricing/");
+      }else{
+        toast.error("All Fields are mandatory !")
+      }
+    }else if(selectedPostType==="NEW"){
+      if(equipName && allData?.categories?.length > 0  && allData?.specility?.length > 0 && allData?.prodCondition?.prod_desc){
+        navigate("/post/specifications/");
+      }else{
+        toast.error("All Fields are mandatory !")
+      }
+    }else if(selectedPostType=== "SPARE & ACCESSORIES"){
+      if(equipName && allData?.Compatible_Models  && allData?.specility?.length > 0 && allData?.prodCondition?.prod_desc){
+        navigate("/post/specifications/");
+      }else{
+        toast.error("All Fields are mandatory !")
+      }
+    }else{
+      if(equipName && allData?.categories?.length > 0  && allData?.specility?.length > 0 ){
+        navigate("/post/specifications/");
+      }else{
+        toast.error("All Fields are mandatory !")
+      }
     }
     window.scrollTo(0, 0);
   };
@@ -362,14 +398,14 @@ const handleLocation = () =>{
               {/* {formik.errors.equipment_name && formik.touched.equipment_name && (<div style={{color : 'red'}}>{formik.errors.equipment_name}</div>)} */}
 
               {(() => {
-                return getAddProdScreen2(selectedPostType ,handleLocation  , dispatch , CompatibleModel , setCompatibleModels , prodCondition , handleProdCondition , prodLocation);
+                return getAddProdScreen2(selectedPostType ,handleLocation   , dispatch , CompatibleModel , setCompatibleModels , prodCondition , handleProdCondition , prodLocation);
               })()}
             </div>
             <div className={styles.specialtCont}>
               {selectedPostType === "SPARE & ACCESSORIES" ? (
                 ""
               ) : (
-                <AdvtSpecialityDorpDown  data={dropCat} />
+                <AdvtCategoriesDorpDown  data={dropCat} />
               )}
               <AdvtSpecialityDorpDown data={dropSpec} />
               {selectedPostType === "SPARE & ACCESSORIES" ? (
@@ -391,15 +427,13 @@ const handleLocation = () =>{
   );
 };
 
-const AdvtSpecialityDorpDown = (props) => {
+const AdvtCategoriesDorpDown = (props) => {
   const dispatch  = useDispatch()
   const navigate = useNavigate()
   const selectedPostType = useSelector(
     (state) => state.addProd.prodAddData.selectedPostType
   );
   const categoriesId = useSelector((state)=>state.addProd.prodAddData.categories)
-  // console.log(categoriesId,"cate")
-  // console.log(props.data.dataList)
   const [show, setShow] = useState(false);
   const [selectedCat,setSelectedCat]=useState({});
 
@@ -465,6 +499,59 @@ const AdvtSpecialityDorpDown = (props) => {
   );
 };
 
+
+const AdvtSpecialityDorpDown = (props) => {
+  const dispatch  = useDispatch()
+  const navigate = useNavigate()
+  const selectedPostType = useSelector(
+    (state) => state.addProd.prodAddData.selectedPostType
+  );
+  const Speciality = useSelector((state)=>state.addProd.prodAddData.specility)
+  const [show, setShow] = useState(false);
+
+
+  useEffect(()=>{
+    if(!selectedPostType){
+      navigate("/post/")
+    }
+  },[selectedPostType])
+  const handleCategoriesName = (event) =>{
+    dispatch(setSpecality(event.target.value))
+  }
+  const ref=useRef();
+  useEffect(()=>{
+      document.addEventListener("click",(e)=>{
+      if(ref.current && !ref.current.contains(e.target)){
+        setShow(false)
+      }
+    });
+  },[])
+  return (
+    <div className={styles.speciality} ref={ref}>
+      <div className={styles.specTag}>
+        <p>{props.data.title}</p>
+      </div>
+      <div className={styles.selectEquipDiv} onClick={() => setShow(!show)}>
+        <p>{props.data.placeholder}</p>
+        <img className={styles.dropDownImage} src={postDropdown} alt="..." />
+      </div>
+
+      {show && (
+        <div className={styles.checkBox}>
+          {props.data.dataList.map((value, index) => {
+            return (
+              <div className={styles.checkboxCont} key={value.id}>
+                <input type="checkbox" id="specility" value={value?.name} checked={Speciality?.includes(value?.name)} name="specility" onChange={handleCategoriesName}  />
+                <label for="checkbox1">{value?.name}</label>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const AdvtPrice = () => {
   const dispatch =  useDispatch()
   const navigate = useNavigate();
@@ -472,7 +559,6 @@ export const AdvtPrice = () => {
   const selectedPostType = useSelector(
     (state) => state.addProd.prodAddData.selectedPostType
   );
-
 
   useEffect(()=>{
     if(!selectedPostType){
@@ -488,11 +574,11 @@ export const AdvtPrice = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(prodCondition){
+    if(prodCondition?.condition && prodCondition?.negotiable && prodCondition?.price && prodCondition?.prod_desc){
       navigate("/post/specifications/");
       window.scrollTo(0, 0);
     }else{
-      toast.error("all fields are mandatories")
+      toast.error("All fields are mandatory")
     }
   };
   return (
@@ -587,12 +673,9 @@ export const AdvtProdData = () => {
   const ManufacturingYear = useSelector((state) => state.addProd.prodAddData.purchase_year);
   const specifications = useSelector((state) => state.addProd.prodAddData.specifications);
   const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
-  // const equipPrice =  useSelector((state)=>state.addProd.prodAddData.price)
-  // const equipNegot =  useSelector((state)=>state.addProd.prodAddData.negotiable)
+  const userId =  useSelector((state)=>state.profileData.UserData.uid)
   const prodPrice =  useSelector((state)=>state.addProd.prodAddData.Prod_price)
   const allData =  useSelector((state)=>state.addProd.prodAddData)
-  console.log(prodPrice)
-
 
 
   useEffect(()=>{
@@ -606,37 +689,46 @@ export const AdvtProdData = () => {
     dispatch(setEquipSpecification({...specifications , name , value}))
   }
 
-  // const handleProdCondition = (event) =>{
-  //   const {name,value} = event.target
-  //   dispatch(setEquipCondition({...prodCondition ,name,value}))
-  // }
-  
+ 
 
-  const handleSubmit=(event)=>{  
+  const handleSubmit=async(event)=>{  
     event.preventDefault();
-    const data = {
-      post_type : selectedPostType == "PRE-OWNED" ? 1 : selectedPostType == "NEW"  ? 2 : selectedPostType == "SPARE & ACCESSORIES" ? 3 : selectedPostType == "SERVICES" ? 4 : ""  ,
-      image : allData?.prodImgs,
-      video : allData?.prodVideos,
-      equip_name : allData?.Equip_name,
-      equip_Location : allData?.Equip_location,
-      category : allData?.categories,
-      location : "location",
-      speciality_name : "speciality_name",
-      equip_condition : allData?.prodCondition?.condition,
-      asking_price : allData?.prodCondition?.price,
-      negotiable_type : allData?.prodCondition?.negotiable,
-      description : allData?.prodCondition?.prod_desc,
-      year : allData?.purchase_year,
-      brand:allData?.specifications?.brand,
-      model:allData?.specifications?.model,
-      warranty: allData?.specifications?.waranty,
-      existing_amc: allData?.specifications?.amc_cme,
-      other_details: allData?.specifications?.other_details,
-      user : "ee0654b0-96d5-4aaa-a39a-caa9b901cf80",
+  const formData = new FormData()
+  formData.append("post_type" , selectedPostType == "PRE-OWNED" ? 1 : selectedPostType == "NEW"  ? 2 : selectedPostType == "SPARE & ACCESSORIES" ? 3 : selectedPostType == "SERVICES" ? 4 : ""  )
+  formData.append("images" , allData?.prodImgs)
+  formData.append("videos" , allData?.prodVideos)
+  formData.append("equip_name" , allData?.Equip_name)
+  formData.append("address" , allData?.Equip_location)
+  formData.append("category" , allData?.categories)
+  formData.append("speciality_name" , allData?.specility)
+  formData.append("equip_condition" , allData?.prodCondition?.condition ? allData?.prodCondition?.condition : "")
+  formData.append("negotiable_type" ,allData?.prodCondition?.negotiable ? allData?.prodCondition?.negotiable : "")
+  formData.append("asking_price" ,allData?.prodCondition?.price ? allData?.prodCondition?.price : "")
+  formData.append("description" , allData?.prodCondition?.prod_desc)
+  formData.append("year" , allData?.purchase_year ? allData?.purchase_year : "")
+  formData.append("brand" , allData?.specifications?.brand)
+  formData.append("model" , allData?.specifications?.model)
+  formData.append("warranty" , allData?.specifications?.waranty ? allData?.specifications?.waranty : "")
+  formData.append("existing_amc" , allData?.specifications?.amc_cme ? allData?.specifications?.amc_cme : "")
+  formData.append("other_details" , allData?.specifications?.other_details)
+  formData.append("latitude" , allData?.location?.lat)
+  formData.append("longitude" , allData?.location?.lang)
+  // formData.append("user" ,userId)
+  formData.append("user" ,"ee0654b0-96d5-4aaa-a39a-caa9b901cf80")
+  formData.append("Compatible_Models" ,allData?.Compatible_Models)
+  formData.append("Prod_price" ,allData?.Prod_price)
+
+    const res =  await postDataFIle("product/add/" , formData , true)
+    console.log(res,"res")
+    if(res.status){
+      toast.success("Product Added SuccessFully !")
+      dispatch(clearProdAddData());
+      setTimeout(()=>{
+        navigate("/dashboard/")
+      },2000)
+    }else{
+      toast.error(res?.msg)
     }
-    console.log(data,"data")
-    // toast.success("Your AD listed Successfully",{autoClose:2000});
   }
   const handleNavigate = () =>{
     if(selectedPostType=="NEW" || selectedPostType =="SPARE & ACCESSORIES" || selectedPostType=="SERVICES"){
@@ -674,11 +766,11 @@ export const AdvtProdData = () => {
               <div className={styles.advtRadio}>
                 <span>Under Warranty :</span>
                 <div>
-                  <input type="radio" name="waranty"  value="YES" checked={specifications?.waranty == "YES"} onChange={handleChange} />
+                  <input type="radio" name="waranty"  value="1" checked={specifications?.waranty == "1"} onChange={handleChange} />
                   <span>YES</span>
                 </div>
                 <div>
-                  <input type="radio" name="waranty" value="NO" checked={specifications?.waranty ==  "NO"}  onChange={handleChange}  />
+                  <input type="radio" name="waranty" value="0" checked={specifications?.waranty ==  "0"}  onChange={handleChange}  />
                   <span>NO</span>
                 </div>
               </div>
@@ -686,11 +778,11 @@ export const AdvtProdData = () => {
               <div className={styles.advtRadio}>
                 <span>Existing AMC/CME :</span>
                 <div>
-                  <input type="radio" name="amc_cme" value="YES" checked={specifications?.amc_cme == "YES"} onChange={handleChange} />
+                  <input type="radio" name="amc_cme" value="1" checked={specifications?.amc_cme == "1"} onChange={handleChange} />
                   <span>YES</span>
                 </div>
                 <div>
-                  <input type="radio" name="amc_cme" value="NO" checked={specifications?.amc_cme == "NO"} onChange={handleChange}/>
+                  <input type="radio" name="amc_cme" value="0" checked={specifications?.amc_cme == "0"} onChange={handleChange}/>
                   <span>NO</span>
                 </div>
               </div>
@@ -714,7 +806,7 @@ export const AdvtProdData = () => {
 /*++++++++++++++++++++++++ Non Components ++++++++++++++++++++++++++++++++++*/
 
 
-const getAddProdScreen2 = (selectedType , handleLocation ,dispatch ,CompatibleModel , setCompatibleModels ,prodCondition , handleProdCondition  , prodLocation) => {
+const getAddProdScreen2 = (selectedType , handleLocation  ,dispatch ,CompatibleModel , setCompatibleModels ,prodCondition , handleProdCondition  , prodLocation) => {
   if (selectedType === "NEW") {
     return (
       <div className={styles.prodDiscr}>
@@ -731,9 +823,9 @@ const getAddProdScreen2 = (selectedType , handleLocation ,dispatch ,CompatibleMo
       <React.Fragment>
         <label for="lname">Where is the Equipment</label>
         <input type="text" id="Equip_location" name="Equip_location" value={prodLocation} onChange={(e)=>dispatch(setEquip_Location(e.target.value))} />
-        <div onClick={handleLocation}  className={styles.locSelect}>
-          <img className={styles.locationPng} src={location} alt="..." />
-          <p  className={styles.forAlign}>Find the current location</p>
+        <div  className={styles.locSelect}>
+          <img onClick={handleLocation}  className={styles.locationPng} src={location} alt="..." />
+          <p onClick={handleLocation}  className={styles.forAlign}>Find the current location</p>
         </div>
       </React.Fragment>
     );
