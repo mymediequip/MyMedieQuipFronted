@@ -147,6 +147,8 @@ export const Login=(props)=>{
                 <PhoneInput 
                 country={'in'} 
                 value={mobile}
+                countryCodeEditable={false}
+                disableDropdown
                 inputStyle={{width:"100%",backgroundColor:"#FAFFFE" }}
                 onChange={(phone)=>setMobile(phone)}
                 onBlur={validatePhone}

@@ -508,15 +508,17 @@ const AdvtSpecialityDorpDown = (props) => {
   );
   const Speciality = useSelector((state)=>state.addProd.prodAddData.specility)
   const [show, setShow] = useState(false);
-
+  const [selectedCat,setSelectedCat]=useState({});
+  console.log(selectedCat)
 
   useEffect(()=>{
     if(!selectedPostType){
       navigate("/post/")
     }
   },[selectedPostType])
-  const handleCategoriesName = (event) =>{
+  const handleCategoriesName = (event ,catgorie) =>{
     dispatch(setSpecality(event.target.value))
+    selectedCat[catgorie]=event.target.checked;
   }
   const ref=useRef();
   useEffect(()=>{
@@ -532,7 +534,25 @@ const AdvtSpecialityDorpDown = (props) => {
         <p>{props.data.title}</p>
       </div>
       <div className={styles.selectEquipDiv} onClick={() => setShow(!show)}>
-        <p>{props.data.placeholder}</p>
+        <p>
+        {(()=>{
+            let keys=Object.keys(selectedCat);
+            if(keys.length===0){
+              return props.data.placeholder;
+            }
+            else{
+              let temp="";
+              for(let i=0;i<keys.length;i++){
+                if(selectedCat[keys[i]]){
+                  temp+=keys[i]+";";
+                }
+              }
+              return temp.slice(0,40)+"....";
+            }
+            
+          })()
+          }
+        </p>
         <img className={styles.dropDownImage} src={postDropdown} alt="..." />
       </div>
 
@@ -541,7 +561,7 @@ const AdvtSpecialityDorpDown = (props) => {
           {props.data.dataList.map((value, index) => {
             return (
               <div className={styles.checkboxCont} key={value.id}>
-                <input type="checkbox" id="specility" value={value?.name} checked={Speciality?.includes(value?.name)} name="specility" onChange={handleCategoriesName}  />
+                <input type="checkbox" id="specility" value={value?.name} checked={Speciality?.includes(value?.name)} name="specility" onChange={(e)=>handleCategoriesName(e,value?.name)}  />
                 <label for="checkbox1">{value?.name}</label>
               </div>
             );
