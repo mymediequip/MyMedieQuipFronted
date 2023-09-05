@@ -102,7 +102,7 @@ const ProductData=()=>{
                         </div>
                         {/* <SocialShare/> */}
                         <div style={{display:"flex",gap:"20px"}}>
-                            <img src={pdShare} ref={ref} alt='...' onClick={handleSocial} style={{width:"80px"}}/>
+                            <img src={pdShare} ref={ref} alt='...' onClick={handleSocial} style={{width:"80px",cursor:"pointer"}}/>
                             {
                                 openSocial && (<div className={styles.socialShare}>
                                     <SocialShare />

@@ -42,7 +42,6 @@ export const MyProfile=()=>{
     }),
     onSubmit : function (values){
       handleSubmitForm(values)
-
     }
   })
 
@@ -51,7 +50,8 @@ export const MyProfile=()=>{
    const res = await postData("users/get_user_detail/" ,"", true)
    if(res?.status){
     setPreviewImage(res?.data?.profile?.image)
-    dispatch(getProfileImage(res?.data?.profile?.profile_image))
+    dispatch(getProfileImage(res?.data?.profile?.profile_image));
+    
     formik.setValues({
       fname : res?.data?.profile?.first_name,
       pnumber : res?.data?.mobile,

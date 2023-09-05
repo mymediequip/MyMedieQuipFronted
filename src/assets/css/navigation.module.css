@@ -119,6 +119,7 @@ a{
 .Nav2Container a{
     text-decoration: none;
     color: #757574;
+    /* margin: auto; */
 }
 .CreatBtn{
     width: 200px;

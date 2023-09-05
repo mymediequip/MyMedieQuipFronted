@@ -2,7 +2,7 @@ import React, { useState ,useEffect,useRef} from 'react';
 import {companyName} from '../assets/data/data';
 import { useSelector,useDispatch } from 'react-redux';
 import { changeLocation, changeLoginStatus } from '../app/Slices/AuthSlice';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import styles from '../assets/css/navigation.module.css';
 import { ToastContainer, toast} from 'react-toastify';
 import {
@@ -18,7 +18,29 @@ import {
 
 export const Navigation=()=>{
     const isLogin=useSelector((state)=>state.auth.isLogin);
-    const token=localStorage.getItem("token")
+    const {pathname}=useLocation();
+    console.log(pathname)
+    const token=localStorage.getItem("token");
+    const links=[
+        {name:"Equipment Category",path:"/specialization"},
+        {name:"Pre-owned Equipment",path:"/"},
+        {name:"New Equipment",path:"/"},
+        {name:"Service",path:"/"},
+        {name:"Spare & Accessories",path:"/"},
+        {name:"Distributor & Manufacturer",path:"/"},
+        {name:"Contact Us",path:"/"}
+    ];
+    const postlinks=[
+        // {name:"Equipment Category",path:"/specialization"},
+        {name:"My Profile",path:"/dashboard/"},
+        {name:"My Ads",path:"/"},
+        {name:"My Messages",path:"/"},
+        {name:"My Services",path:"/"},
+        {name:"Payment History",path:"/"},
+        {name:"Awaiting Payment",path:"/"},
+        {name:"Subcriptions",path:"/"},
+        {name:"My Orders",path:"/"}
+    ];
     return(
         <div id="navigationBlur">
             <header className={styles.headContainer}>
@@ -40,27 +62,21 @@ export const Navigation=()=>{
                 </div>
             </header>
             <hr className={styles.nav_line}/>
-            <Nav2/>
+            {
+                pathname.includes("/post/")?<Nav2 links={postlinks}/>:<Nav2 links={links}/>
+            }
             <hr className={styles.nav_line}/>
         </div>
     );
 };
 
-const Nav2=()=>{
-    const links=[
-        {name:"Equipment Category",path:"/specialization"},
-        {name:"Used Equipment",path:"/"},
-        {name:"New Equipment",path:"/"},
-        {name:"Service",path:"/"},
-        {name:"Spare & Accessories",path:"/"},
-        {name:"For Distribution",path:"/"},
-        {name:"Contact Us",path:"/"}
-    ];
+const Nav2=(props)=>{
+    
     return(
         <div className={styles.Nav2Container}>
            <div className={styles.navlinks}>
            {
-                links.map((values,index)=>{
+                props.links.map((values,index)=>{
                     return <NavLink to={values.path} style={activateLink} key={index}>{values.name}</NavLink>;
                 })
             }

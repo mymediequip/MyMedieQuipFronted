@@ -12,7 +12,7 @@ const PrivateRoutes = () => {
       </div>
     </>
   ) : (
-    <Navigate to="/" />
+    <Navigate to="/"/>
   );
 };
 

@@ -14,7 +14,8 @@ import { useLocation } from 'react-router-dom';
 
 export const SocialShare=(props)=>{
     const {pathname}=useLocation();
-    let shareUrl=pathname;
+    let shareUrl=process.env.REACT_APP_URL+pathname;
+    console.log(shareUrl)
     let title="Checkout this ";
     return(
         <React.Fragment>
