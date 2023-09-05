@@ -15,17 +15,17 @@ export const prodAddSlice = createSlice({
         categories:[],
         specility:[],
         Equip_spacality:null,
-        Equip_location:null,
+        Equip_location:"",
         Compatible_Models:null,
         Prod_price:null,
         specialtiey:null,
         location:{
-            lang:null,
-            lat:null
+            lang:0,
+            lat:0,
         },
         prodCondition : {
           condition:null,
-          price:null,
+          price:0,
           negotiable:null,
           prod_desc:null,
         },
@@ -86,6 +86,11 @@ export const prodAddSlice = createSlice({
       state.prodAddData.specility?.splice(index, 1);
     }
     },
+    setLatLong : (state,action)=>{
+      const { name, value } = action.payload;
+      console.log(action.payload)
+      state.prodAddData.location[name] = value;
+    },
     setEquip_Location : (state,action)=>{
       state.prodAddData.Equip_location=action.payload
     },
@@ -101,6 +106,7 @@ export const prodAddSlice = createSlice({
     setManufacturingYear : (state,action)=>{
       state.prodAddData.purchase_year=action.payload
     },
+
     setEquipCondition : (state,action)=>{
       const { name, value } = action.payload;
       state.prodAddData.prodCondition[name] = value;
@@ -156,7 +162,7 @@ export const prodAddSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setType , addImg , removeImg ,addVideos ,removeVideo , setEquipmentName ,setManufacturingYear ,setEquipSpecification , setCompatibleModels ,setProdPrice ,clearProdAddData ,setEquipCondition ,setEquip_Location , fetchEuipCategories , fetchParentName , setCategories ,fetchSpecialName , setSpecality} = prodAddSlice.actions
+export const { setType , addImg , removeImg ,addVideos ,removeVideo , setEquipmentName ,setManufacturingYear ,setEquipSpecification , setCompatibleModels ,setProdPrice ,clearProdAddData ,setEquipCondition ,setEquip_Location , fetchEuipCategories , fetchParentName , setCategories ,fetchSpecialName , setSpecality , setLatLong} = prodAddSlice.actions
 
 // Asynchronous thunk action
 export const fetchCategories = (Equip_name)=>async(dispatch)=>{

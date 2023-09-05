@@ -40,6 +40,7 @@ export const Hero=(props)=>{
 const Catogories=()=>{
 const dispatch =  useDispatch()
 const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
+console.log(categories,"categories")
 
 const [filterEquip ,setFilterEquip] =  useState("")
  const handleChange = (event) =>{

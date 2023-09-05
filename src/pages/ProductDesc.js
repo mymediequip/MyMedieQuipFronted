@@ -29,6 +29,8 @@ import {
 import { useFormik } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import Map from '../components/GoogleMap';
+import axios from 'axios';
 
 export const ProductDescription=()=>{
     return(
@@ -42,13 +44,52 @@ export const ProductDescription=()=>{
 }; 
 
 const ProductData=()=>{
-    // const lg  =  useSelector((state)=>state.auth)
-    // console.log(lg,"lg")
+ 
     const navigate  =  useNavigate()
     let isLogin = localStorage.getItem("token")
     const [getStart,setGetStart]=useState(false);
     const [isBlur,setBlur]=useState(false);
+    const [address,setaddress]=useState("");
+    const [location ,setLocation] =  useState({
+        lat : null,
+        long : null
+    }) 
+   
+    
+    
+    const handleLocation = () =>{
+        if("geolocation" in navigator){
+          navigator.geolocation.getCurrentPosition(
+            position=>setLocation({
+                lat  : position.coords.latitude,
+                long : position.coords.longitude
+            }),
+            error =>{
+              console.log(error , "error getting location")
+            }
+          )
+        }else{
+          console.log("Gelocation is not available");
+        }
+      }
 
+    useEffect(()=>{
+        handleLocation()
+    },[])
+       
+        useEffect(() => {
+            const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
+            const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${location?.lat}&lon=${location?.long}&format=json&apiKey=${API_KEY}`;
+            axios
+              .get(API_URL)
+              .then(response => {
+                // console.log(response)
+                setaddress(response?.data?.display_name)
+              })
+              .catch(error => {
+                console.error('Error fetching address:', error);
+              });
+          }, [location.lat ,location.long]);
 
     const phoneNumber = '+919716924981'; // Replace with the actual phone number
     const encodedPhoneNumber = encodeURIComponent(phoneNumber);
@@ -170,8 +211,9 @@ const ProductData=()=>{
                     
                     <div className={styles.prodLocation}>
                         <b style={{color:"#019C89"}}>Posted in</b>
-                        <span>Rt Nagar , Bengaluru, Karnataka</span>
-                        <img src={dummyMap} alt='...'/>
+                        <span>{address}</span>
+                        {/* <img src={dummyMap} alt='...'/> */}
+                        <Map lat={location?.lat} long={location?.long}/>
                     </div>
 
                     <div className={styles.prodDesclaimer}>

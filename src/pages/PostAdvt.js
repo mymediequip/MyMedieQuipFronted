@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../assets/css/postAdvt.module.css";
-import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories, fetchCategoriesName, setCategories, fetchSpecialityName, setSpecality } from "../app/Slices/ProdAddSlice";
+import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories, fetchCategoriesName, setCategories, fetchSpecialityName, setSpecality, setLatLong } from "../app/Slices/ProdAddSlice";
 import GeoCode from "react-geocode"
 import {
   ImageUpload,
@@ -19,7 +19,7 @@ import { useRef } from "react";
 // toast.configure();
 import { equipmentName } from "../utils/validation";
 import axios from "axios";
-import { postData } from "../services";
+import { postData, postDataFIle } from "../services";
 
 export const PostAdvt = () => {
   return (
@@ -252,11 +252,7 @@ export const AdvtMedia = () => {
 };
 
 export const AdvtLocation = () => {
-const [lat,setlat] = useState(null)
-const [long,setlong] = useState(null)
 const [searchName,setSearchName] = useState("")
-const [parent,setParent] = useState([])
-const [address, setAddress] = useState('');
 const dispatch =  useDispatch()
 const navigate = useNavigate();
   const selectedPostType = useSelector(
@@ -266,7 +262,7 @@ const equipName  =  useSelector((state)=>state.addProd.prodAddData.Equip_name)
 const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
 const parentName =  useSelector((state)=>state.addProd.prodAddData.Parent_Name)
 const specialityName =  useSelector((state)=>state.addProd.prodAddData.specialtiey_name)
-
+const getLatLang =  useSelector((state)=>state.addProd.prodAddData.location)
 const CompatibleModel =  useSelector((state)=>state.addProd.prodAddData.Compatible_Models)
 const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
 const prodLocation =  useSelector((state)=>state.addProd.prodAddData.Equip_location)
@@ -303,10 +299,10 @@ const handleLocation = () =>{
   if("geolocation" in navigator){
     navigator.geolocation.getCurrentPosition(
       position=>{
-        setlat(position.coords.latitude)
-        setlong(position.coords.longitude)
-      },
-      error =>{
+        const {latitude ,longitude} =  position.coords
+        dispatch(setLatLong({name : "lat" , value : latitude}))
+        dispatch(setLatLong({name : "lang" , value : longitude}))
+      },   error =>{
         console.log(error , "error getting location")
       }
     )
@@ -318,7 +314,7 @@ const handleLocation = () =>{
 
 useEffect(() => {
   // const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
-  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${long}&format=json`;;
+  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${getLatLang?.lat}&lon=${getLatLang?.lang}&format=json`;;
 
   axios
     .get(API_URL)
@@ -328,33 +324,8 @@ useEffect(() => {
     .catch(error => {
       console.error('Error fetching address:', error);
     });
-}, [lat, long]);
+}, [getLatLang]);
 
-
-// useEffect(() => {
-//   const API_KEY = 'AIzaSyADGoHCfvvOG_3Ym3WxRD-yg4-3-KvR8xA';
-//   const API_URL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${API_KEY}`;
-
-//   axios
-//     .get(API_URL)
-//     .then(response => {
-//       console.log(response,"res")
-//       // if (response.data.results.length > 0) {
-//       //   setAddress(response.data.results[0].formatted_address);
-//       // } else {
-//       //   setAddress('Address not found');
-//       // }
-//     })
-//     .catch(error => {
-//       console.error('Error fetching address:', error);
-//     });
-// }, [lat, long]);
-
-
-
-
-
- 
 
   const dropSpec = {
     title: "Speciality",
@@ -667,7 +638,6 @@ export const AdvtProdData = () => {
   const allData =  useSelector((state)=>state.addProd.prodAddData)
 
 
-
   useEffect(()=>{
     if(!selectedPostType){
       navigate("/post/")
@@ -679,38 +649,71 @@ export const AdvtProdData = () => {
     dispatch(setEquipSpecification({...specifications , name , value}))
   }
 
-  // const handleProdCondition = (event) =>{
-  //   const {name,value} = event.target
-  //   dispatch(setEquipCondition({...prodCondition ,name,value}))
-  // }
-  
+ 
 
   const handleSubmit=async(event)=>{  
     event.preventDefault();
-    const data = {
-      post_type : selectedPostType == "PRE-OWNED" ? 1 : selectedPostType == "NEW"  ? 2 : selectedPostType == "SPARE & ACCESSORIES" ? 3 : selectedPostType == "SERVICES" ? 4 : ""  ,
-      image : allData?.prodImgs,
-      video : allData?.prodVideos,
-      equip_name : allData?.Equip_name,
-      equip_Location : allData?.Equip_location,
-      pk : allData?.categories,
-      speciality_name : allData?.specility[0],
-      equip_condition : allData?.prodCondition?.condition,
-      asking_price : allData?.prodCondition?.price,
-      negotiable_type : allData?.prodCondition?.negotiable,
-      description : allData?.prodCondition?.prod_desc,
-      year : allData?.purchase_year,
-      brand:allData?.specifications?.brand,
-      model:allData?.specifications?.model,
-      // warranty: allData?.specifications?.waranty,
-      warranty: 5,
-      // existing_amc: allData?.specifications?.amc_cme,
-      existing_amc: 1,
-      other_details: allData?.specifications?.other_details,
-    }
-    console.log(data,"data")
-    const res =  await postData("product/add/" , data , true)
+  const formData = new FormData()
+  formData.append("post_type" , selectedPostType == "PRE-OWNED" ? 1 : selectedPostType == "NEW"  ? 2 : selectedPostType == "SPARE & ACCESSORIES" ? 3 : selectedPostType == "SERVICES" ? 4 : ""  )
+  formData.append("images" , allData?.prodImgs)
+  formData.append("videos" , allData?.prodVideos)
+  formData.append("equip_name" , allData?.Equip_name)
+  formData.append("address" , allData?.Equip_location)
+  formData.append("category" , allData?.categories)
+  formData.append("speciality_name" , allData?.specility)
+  formData.append("equip_condition" , allData?.prodCondition?.condition ? allData?.prodCondition?.condition : "")
+  formData.append("negotiable_type" ,allData?.prodCondition?.negotiable ? allData?.prodCondition?.negotiable : "")
+  formData.append("description" , allData?.prodCondition?.prod_desc)
+  formData.append("year" , allData?.purchase_year ? allData?.purchase_year : "")
+  formData.append("brand" , allData?.specifications?.brand)
+  formData.append("model" , allData?.specifications?.model)
+  formData.append("warranty" , allData?.specifications?.waranty ? allData?.specifications?.waranty : "")
+  formData.append("existing_amc" , allData?.specifications?.amc_cme ? allData?.specifications?.amc_cme : "")
+  formData.append("other_details" , allData?.specifications?.other_details)
+  formData.append("latitude" , allData?.location?.lat)
+  formData.append("longitude" , allData?.location?.lang)
+  // formData.append("user" ,userId)
+  formData.append("user" ,"ee0654b0-96d5-4aaa-a39a-caa9b901cf80")
+  formData.append("Compatible_Models" ,allData?.Compatible_Models)
+  formData.append("Prod_price" ,allData?.Prod_price)
+
+
+    // const data = {
+    //   post_type : selectedPostType == "PRE-OWNED" ? 1 : selectedPostType == "NEW"  ? 2 : selectedPostType == "SPARE & ACCESSORIES" ? 3 : selectedPostType == "SERVICES" ? 4 : ""  ,
+    //   image : allData?.prodImgs,
+    //   video : allData?.prodVideos,
+    //   equip_name : allData?.Equip_name,
+    //   address : allData?.Equip_location,
+    //   category : allData?.categories,
+    //   speciality_name : allData?.specility,
+    //   equip_condition : allData?.prodCondition?.condition,
+    //   asking_price : allData?.prodCondition?.price,
+    //   negotiable_type : allData?.prodCondition?.negotiable,
+    //   description : allData?.prodCondition?.prod_desc,
+    //   year : allData?.purchase_year,
+    //   brand:allData?.specifications?.brand,
+    //   model:allData?.specifications?.model,
+    //   warranty: allData?.specifications?.waranty,
+    //   latitude: allData?.location?.lat,
+    //   existing_amc: allData?.specifications?.amc_cme,
+    //   longitude: allData?.location?.lang,
+    //   other_details: allData?.specifications?.other_details,
+    //   Compatible_Models : allData?.Compatible_Models,
+    //   Prod_price : allData?.Prod_price,
+     
+    // }
+    // console.log(data,"data")
+    const res =  await postDataFIle("product/add/" , formData , true)
     console.log(res,"res")
+    if(res.status){
+      toast.success("Product Added SuccessFully !")
+      dispatch(clearProdAddData());
+      setTimeout(()=>{
+        navigate("/dashboard/")
+      },2000)
+    }else{
+      toast.error(res?.msg)
+    }
   }
   const handleNavigate = () =>{
     if(selectedPostType=="NEW" || selectedPostType =="SPARE & ACCESSORIES" || selectedPostType=="SERVICES"){
@@ -748,11 +751,11 @@ export const AdvtProdData = () => {
               <div className={styles.advtRadio}>
                 <span>Under Warranty :</span>
                 <div>
-                  <input type="radio" name="waranty"  value="YES" checked={specifications?.waranty == "YES"} onChange={handleChange} />
+                  <input type="radio" name="waranty"  value="1" checked={specifications?.waranty == "1"} onChange={handleChange} />
                   <span>YES</span>
                 </div>
                 <div>
-                  <input type="radio" name="waranty" value="NO" checked={specifications?.waranty ==  "NO"}  onChange={handleChange}  />
+                  <input type="radio" name="waranty" value="0" checked={specifications?.waranty ==  "0"}  onChange={handleChange}  />
                   <span>NO</span>
                 </div>
               </div>
@@ -760,11 +763,11 @@ export const AdvtProdData = () => {
               <div className={styles.advtRadio}>
                 <span>Existing AMC/CME :</span>
                 <div>
-                  <input type="radio" name="amc_cme" value="YES" checked={specifications?.amc_cme == "YES"} onChange={handleChange} />
+                  <input type="radio" name="amc_cme" value="1" checked={specifications?.amc_cme == "1"} onChange={handleChange} />
                   <span>YES</span>
                 </div>
                 <div>
-                  <input type="radio" name="amc_cme" value="NO" checked={specifications?.amc_cme == "NO"} onChange={handleChange}/>
+                  <input type="radio" name="amc_cme" value="0" checked={specifications?.amc_cme == "0"} onChange={handleChange}/>
                   <span>NO</span>
                 </div>
               </div>

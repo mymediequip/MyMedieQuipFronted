@@ -53,7 +53,7 @@ const Nav2=()=>{
         {name:"New Equipment",path:"/"},
         {name:"Service",path:"/"},
         {name:"Spare & Accessories",path:"/"},
-        {name:"For Distribution",path:"/"},
+        {name:"Distributor & Manufacturer",path:"/"},
         {name:"Contact Us",path:"/"}
     ];
     return(
@@ -291,7 +291,7 @@ const ProfileDropDown=()=>{
     return(
         <div className={styles.exploreCont} ref={ref}>
             <div className={styles.profileHead} onClick={handleClick} >
-                <img src={profile_image ? profile_image :testimage2} style={{width:"45px",height:"45px" , borderRadius : "50%"}} alt='Dashboard'/>
+                <img src={profile_image ? profile_image : testimage2} style={{width:"45px",height:"45px" , borderRadius : "50%"}} alt='Dashboard'/>
                 <img style={{cursor : 'pointer'}} src={downIcon} alt='>'/>
             </div>
             {
@@ -341,7 +341,7 @@ const Humberger=()=>{
         {name:"NEW EQUIPMENTS",path:"/"},
         {name:"SERVICES",path:"/"},
         {name:"SPARE & ACCESSORIES",path:"/"},
-        {name:"FOR DISTRIBUTION",path:"/"},
+        {name:"Distributor & Manufacturer",path:"/"},
         {name:"CONTACT US",path:"/"},
         {name:"POST ADVERT",path:"/"}
     ];

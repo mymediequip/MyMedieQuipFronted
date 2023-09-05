@@ -125,7 +125,7 @@ export const MyProfile=()=>{
           <div className={styles.column1}>
             <div 
             className={styles.image} 
-            style={{backgroundImage:`url(${blob ?   blob  : testimage2 ? testimage2  :  `http://13.53.198.145:8000${previewImage}` })`}}
+            style={{backgroundImage:`url(${blob ?   blob   :  previewImage ? `http://13.53.198.145:8000${previewImage}` : testimage2})`}}
             >
             </div>
               <a style={{cursor  : "pointer"}} onClick={handleLinkClick}>Edit Profile Image </a>
