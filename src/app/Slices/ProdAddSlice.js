@@ -88,7 +88,6 @@ export const prodAddSlice = createSlice({
     },
     setLatLong : (state,action)=>{
       const { name, value } = action.payload;
-      console.log(action.payload)
       state.prodAddData.location[name] = value;
     },
     setEquip_Location : (state,action)=>{
