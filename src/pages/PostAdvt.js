@@ -260,7 +260,6 @@ const navigate = useNavigate();
   );
 
 const allData  =  useSelector((state)=>state.addProd.prodAddData)
-console.log(allData)
 const equipName  =  useSelector((state)=>state.addProd.prodAddData.Equip_name)
 const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
 const parentName =  useSelector((state)=>state.addProd.prodAddData.Parent_Name)
@@ -536,13 +535,11 @@ const AdvtSpecialityDorpDown = (props) => {
 export const AdvtPrice = () => {
   const dispatch =  useDispatch()
   const navigate = useNavigate();
-const allData  =  useSelector((state)=>state.addProd.prodAddData)
   const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
   const selectedPostType = useSelector(
     (state) => state.addProd.prodAddData.selectedPostType
   );
 
-console.log(prodCondition)
   useEffect(()=>{
     if(!selectedPostType){
       navigate("/post/")
