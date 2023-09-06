@@ -3,15 +3,15 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { HomeLayout } from './layouts/HomeLayout';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { ContentConatiner } from './components/ContentContainer';
-import { MyProfile } from './pages/ProfilePage';
-import { ProductDescription,ProductImgVideo,ProductMetaData,ProductReview} from './pages/ProductDesc';
-import { SelectAdvtType,PostAdvt ,AdvtMedia,AdvtLocation,AdvtPrice,AdvtProdData} from './pages/PostAdvt';
+import { MyProfile } from './features/User/buyer_seller/ProfilePage';
+import { ProductDescription,ProductImgVideo,ProductMetaData,ProductReview,ProductMeta} from './features/Buy/ProductDesc';
+import { SelectAdvtType,PostAdvt ,AdvtMedia,AdvtLocation,AdvtPrice,AdvtProdData} from './features/Sell/PostAdvt';
 import { 
   LoginRegister,
   OtpVervicatonForm,
   Signup,
   Login
-} from './pages/LoginRegister';
+} from './features/Auth/LoginRegister';
 import PrivateRoutes from './components/PrivateRoute';
 
 export const Routers=()=>{

@@ -41,6 +41,18 @@
     background-color: #0e0e0ed1;
     z-index: 1;
 }
+/* calander */
+.calanderCont{
+    width: 70vw;
+    height: 400px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFFFFF;
+    z-index: 2;
+    margin: auto;
+}
 
 @media(max-width:1200px){
     .getStartContainer{

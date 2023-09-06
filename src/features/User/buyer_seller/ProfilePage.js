@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styles from '../assets/css/profile.module.css';
+import styles from '../../../assets/css/profile.module.css'
 import { NavLink, json } from 'react-router-dom';
-import { Logout } from '../components/Navigation';
-import { testimage2 } from '../assets/images';
+import { Logout } from '../../../components/Navigation';
+import { testimage2 } from '../../../assets/images';
 import { useFormik } from 'formik';
 import * as yup from "yup"
-import { emailSchema, fnameSchema, gstinSchema, lnameSchema, nationalitySchema, pancardSchema, pnumberSchema } from '../utils/validation';
-import {postData, postDataFIle } from '../services';
+import { emailSchema, fnameSchema, gstinSchema, lnameSchema, nationalitySchema, pancardSchema, pnumberSchema } from '../../../utils/validation';
+import {postData, postDataFIle } from '../../../services';
 import { toast } from 'react-toastify';
-import { Toaster } from '../utils/Toaster';
+import { Toaster } from '../../../utils/Toaster';
 import { useDispatch } from 'react-redux';
-import { getProfileImage } from '../app/Slices/UserData';
+import { getProfileImage } from '../../../app/Slices/UserData';
 
 export const MyProfile=()=>{
   const dispatch  =  useDispatch()

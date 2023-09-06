@@ -2,22 +2,22 @@ import React, { useEffect } from 'react';
 import { NavLink,useNavigate,Outlet, useLocation} from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeLocation, changeLoginStatus } from '../app/Slices/AuthSlice';
-import styles from '../assets/css/loginregister.module.css';
+import { changeLocation, changeLoginStatus } from '../../app/Slices/AuthSlice';
+import styles from '../../assets/css/loginregister.module.css';
 import PhoneInput from 'react-phone-input-2';
 import OtpInput from 'react-otp-input';
-import { Loader } from '../components/Loader';
+import { Loader } from '../../components/Loader';
 import 'react-phone-input-2/lib/style.css';
-import { Toaster ,toast } from '../utils/Toaster';
+import { Toaster ,toast } from '../../utils/Toaster';
 import {
     loginBg,
     howWeWorks,
     linkdinLogin,
     fbllogin,
     googleLogin,
-} from '../assets/images/index';
-import { postData } from '../services';
-import { getUserData } from '../app/Slices/UserData';
+} from '../../assets/images/index';
+import { postData } from '../../services';
+import { getUserData } from '../../app/Slices/UserData';
 
 
 export const LoginRegister=()=>{

@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { DashboardAdvt } from '../components/Advt';
+import { DashboardAdvt } from '../../components/Advt';
 import { NavLink, Outlet, useNavigate} from 'react-router-dom';
-import styles from '../assets/css/prod_desc.module.css';
-import { RelatedProdCard } from '../components/Cards';
-import { GetStarted,BackgroundBlur } from '../utils/Popups';
+import styles from '../../assets/css/buy/prod_desc.module.css';
+import { RelatedProdCard } from '../../components/Cards';
+import { GetStarted,BackgroundBlur } from '../../utils/Popups';
 import * as yup from "yup";
-import { SocialShare } from '../utils/Popups';
-import {emailSchema, fnameSchema} from '../utils/validation';
+import { SocialShare } from '../../utils/Popups';
+import {emailSchema, fnameSchema} from '../../utils/validation';
 import { useRef, useState ,useEffect} from 'react';
 import {
     dummyMap,
@@ -25,11 +25,12 @@ import {
     video_Advt,
     filledStar,
     testimage2,
-} from '../assets/images/index';
+} from '../../assets/images/index';
 import { useFormik } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import Map from '../components/GoogleMap';
+import { ScheduleMeeting } from './Meeting';
+import Map from '../../components/GoogleMap';
 import axios from 'axios';
 
 export const ProductDescription=()=>{
@@ -55,8 +56,6 @@ const ProductData=()=>{
         long : null
     }) 
    
-    
-    
     const handleLocation = () =>{
         if("geolocation" in navigator){
           navigator.geolocation.getCurrentPosition(
@@ -94,15 +93,21 @@ const ProductData=()=>{
     const phoneNumber = '+919716924981'; // Replace with the actual phone number
     const encodedPhoneNumber = encodeURIComponent(phoneNumber);
 
-    
-
     const [openSocial,setOpenSocial]=useState(false);
+    const [openMeeting,setMeeting]=useState(false);
+
     const sellarClick=(event)=>{
         event.preventDefault();
+        if(isLogin){
+            setMeeting(!openMeeting);
+            window.scrollTo(0,300);  
+        }
+        else{
             setBlur(true); 
-            window.scrollTo(0,0);
             setGetStart(!getStart);
             navigate("" ,{state:{navigateTo: "products/xray-machine/"}});
+            window.scrollTo(0,0);  
+        }
     };
 
     const handleSocial=(e)=>{
@@ -164,25 +169,7 @@ const ProductData=()=>{
                         </div>
                     </div>
                     
-                    <div>
-                        <div className={styles.pd_links}>
-                            <div className={styles.sellerName}>
-                                <img src={testimage2} alt='...'/>
-                                <p>Mr Daniel</p>
-                            </div>
-                            <span>17/08/2023</span>
-                        </div>
-                    </div>
-
-                    <div>
-                        <p style={{color:"#019C89"}}>Product Details</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut libero odio. Nam elementum orci ut enim rutrum fringilla. Integer pellentesque semper erat id vestibulum. Vestibulum ultrices sapien orci, ut auctor ipsum maximus in. Aenean eu est tempor, blandit ipsum non, eleifend odio. Aenean erat purus, pulvinar quis rhoncus a, ultricies quis nulla. Aliquam erat volutpat. Pellentesque luctus lectus lorem, eleifend rutrum tellus auctor at. In purus massa, feugiat semper malesuada sed, vehicula id ex.Phasellus vitae ex vitae justo efficitur aliquet. Suspendisse metus augue, tincidunt a dui aliquam, congue rhoncus leo. Nunc eleifend elementum odio viverra volutpat. Morbi pulvinar nisl nec diam scelerisque, et volutpat libero aliquam. Donec dapibus lorem nec faucibus bibendum. Mauris quis diam eget nibh convallis consectetur ac vel velit.dapibus. Mauris convallis, orci in condimentum lobortis, dolor est lobortis tortor, nec hendrerit augue ipsum at ligula. Maecenas sollicitudin, ante quis euismod pellentesque, sapien turpis elementum dolor, tempus dignissim turpis ex auctor nibh. Pellentesque euismod vitae ante viverra pulvinar. Phasellus porttitor arcu a justo dictum condimentum. Nam sollicitudin nunc urna, sit amet consectetur nisl accumsan sed.</p>
-                    </div>
-
-                    <div>
-                        <h3>₹ 50000</h3>
-                        <p>(Plus Shipping and VAT tax included)</p>
-                    </div>
+                    {openMeeting?<ScheduleMeeting sellarClick={sellarClick}/>:<ProductMeta/>}
                     
                     <div className={styles.prodActLinks}>
                         <NavLink className={styles.contactSellar} onClick={sellarClick}>
@@ -231,6 +218,52 @@ const ProductData=()=>{
             }
         </React.Fragment>
     );
+};
+
+export const ProductMeta = () => {
+  return (
+    <React.Fragment>
+      <div>
+        <div className={styles.pd_links}>
+          <div className={styles.sellerName}>
+            <img src={testimage2} alt="..." />
+            <p>Mr Daniel</p>
+          </div>
+          <span>17/08/2023</span>
+        </div>
+      </div>
+
+      <div>
+        <p style={{ color: "#019C89" }}>Product Details</p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut
+          libero odio. Nam elementum orci ut enim rutrum fringilla. Integer
+          pellentesque semper erat id vestibulum. Vestibulum ultrices sapien
+          orci, ut auctor ipsum maximus in. Aenean eu est tempor, blandit ipsum
+          non, eleifend odio. Aenean erat purus, pulvinar quis rhoncus a,
+          ultricies quis nulla. Aliquam erat volutpat. Pellentesque luctus
+          lectus lorem, eleifend rutrum tellus auctor at. In purus massa,
+          feugiat semper malesuada sed, vehicula id ex.Phasellus vitae ex vitae
+          justo efficitur aliquet. Suspendisse metus augue, tincidunt a dui
+          aliquam, congue rhoncus leo. Nunc eleifend elementum odio viverra
+          volutpat. Morbi pulvinar nisl nec diam scelerisque, et volutpat libero
+          aliquam. Donec dapibus lorem nec faucibus bibendum. Mauris quis diam
+          eget nibh convallis consectetur ac vel velit.dapibus. Mauris
+          convallis, orci in condimentum lobortis, dolor est lobortis tortor,
+          nec hendrerit augue ipsum at ligula. Maecenas sollicitudin, ante quis
+          euismod pellentesque, sapien turpis elementum dolor, tempus dignissim
+          turpis ex auctor nibh. Pellentesque euismod vitae ante viverra
+          pulvinar. Phasellus porttitor arcu a justo dictum condimentum. Nam
+          sollicitudin nunc urna, sit amet consectetur nisl accumsan sed.
+        </p>
+      </div>
+
+      <div>
+        <h3>₹ 50000</h3>
+        <p>(Plus Shipping and VAT tax included)</p>
+      </div>
+    </React.Fragment>
+  );
 };
 
 const ProductInfo=()=>{

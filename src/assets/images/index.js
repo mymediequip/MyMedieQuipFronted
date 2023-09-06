@@ -60,7 +60,17 @@ import whatsApp2 from './whatsapp2.png';
 import dummyMap from './mapDumy.png';
 import twitter2 from './twitter2.png';
 import email2 from './mail2.png';
+import meetingImg from './meeting.png';
+import scheduleBtn from './schedulBtnImg.png';
+import inspectionBtn from './inspection_btn.png';
+import buyBtn from './buy_btn.png';
+import meetSuccess from './meetSuccess.png';
 export {
+    buyBtn,
+    meetSuccess,
+    inspectionBtn,
+    scheduleBtn,
+    meetingImg,
     twitter2,
     email2,
     whatsApp2,
