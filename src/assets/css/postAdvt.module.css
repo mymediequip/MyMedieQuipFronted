@@ -197,6 +197,18 @@
     border-top: none;
     position: absolute;
     width: 99.35%;
+    height: 156px;
+    overflow-y: auto;
+    background-color: #FFFFFF;
+}
+.checkBox1{
+    margin-top: -2px;
+    border: 1px solid #9C9E9F;
+    border-top: none;
+    position: absolute;
+    width: 99.35%;
+    height :fit-content;
+    overflow-y: auto;
     background-color: #FFFFFF;
 }
 .checkboxCont{

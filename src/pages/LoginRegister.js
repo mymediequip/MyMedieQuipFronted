@@ -110,11 +110,9 @@ export const Login=(props)=>{
     const handleLoginSubmition= async(event)=>{
         event.preventDefault();
         if (validatePhone()){
-            const data = {
-                mobile :  mobile
-                // mobile : "9716924981"
-            }
-            const res =  await postData("users/generateotp/" , data)
+            const formData = new FormData()
+            formData.append("mobile" , mobile)
+            const res =  await postData("users/generateotp/" , formData)
             if(res?.status){
                 toast.success("Mobile Number verified !")
                 dispatch(changeLocation())
@@ -237,10 +235,9 @@ export const OtpVervicatonForm=({getOtp,number,setotp , setGetStart ,setBlur})=>
     const handleResend = async(num ,otp , navigate) =>{
         setnum(num)
         setnav(navigate)
-        const data = {
-            mobile :  num
-        }
-        const res =  await postData("users/generateotp/" , data)
+        const formData =  new FormData()
+        formData.append("mobile"  , num)
+        const res =  await postData("users/generateotp/" , formData)
         if(res.status){
             setreset(true)
             if(getOtp){
@@ -254,11 +251,10 @@ export const OtpVervicatonForm=({getOtp,number,setotp , setGetStart ,setBlur})=>
 
     const handleOtp = async() => {
         if(otp.length===6 && /^\d+$/.test(otp)){
-            let data = {
-                mobile : preNumber || number || num,
-                otp : otp || getOtp 
-            }
-           const res = await postData("users/verifyotp/",data);
+            const formData =  new FormData()
+            formData.append("mobile" , preNumber || number || num)
+            formData.append("otp"  , otp || getOtp)
+           const res = await postData("users/verifyotp/",formData);
            if(res?.status){
                setOtpError(false)
             toast.success("Verified OTP SuccessFully !")

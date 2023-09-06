@@ -10,7 +10,7 @@ import {
 } from '../assets/images/index';
 import { ClientCard } from './Cards';
 import styles from '../assets/css/card.module.css';
-import { postData } from '../services';
+import {  postData} from '../services';
 
 export const OurClients=()=>{
   const [currentIndex, setCurrentIndex] = useState(0);

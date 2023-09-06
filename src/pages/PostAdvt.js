@@ -4,7 +4,6 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../assets/css/postAdvt.module.css";
 import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories, fetchCategoriesName, setCategories, fetchSpecialityName, setSpecality, setLatLong } from "../app/Slices/ProdAddSlice";
-import GeoCode from "react-geocode"
 import {
   ImageUpload,
   arrLeft,
@@ -16,10 +15,8 @@ import {
 import {toast,ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRef } from "react";
-// toast.configure();
-import { equipmentName } from "../utils/validation";
 import axios from "axios";
-import { postData, postDataFIle } from "../services";
+import { postData } from "../services";
 
 export const PostAdvt = () => {
   return (
@@ -78,7 +75,7 @@ export const SelectAdvtType = () => {
       <div className={styles.selectAdvtCont}>
         <h3>Post Your Adv</h3>
         <div className={styles.slectTypes}>
-          {selectTypes.map((value, index) => {
+          {selectTypes?.map((value, index) => {
             return (
               <span 
                 onClick={changeColor}
@@ -187,7 +184,7 @@ export const AdvtMedia = () => {
                     />
                     <img src={ImageUpload} alt="Upload" />
                   </label>
-                  {selectedImages.map((value, index) => {
+                  {selectedImages?.map((value, index) => {
                     return (
                       <div style={{ margin: "10px", display: "flex" }}>
                         <img src={value?.imageUrl} key={value?.id} />
@@ -445,7 +442,6 @@ const AdvtCategoriesDorpDown = (props) => {
   const handleCategoriesName = (event,catgorie) =>{
     dispatch(setCategories(Number(event.target.value)));
     selectedCat[catgorie]=event.target.checked;
-    // console.log(event.target.checked,event.target.value,catgorie);
   }
   const ref=useRef();
   useEffect(()=>{
@@ -484,8 +480,8 @@ const AdvtCategoriesDorpDown = (props) => {
       </div>
 
       {show && (
-        <div className={styles.checkBox}>
-          {props.data.dataList.map((value, index) => {
+        <div className={props?.data?.dataList.length > 1 ?  styles.checkBox : styles.checkBox1}>
+          {props?.data?.dataList?.map((value, index) => {
             return (
               <div className={styles.checkboxCont} key={value.id}>
                 <input type="checkbox" id="categories" value={value?.id} checked={categoriesId?.includes(value.id)} name="categories" onChange={(e)=>handleCategoriesName(e,value?.name)}  />
@@ -557,8 +553,8 @@ const AdvtSpecialityDorpDown = (props) => {
       </div>
 
       {show && (
-        <div className={styles.checkBox}>
-          {props.data.dataList.map((value, index) => {
+        <div className={props?.data?.dataList.length > 4 ?  styles.checkBox : styles.checkBox1}>
+          {props?.data?.dataList?.map((value, index) => {
             return (
               <div className={styles.checkboxCont} key={value.id}>
                 <input type="checkbox" id="specility" value={value?.name} checked={Speciality?.includes(value?.name)} name="specility" onChange={(e)=>handleCategoriesName(e,value?.name)}  />
@@ -738,7 +734,7 @@ export const AdvtProdData = () => {
   formData.append("Compatible_Models" ,allData?.Compatible_Models)
   formData.append("Prod_price" ,allData?.Prod_price)
 
-    const res =  await postDataFIle("product/add/" , formData , true)
+    const res =  await postData("product/add/" , formData , true)
     console.log(res,"res")
     if(res.status){
       toast.success("Product Added SuccessFully !")

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { postData, postData1 } from '../../services';
+import {  postData } from '../../services';
 
 export const prodAddSlice = createSlice({
   name: 'prodAdd',
@@ -165,22 +165,20 @@ export const { setType , addImg , removeImg ,addVideos ,removeVideo , setEquipme
 
 // Asynchronous thunk action
 export const fetchCategories = (Equip_name)=>async(dispatch)=>{
- const data  = {
-   q : Equip_name 
- }
+  const formData =  new FormData()
+  formData.append("q" ,Equip_name)
   try {
-    const res = await postData("product/category/menulist/" , data )
+    const res = await postData("product/category/menulist/" , formData  )
     dispatch(fetchEuipCategories(res?.data))
   } catch (error) {
     console.log(error,"error")
   }
 }
 export const fetchCategoriesName = (id)=>async(dispatch)=>{
-  const data  = {
-    id : id
-  }
+  const formData =  new FormData()
+  formData.append("id" ,id)
    try {
-     const res = await postData("product/category/menulist/" , data)
+     const res = await postData("product/category/menulist/" , formData )
      dispatch(fetchParentName(res?.data))
    } catch (error) {
      console.log(error,"error")
@@ -188,7 +186,7 @@ export const fetchCategoriesName = (id)=>async(dispatch)=>{
  }
  export const fetchSpecialityName = ()=>async(dispatch)=>{
    try {
-     const res = await postData1("product/speciality/lists/")
+     const res = await postData("product/speciality/lists/" , "" , true)
      dispatch(fetchSpecialName(res?.data))
    } catch (error) {
      console.log(error,"error")

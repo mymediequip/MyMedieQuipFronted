@@ -10,7 +10,6 @@ import {
     m_search,
     downIcon
 } from '../assets/images/index';
-import { postData } from '../services';
 import { fetchCategories } from '../app/Slices/ProdAddSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -40,6 +39,7 @@ export const Hero=(props)=>{
 const Catogories=()=>{
 const dispatch =  useDispatch()
 const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
+console.log(categories,"cate")
 
 const [filterEquip ,setFilterEquip] =  useState("")
  const handleChange = (event) =>{
