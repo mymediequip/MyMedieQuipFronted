@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { NavLink,useNavigate,Outlet, useLocation} from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeLocation, changeLoginStatus } from '../app/Slices/AuthSlice';
+import { changeLocation, changeLoginStatus, clearLocation } from '../app/Slices/AuthSlice';
 import styles from '../assets/css/loginregister.module.css';
 import PhoneInput from 'react-phone-input-2';
 import OtpInput from 'react-otp-input';
@@ -93,6 +93,9 @@ export const Login=(props)=>{
         color:"#FFFFFF"
     }
 
+ useEffect(()=>{
+    dispatch(clearLocation())
+ },[])   
     const validatePhone = () => {
         if (!mobile) {
           setPhoneError('Phone number is required');
@@ -115,7 +118,7 @@ export const Login=(props)=>{
             const res =  await postData("users/generateotp/" , formData)
             if(res?.status){
                 toast.success("Mobile Number verified !")
-                dispatch(changeLocation())
+                dispatch(changeLocation(true))
                 setTimeout(()=>{
                     if(props.setOtpForm){
                         props.setOtpForm(true);
@@ -182,7 +185,6 @@ export const OtpVervicatonForm=({getOtp,number,setotp , setGetStart ,setBlur})=>
      let  preNumber = location?.state?.number;
      const [otp, setOtp] = useState("");
      const [resendotp, setresendotp] = useState("");
-     const [reset, setreset] = useState(false);
      const [num, setnum] = useState("");
      const [nav, setnav] = useState("");
      const [otpError,setOtpError]=useState(false);
@@ -211,9 +213,7 @@ export const OtpVervicatonForm=({getOtp,number,setotp , setGetStart ,setBlur})=>
     useEffect(()=>{
         const interval = setInterval(() => {
             if (otpTime.minute === 0 && otpTime.sec === 0) {
-                // Timer expired
                 clearInterval(interval);
-                // Handle timer expiration if needed
             } else {
                 if (otpTime.sec === 0) {
                     setOtpTime(prevTime => ({ minute: prevTime.minute - 1, sec: 59 }));
@@ -225,7 +225,7 @@ export const OtpVervicatonForm=({getOtp,number,setotp , setGetStart ,setBlur})=>
         return () => {
             clearInterval(interval);
         };
-    },[otpTime ,reset]);
+    },[otpTime]);
          
 
     useEffect(()=>{
@@ -239,7 +239,7 @@ export const OtpVervicatonForm=({getOtp,number,setotp , setGetStart ,setBlur})=>
         formData.append("mobile"  , num)
         const res =  await postData("users/generateotp/" , formData)
         if(res.status){
-            setreset(true)
+            setOtpTime({minute:0,sec:5})
             if(getOtp){
                 setotp(res?.data?.otp)
             }

@@ -49,7 +49,7 @@ export const Routers=()=>{
           {/* ProductDescription */}
           <Route path='products/:proddetails' element={<ProductDescription/>}>
             <Route index element={<ProductImgVideo/>}/>
-            <Route path='info' element={<ProductMetaData/>}/>
+            {/* <Route path='info' element={<ProductMetaData/>}/> */}
             <Route path='review' element={<ProductReview/>}/>
           </Route>
 

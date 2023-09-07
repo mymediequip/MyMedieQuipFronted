@@ -42,8 +42,9 @@ export const NewProductsCard = (props) => {
   const [getStart,setGetStart]=useState(false);
   const [isBlur,setBlur]=useState(false);
   const navigate=useNavigate();
-  const productClick = () => {
-      navigate("/products/xray-machine/")
+  const productClick = (item) => {
+    console.log(item,"item")
+      navigate(`/products/${item?.equip_name}/` , {state : {prodDetails : item}})
       window.scrollTo(0,0);
   };
 
@@ -56,7 +57,7 @@ export const NewProductsCard = (props) => {
 
   return (
     <React.Fragment>
-      <div className={styles.cardContainer} onClick={productClick}>
+      <div className={styles.cardContainer} onClick={()=>productClick(props?.data)}>
         <div className={styles.cardContent}>
           <div className={styles.equipImage}>
             <div className={styles.productImage}>
@@ -84,13 +85,13 @@ export const NewProductsCard = (props) => {
             </div>
           </div>
           <div className={styles.title_desk}>
-            <h5>{props.data.title}</h5>
-            <p>{props.data.desc}</p>
+            <h5>{props?.data?.equip_name}</h5>
+            <p>{props?.data?.description}</p>
           </div>
           <div className={styles.price}>
             <div className={styles.priceTag}>
-              <h5>₹ {props.data.dis_price}</h5>
-              <p>₹{props.data.t_price}</p>
+              <h5>₹ {props?.data?.asking_price}</h5>
+              <p>₹{props?.data?.asking_price}</p>
             </div>
             <div>
               <NavLink className={styles.PriceBtn} onClick={sellarClick}>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { DashboardAdvt } from '../components/Advt';
-import { NavLink, Outlet, useNavigate} from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate} from 'react-router-dom';
 import styles from '../assets/css/prod_desc.module.css';
 import { RelatedProdCard } from '../components/Cards';
 import { GetStarted,BackgroundBlur } from '../utils/Popups';
@@ -28,7 +28,6 @@ import {
 } from '../assets/images/index';
 import { useFormik } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
 import Map from '../components/GoogleMap';
 import axios from 'axios';
 
@@ -37,49 +36,29 @@ export const ProductDescription=()=>{
         <div className={styles.pd_container}>
             <DashboardAdvt/>
             <ProductData/>
-            <ProductInfo/>
+            {/* <ProductInfo/> */}
             <RelatedProd/>
         </div>
     );
 }; 
 
 const ProductData=()=>{
+    const  location  =  useLocation()
+    const item =  location?.state?.prodDetails
+    console.log(item,"item")
  
     const navigate  =  useNavigate()
     let isLogin = localStorage.getItem("token")
     const [getStart,setGetStart]=useState(false);
     const [isBlur,setBlur]=useState(false);
     const [address,setaddress]=useState("");
-    const [location ,setLocation] =  useState({
-        lat : null,
-        long : null
-    }) 
-   
-    
-    
-    const handleLocation = () =>{
-        if("geolocation" in navigator){
-          navigator.geolocation.getCurrentPosition(
-            position=>setLocation({
-                lat  : position.coords.latitude,
-                long : position.coords.longitude
-            }),
-            error =>{
-              console.log(error , "error getting location")
-            }
-          )
-        }else{
-          console.log("Gelocation is not available");
-        }
-      }
+    const [click,setClick]=useState("");
 
-    useEffect(()=>{
-        handleLocation()
-    },[])
+
        
         useEffect(() => {
             const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
-            const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${location?.lat}&lon=${location?.long}&format=json&apiKey=${API_KEY}`;
+            const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${item?.latitude}&lon=${item?.longitude}&format=json&apiKey=${API_KEY}`;
             axios
               .get(API_URL)
               .then(response => {
@@ -89,7 +68,7 @@ const ProductData=()=>{
               .catch(error => {
                 console.error('Error fetching address:', error);
               });
-          }, [location.lat ,location.long]);
+          }, [item]);
 
     const phoneNumber = '+919716924981'; // Replace with the actual phone number
     const encodedPhoneNumber = encodeURIComponent(phoneNumber);
@@ -124,9 +103,9 @@ const ProductData=()=>{
             <div className={styles.prod_path}>
                 <img src={homeIcon} alt='...'/>
                 <img src={rightMove} alt='...'/>
-                <NavLink to="/">Ultrasound Machine</NavLink>
+                <NavLink to="/">{item?.equip_name}</NavLink>
                 <img src={rightMove} alt='...'/>
-                <NavLink to="/">XYZ Machine</NavLink>
+                <NavLink to="/">{item?.equip_name}</NavLink>
             </div>
             <div className={styles.prod_data}>
                 <div className={styles.prod_imgs}>
@@ -144,7 +123,7 @@ const ProductData=()=>{
                 <div className={styles.p_data}>
                     <div className={styles.p_head}>
                         <div>
-                            <h3>XYZ MACHINE</h3>
+                            <h3>{item?.equip_name}</h3>
                             <div>
                                 <img src={star} alt='...'/>
                                 <img src={star} alt='...'/>
@@ -170,17 +149,17 @@ const ProductData=()=>{
                                 <img src={testimage2} alt='...'/>
                                 <p>Mr Daniel</p>
                             </div>
-                            <span>17/08/2023</span>
+                            <span>{new Date(item?.created_date).toLocaleDateString()}</span>
                         </div>
                     </div>
 
                     <div>
                         <p style={{color:"#019C89"}}>Product Details</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut libero odio. Nam elementum orci ut enim rutrum fringilla. Integer pellentesque semper erat id vestibulum. Vestibulum ultrices sapien orci, ut auctor ipsum maximus in. Aenean eu est tempor, blandit ipsum non, eleifend odio. Aenean erat purus, pulvinar quis rhoncus a, ultricies quis nulla. Aliquam erat volutpat. Pellentesque luctus lectus lorem, eleifend rutrum tellus auctor at. In purus massa, feugiat semper malesuada sed, vehicula id ex.Phasellus vitae ex vitae justo efficitur aliquet. Suspendisse metus augue, tincidunt a dui aliquam, congue rhoncus leo. Nunc eleifend elementum odio viverra volutpat. Morbi pulvinar nisl nec diam scelerisque, et volutpat libero aliquam. Donec dapibus lorem nec faucibus bibendum. Mauris quis diam eget nibh convallis consectetur ac vel velit.dapibus. Mauris convallis, orci in condimentum lobortis, dolor est lobortis tortor, nec hendrerit augue ipsum at ligula. Maecenas sollicitudin, ante quis euismod pellentesque, sapien turpis elementum dolor, tempus dignissim turpis ex auctor nibh. Pellentesque euismod vitae ante viverra pulvinar. Phasellus porttitor arcu a justo dictum condimentum. Nam sollicitudin nunc urna, sit amet consectetur nisl accumsan sed.</p>
+                        <p>{item?.description}</p>
                     </div>
 
                     <div>
-                        <h3>₹ 50000</h3>
+                        <h3>₹ {item?.asking_price}</h3>
                         <p>(Plus Shipping and VAT tax included)</p>
                     </div>
                     
@@ -222,6 +201,7 @@ const ProductData=()=>{
                     </div>
 
                 </div>
+                
             </div>
             {
                 getStart?<GetStarted setGetStart={setGetStart} setBlur={setBlur}/>:""
@@ -229,6 +209,24 @@ const ProductData=()=>{
             {
                 isBlur?<BackgroundBlur/>:""
             }
+
+        <div className={styles.pd_info}>
+            <div className={styles.pd_info_links}>
+                <div style={{marginRight : '20px'}} onClick={()=>setClick("details")} className={`${click == "details" ? styles.isActive : styles.isDeactive}`}>DETAILS</div>
+                <div onClick={()=>setClick("photo")} className={`${click == "photo" ? styles.isActive : styles.isDeactive}`}  >PHOTOS</div>
+                <div style={{marginLeft : '20px'}} onClick={()=>setClick("review")} className={`${click == "review" ? styles.isActive : styles.isDeactive}`}  >REVIEWS</div>
+            </div>
+        </div>
+        <div>
+                {
+                    click == "details" ? 
+                    <ProductMetaData info={item} /> 
+                    : click == "photo" ?
+                    <ProductImgVideo/>
+                    : click == "review" ?
+                    <ProductReview/> : ""
+                }
+            </div>
         </React.Fragment>
     );
 };
@@ -237,7 +235,7 @@ const ProductInfo=()=>{
     return(
         <div className={styles.pd_info}>
             <div className={styles.pd_info_links}>
-                <NavLink style={ActivateLinks} to="/products/xray-machine/info/" >DETAILS</NavLink>
+                <NavLink style={ActivateLinks} to={`/products/xray-machine/info/`} >DETAILS</NavLink>
                 <NavLink style={ActivateLinks} to="/products/xray-machine/" >PHOTOS</NavLink>
                 <NavLink style={ActivateLinks} to="/products/xray-machine/review/" >REVIEWS</NavLink>
             </div>
@@ -259,16 +257,17 @@ export const ProductImgVideo=()=>{
     );
 };
 
-export const ProductMetaData=()=>{
+export const ProductMetaData=({info})=>{
+
     const productdedtails=[ 
-        {pname:'Brand' ,pvalue:'ABC'},
-        {pname:'Model',pvalue:'PQR'},
-        {pname:'Condition',pvalue:'EXCELLENT '},
-        {pname:'Warrenty',pvalue:'Not Specifies '},
-        {pname:'Shipping From',pvalue:' India'},
+        {pname:'Brand' ,pvalue: info?.brand},
+        {pname:'Model',pvalue:info?.model},
+        {pname:'Condition',pvalue:info?.equip_condition == 1 ? "Good" :info?.equip_condition == 2 ? "Excellent" : "As Good as New" },
+        {pname:'Warrenty',pvalue: info?.warranty == 1  ? "YES" : "NO"},
+        {pname:'Shipping From',pvalue: info?.address},
         {pname:'Advert#',pvalue:'20212922'},
         {pname:'Catagory',pvalue:'Ultrasound Machine'},
-        {pname:'Posted',pvalue:'12-07-2022'},
+        {pname:'Posted',pvalue: new Date(info?.created_date).toLocaleDateString()},
         {pname:'Visits',pvalue:'12'}
     ]
     return(

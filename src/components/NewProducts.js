@@ -19,7 +19,7 @@ export const NewProducts=(props)=>{
         const handleResize = () => {
           setIsMobileView(window.innerWidth <= 768); // Adjust breakpoint as needed
         };
-    
+
         handleResize(); // Set initial view on component mount
         window.addEventListener('resize', handleResize);
         return () => {
@@ -30,39 +30,39 @@ export const NewProducts=(props)=>{
 
     const handleScrollLeft = () =>{
         setScroll(true)
-     setCurrentIndex((prev)=>(prev-1 + cardData?.length) % cardData?.length)
+     setCurrentIndex((prev)=>(prev-1 + props?.data?.length) % props?.data?.length)
     } 
   
     const handleScrollRight = () =>{
         setScroll(true)
-        setCurrentIndex((prev)=> (prev + 1) % cardData?.length)
+        setCurrentIndex((prev)=> (prev + 1) % props?.data?.length)
        }
    
   
     useEffect(()=>{
       const updateDisplayedData = () =>{
         const displayed=[
-          cardData[currentIndex % cardData?.length],
-          cardData[(currentIndex + 1) % cardData?.length],
-          cardData[(currentIndex + 2) % cardData?.length],
-          cardData[(currentIndex + 3) % cardData?.length],
-          cardData[(currentIndex + 4) % cardData?.length],
+          props?.data[currentIndex % props?.data?.length],
+          props?.data[(currentIndex + 1) % props?.data?.length],
+          props?.data[(currentIndex + 2) % props?.data?.length],
+          props?.data[(currentIndex + 3) % props?.data?.length],
+          props?.data[(currentIndex + 4) % props?.data?.length],
 
         ]
         setDisplayedData(displayed)
       }
   
       updateDisplayedData();
-    },[currentIndex])
+    },[currentIndex , props?.data])
 
     const cardData=[
-        {title:"Product Title",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-        {title:"Product Title",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-        {title:"Product Title",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-        {title:"Product",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-        {title:"1",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-        {title:"2",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-        {title:"3 Title",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
+        {title:"Operation Machine",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:55000.00 , img : "https://images.unsplash.com/photo-1504439468489-c8920d796a29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80"},
+        {title:"Blood pressure systems",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"30000.00",t_price:75000.00 , img : "https://plus.unsplash.com/premium_photo-1661772484028-74016b213190?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"},
+        {title:"Endoscopy Equipment",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"60000.00",t_price:65000.00 , img : "https://media.istockphoto.com/id/1295788967/photo/patient-getting-fiber-optic-gastroscopy.jpg?s=2048x2048&w=is&k=20&c=qMWwkU8rCg46jJc1jxVN3LTTbD0_oS9i7qEET8oD-Uw="},
+        {title:"Air Compressors",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"80000.00",t_price:335000.00 , img : "https://media.istockphoto.com/id/1006038874/photo/close-up-air-compressor-engine-machine-industrial-engineering-concept.jpg?s=2048x2048&w=is&k=20&c=U8HEQaMVw9pqmyyUb35_1zt5PtE_Kw5qTvRL8F23t2k="},
+        {title:"Anesthesia Machines",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"110000.00",t_price:65000.00 , img : "https://images.unsplash.com/photo-1605654580413-5a7f24649936?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80"},
+        {title:"Dental Equipment",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"450000.00",t_price:815000.00 , img : "https://images.unsplash.com/photo-1616391182219-e080b4d1043a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1983&q=80"},
+        {title:"Home Care Rehab",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"20000.00",t_price:5000.00 , img : "https://media.istockphoto.com/id/1319783107/photo/asian-disabled-senior-elderly-man-on-wheelchair-doing-physiotherapist-with-support-from.jpg?s=2048x2048&w=is&k=20&c=1bRTtT8hBzeFCYuzXVk5tVdL_kyCvDPmYz7dA55XEKg="},
     ];
 
   const startIndex = (currentPage - 1) * itemsPerPage;
