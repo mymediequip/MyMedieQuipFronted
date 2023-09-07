@@ -6,6 +6,7 @@ import { ContentConatiner } from './components/ContentContainer';
 import { MyProfile } from './features/User/buyer_seller/ProfilePage';
 import { ProductDescription,ProductImgVideo,ProductMetaData,ProductReview,ProductMeta} from './features/Buy/ProductDesc';
 import { SelectAdvtType,PostAdvt ,AdvtMedia,AdvtLocation,AdvtPrice,AdvtProdData} from './features/Sell/PostAdvt';
+import { Checkout } from './features/Buy/Checkout';
 import { 
   LoginRegister,
   OtpVervicatonForm,
@@ -52,6 +53,9 @@ export const Routers=()=>{
             <Route path='info' element={<ProductMetaData/>}/>
             <Route path='review' element={<ProductReview/>}/>
           </Route>
+
+          {/* checkout */}
+          <Route path='products/:proddetails/checkout' element={<Checkout/>}/>
 
           {/* post advertisement */}
 

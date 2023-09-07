@@ -65,8 +65,12 @@ import scheduleBtn from './schedulBtnImg.png';
 import inspectionBtn from './inspection_btn.png';
 import buyBtn from './buy_btn.png';
 import meetSuccess from './meetSuccess.png';
+import inspectImg from './inspectImg.png';
+import meetIssued from './meetIssued.png';
 export {
     buyBtn,
+    meetIssued,
+    inspectImg,
     meetSuccess,
     inspectionBtn,
     scheduleBtn,
