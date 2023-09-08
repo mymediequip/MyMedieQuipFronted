@@ -67,8 +67,18 @@ import buyBtn from './buy_btn.png';
 import meetSuccess from './meetSuccess.png';
 import inspectImg from './inspectImg.png';
 import meetIssued from './meetIssued.png';
+import currLocat from './currenLocat.png';
+import decrease from './decrease.png';
+import incrase from './increase.png';
+import paytam from './paytm.png';
+import upib from './upiB.png';
 export {
+    paytam,
+    upib,
+    decrease,
+    incrase,
     buyBtn,
+    currLocat,
     meetIssued,
     inspectImg,
     meetSuccess,
