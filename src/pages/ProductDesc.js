@@ -30,6 +30,7 @@ import { useFormik } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
 import Map from '../components/GoogleMap';
 import axios from 'axios';
+import { postData } from '../services';
 
 export const ProductDescription=()=>{
     return(
@@ -45,59 +46,96 @@ export const ProductDescription=()=>{
 const ProductData=()=>{
     const  location  =  useLocation()
     const item =  location?.state?.prodDetails
-    console.log(item,"item")
- 
+    // console.log(item,"item")
     const navigate  =  useNavigate()
     let isLogin = localStorage.getItem("token")
     const [getStart,setGetStart]=useState(false);
     const [isBlur,setBlur]=useState(false);
     const [address,setaddress]=useState("");
     const [click,setClick]=useState("");
+    const [currentIndex,setCurrentIndex]=useState(0);
+    const [displayedData, setDisplayedData] = useState({});
+    const [profile, setProfle] = useState({});
+    const [category, setcategory] = useState([]);
+    const [openSocial,setOpenSocial]=useState(false);
 
-
-       
-        useEffect(() => {
-            const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
-            const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${item?.latitude}&lon=${item?.longitude}&format=json&apiKey=${API_KEY}`;
-            axios
-              .get(API_URL)
-              .then(response => {
+    useEffect(() => {
+        const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
+        const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${item?.latitude}&lon=${item?.longitude}&format=json&apiKey=${API_KEY}`;
+        axios
+        .get(API_URL)
+        .then(response => {
                 // console.log(response)
                 setaddress(response?.data?.display_name)
-              })
-              .catch(error => {
+            })
+            .catch(error => {
                 console.error('Error fetching address:', error);
-              });
-          }, [item]);
-
-    const phoneNumber = '+919716924981'; // Replace with the actual phone number
-    const encodedPhoneNumber = encodeURIComponent(phoneNumber);
-
-    
-
-    const [openSocial,setOpenSocial]=useState(false);
-    const sellarClick=(event)=>{
-        event.preventDefault();
+            });
+        }, [item]);
+        
+        const phoneNumber = '+919716924981'; // Replace with the actual phone number
+        const encodedPhoneNumber = encodeURIComponent(phoneNumber);
+        const sellarClick=(event)=>{
+            event.preventDefault();
             setBlur(true); 
             window.scrollTo(0,0);
             setGetStart(!getStart);
             navigate("" ,{state:{navigateTo: "products/xray-machine/"}});
-    };
+        };
 
-    const handleSocial=(e)=>{
-        setOpenSocial(!openSocial);
+        const handleSocial=(e)=>{
+            setOpenSocial(!openSocial);
     }
     const prodImgStyle={
-        backgroundImage:`url(${pngwing})`,
+        backgroundImage:`url(${displayedData?.product_images ? displayedData?.product_images : pngwing})`,
     };
     const ref=useRef();
     useEffect(()=>{
         document.addEventListener("click",(e)=>{
-        if(ref.current && !ref.current.contains(e.target)){
-            setOpenSocial(false);
-        }
-      });
+            if(ref.current && !ref.current.contains(e.target)){
+                setOpenSocial(false);
+            }
+        });
     },[])
+    
+    const handleLeft = () =>{
+        setCurrentIndex((prev)=>(prev -1 + item?.product_images.length) % item?.product_images.length)
+
+    }
+    const handleRight = () =>{
+        setCurrentIndex((prev)=>prev+1 % item?.product_images.length)
+    }
+    useEffect(()=>{
+        const updateDisplayedData = () =>{
+            const displayed=item?.product_images[(currentIndex) % item?.product_images?.length]
+            setDisplayedData(displayed)
+        }
+        updateDisplayedData();
+    },[currentIndex])
+
+    useEffect(()=>{
+        handleUserProfile()
+        handleCategory()
+    },[item])
+
+    const handleUserProfile  = async() => {
+        const formData =  new FormData()
+        formData.append("uid" , item?.uid)
+        formData.append("id" , item?.category)
+        const res = await postData("users/get_user_detail/" , formData ,true)
+        if(res?.status){
+            setProfle(res?.data?.profile)
+        }
+    }
+    const handleCategory  = async() => {
+        const formData =  new FormData()
+        formData.append("id" , item?.category)
+        const res = await postData("product/category/menulist/" , formData)
+        if(res?.status){
+            setcategory(res?.data)
+        }
+
+    }
     return(
         <React.Fragment>
             <div className={styles.prod_path}>
@@ -112,12 +150,22 @@ const ProductData=()=>{
                     <div style={prodImgStyle} className={styles.prodBigImg}>
                     </div>
                     <div className={styles.imgSlider}>
-                        <img src={swipetestleft} alt='...' style={{width:"25px",height:"25px"}}/>
-                        <img src={pngwing} alt='...'/>
-                        <img src={pngwing} alt='...'/>
-                        <img src={pngwing} alt='...'/>
-                        <img src={pngwing} alt='...'/>
-                        <img src={nextArow} style={{width:"25px",height:"25px"}} alt='...'/>
+                    <img src={swipetestleft} onClick={handleLeft} alt='...' style={{width:"25px",height:"25px"}}/>
+                    {
+                 item?.product_images.length > 0 ?  item?.product_images?.slice(0,4)?.map((image)=>{
+                        return(
+                            <img src={image?.product_images} alt='...' />
+                        )
+                    }) :  
+                    (<>
+                    <img src={pngwing} alt='...'/>
+                    <img src={pngwing} alt='...'/>
+                    <img src={pngwing} alt='...'/>
+                    <img src={pngwing} alt='...'/>
+                    </>)
+
+                }
+                        <img src={nextArow} onClick={handleRight} style={{width:"25px",height:"25px"}} alt='...'/>
                     </div>
                 </div>
                 <div className={styles.p_data}>
@@ -146,10 +194,10 @@ const ProductData=()=>{
                     <div>
                         <div className={styles.pd_links}>
                             <div className={styles.sellerName}>
-                                <img src={testimage2} alt='...'/>
-                                <p>Mr Daniel</p>
+                                <img src={profile?.profile_image ? profile?.profile_image  : testimage2} alt='...'/>
+                                <p>{`${profile?.first_name} ${profile?.last_name}`}</p>
                             </div>
-                            <span>{new Date(item?.created_date).toLocaleDateString()}</span>
+                            <span>{item?.date}</span>
                         </div>
                     </div>
 
@@ -220,9 +268,9 @@ const ProductData=()=>{
         <div>
                 {
                     click == "details" ? 
-                    <ProductMetaData info={item} /> 
+                    <ProductMetaData info={item} cat={category} /> 
                     : click == "photo" ?
-                    <ProductImgVideo/>
+                    <ProductImgVideo info={item}/>
                     : click == "review" ?
                     <ProductReview/> : ""
                 }
@@ -244,20 +292,29 @@ const ProductInfo=()=>{
     );
 };
 
-export const ProductImgVideo=()=>{
+export const ProductImgVideo=({info})=>{
     return(
         <div className={styles.prodAsset}>
-            <img src={video_Advt} alt='...' style={{width:"100%",height:"400px"}}/>
+            {/* <img src={video_Advt} alt='...' style={{width:"100%",height:"400px"}}/> */}
+            <video controls width={"100%"} height={"400px"}>
+                <source src='blob:http://localhost:3000/40522b67-6acd-4bf1-b947-3dc9e143fe5f' type='video/mp4'/>
+            </video>
             <div className={styles.prodsImg}>
-                <img src={pngwing} alt='...' style={{width:"190px",height:"250px"}}/>
-                <img src={pngwing} alt='...' style={{width:"190px",height:"250px"}}/>
-                <img src={pngwing} alt='...' style={{width:"190px",height:"250px"}}/>
+                {
+                    info?.product_images?.slice(0,5)?.map((image)=>{
+                        return(
+                            <img src={image?.product_images} alt='...' style={{width:"190px",height:"250px"}}/>
+                        )
+                    })
+
+                }
+               
             </div>
         </div>
     );
 };
 
-export const ProductMetaData=({info})=>{
+export const ProductMetaData=({info ,cat})=>{
 
     const productdedtails=[ 
         {pname:'Brand' ,pvalue: info?.brand},
@@ -266,9 +323,9 @@ export const ProductMetaData=({info})=>{
         {pname:'Warrenty',pvalue: info?.warranty == 1  ? "YES" : "NO"},
         {pname:'Shipping From',pvalue: info?.address},
         {pname:'Advert#',pvalue:'20212922'},
-        {pname:'Catagory',pvalue:'Ultrasound Machine'},
-        {pname:'Posted',pvalue: new Date(info?.created_date).toLocaleDateString()},
-        {pname:'Visits',pvalue:'12'}
+        {pname:'Catagory',pvalue: cat ? cat?.map((el)=>el?.name) : 'Ultrasound Machine'},
+        {pname:'Posted',pvalue: info?.date},
+        {pname:'Visits',pvalue: info?.visit ? info?.visit :  '0'}
     ]
     return(
         <table className={styles.prodMetaContainer}>

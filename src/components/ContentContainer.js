@@ -6,7 +6,7 @@ import { Advt } from './Advt';
 import { OurExperties } from './OurExperties';
 import { OurClients } from './OurClients';
 import { Advt2 } from './Advt';
-import { ClientBanner } from './OurClients';
+// import { ClientBanner } from './OurClients';
 import { postData } from '../services';
 
 export const ContentConatiner=(props)=>{
@@ -20,29 +20,17 @@ const [product , setProduct] =  useState({
     },[])
 
     const handleFilterProduct = async()=>{
-        const res  =  await postData("product/lists/" , "" , true)
-        let fill = res.data?.filter((el)=>{
-            if(el?.post_type == 1){
-                return el
-            }
-        })
-        let fill1 = res.data?.filter((el)=>{
-            if(el?.post_type == 2){
-                return el
-            }
-        })
-        let fill3 = res.data?.filter((el)=>{
-            if(el?.post_type == 3){
-                return el
-            }
-        })
+        const res  =  await postData("product/filter_list/" , "" , true)
+        // console.log(res.data)
         setProduct({
-            new : fill1,
-            feature : fill3,
-            bestseller : fill
+            new : res?.data?.new_products,
+            feature : res?.data?.featured_products,
+            bestseller : res?.data?.best_seller_products,
         })
         
     }
+
+    console.log(product)
     return(
         <React.Fragment>
             {/* <MobileCatogories/> */}

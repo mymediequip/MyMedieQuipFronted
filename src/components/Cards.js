@@ -68,7 +68,7 @@ export const NewProductsCard = (props) => {
                   className={styles.newBanner}
                 />
               )}
-              <img src={pngwing} className={styles.productimg} />
+              <img src={props?.data?.product_images?.length > 0 ? `${props?.data?.product_images[0]?.product_images}` :pngwing} className={styles.productimg} />
               <div
                 className={styles.favCart}
                 style={{ top: props.isNew ? "-188px" : "-165px" }}
