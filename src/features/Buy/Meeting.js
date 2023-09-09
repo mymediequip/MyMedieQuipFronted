@@ -114,6 +114,7 @@ const InspectionReport=(props)=>{
     const navigate=useNavigate();
     const handlePayment=(e)=>{
         navigate("/products/xyz-machine/checkout/");
+        window.scrollTo(0,0);
     }
     return(
         <div className={styles.inspectCont}>

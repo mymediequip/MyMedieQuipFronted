@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState ,useEffect} from "react";
 import styles from '../../assets/css/buy/checkout.module.css';
 import {
     currLocat,
@@ -14,13 +14,45 @@ export const Checkout=()=>{
     return(
         <div className={styles.checkoutCont}>
             <div className={styles.checkoutData}>
-                <CheckoutDataHead seq="1" name="LOGIN"/>
+                <PayLogin/>
                 <DelieveryAddress />
                 <OrderSummary/>
                 <PaymentOptions/>
             </div>
             <div className={styles.checkoutPriceData}>
-
+              <p>TOTAL PRICING</p>
+              <div>
+                <span>Equipment Cost :</span>
+                <span>₹10000</span>
+              </div>
+              <div>
+                <span>Negotiable Deal Price :</span>
+                <span>₹10000</span>
+              </div>
+              <div>
+                <span>Platform Fee :</span>
+                <span>₹10000</span>
+              </div>
+              <div>
+                <span>Inspection & Verification Cost:</span>
+                <span style={{color:"#019C89"}}>-₹10000</span>
+              </div>
+              <div>
+                <span>Shipping Price :</span>
+                <span>₹10000</span>
+              </div>
+              <div>
+                <span>Installation Price :</span>
+                <span>₹10000</span>
+              </div>
+              <div>
+                <span>GST:</span>
+                <span>₹10000</span>
+              </div>
+              <div>
+                <b>Total Payment :</b>
+                <b>₹10000</b>
+              </div>
             </div>
         </div>
     );
@@ -29,11 +61,20 @@ export const Checkout=()=>{
 const CheckoutDataHead=(props)=>{
     const defaultStyle={backgroundColor:"#FFFFFF"};
     const selectedStyle={backgroundColor:"#019C89"};
+    const ref=useRef();
+
     const handleClick=(e)=>{
         props.setShowBottom(!props.showBottom);
-    }
+    };
+  //   useEffect(()=>{
+  //     document.addEventListener("click",(e)=>{
+  //     if(ref.current && !ref.current.contains(e.target)){
+  //       props.setShowBottom(false);
+  //     }
+  //   });
+  // },[])
     return(
-        <div className={styles.checkoutDataHead} style={props.showBottom?selectedStyle:defaultStyle} onClick={handleClick}>
+        <div className={styles.checkoutDataHead} ref={ref} style={props.showBottom?selectedStyle:defaultStyle} onClick={handleClick}>
             <div>
                 <span className={styles.checkout1}>{props.seq}</span>
                 <span className={styles.checkout2} style={{color:props.showBottom?"#FFFFFF":"#878793"}}>{props.name}</span>
@@ -225,4 +266,36 @@ const PaymentOptCard=(props)=>{
             
         </div>
     );
-}
+};
+
+const PayLogin=()=>{
+  const [loginData,setLoginData]=useState(false);
+  
+  return (
+    <div>
+      <CheckoutDataHead
+        seq="1"
+        name="LOGIN"
+        setShowBottom={setLoginData}
+        showBottom={loginData}
+      />
+      {loginData && (
+        <div  className={styles.deliveryAdd}>
+          <form className={styles.addressForm}>
+            
+            <div>
+              <input type="text" placeholder="Login Name" />
+              <input type="number" placeholder="Login mobile number" />
+            </div>
+            
+            <div className={styles.saveData}>
+              <input type="submit" value="CHANGED" />
+              {/* <span>CANCEL</span> */}
+            </div>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+
+};

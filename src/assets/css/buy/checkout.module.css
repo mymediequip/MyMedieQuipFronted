@@ -14,12 +14,7 @@
     margin-bottom: 23px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
-.checkoutPriceData{
-    width: 23%;
-    background-color: #FFFFFF;
-    height: 300px;
-    
-}
+
 /* checkout data head */
 .checkoutDataHead{
     width: 100%;
@@ -256,4 +251,24 @@
     color: #878787;
     margin-top: 16px;
     margin-left: 60px;
+}
+
+/* payment summary */
+.checkoutPriceData p{
+    color: #7B7B7B;
+}
+.checkoutPriceData{
+    width: 20%;
+    background-color: #FFFFFF;
+    height: fit-content;
+    padding: 25px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.checkoutPriceData>div{
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0px 15px 0px;
+    color: #2d2d2db0;
+    font-size: 15px;
+    
 }
