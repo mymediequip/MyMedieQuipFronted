@@ -9,6 +9,21 @@
 .prod_imgs{
     width: 300px;
 }
+.newProd{
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.newProd span{
+    background-color: #EE8632;
+    color: #FFFFFF;
+    font-size: 12px;
+    padding: 5px 20px 5px 20px;
+    cursor: pointer;
+    border-radius: 2px;
+}
 .prod_path img{
     width: 18px;
     margin: 5px;
@@ -402,6 +417,37 @@
     color: #555751;
     font-weight: 500;
     font-size: 14px;
+}
+
+/* process */
+.processCont{
+    display: flex;
+    margin-bottom: 80px;
+    justify-content: space-between;
+}
+.procImg{
+    display: flex;
+    width: 90px;
+    height: 90px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.processCard{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    width: 150px;
+}
+.processCard img{
+    width: fit-content;
+}
+.processCard span{
+    text-align: center;
+    color: #4D4D4D;
+    margin-top: 15px;
 }
 
 @media(max-width:848px){

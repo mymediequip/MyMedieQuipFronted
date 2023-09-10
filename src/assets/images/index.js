@@ -72,7 +72,21 @@ import decrease from './decrease.png';
 import incrase from './increase.png';
 import paytam from './paytm.png';
 import upib from './upiB.png';
+import findE from './process/findEquip.png';
+import schedule from './process/schedule.png';
+import inspection from './process/inspection.png';
+import closeDeal from './process/closeDeal.png';
+import shipped from './process/closeDeal.png';
+import handling from './process/install.png';
+import amc from './process/amc.png';
 export {
+    findE,
+    schedule,
+    inspection,
+    closeDeal,
+    handling,
+    amc,
+    shipped,
     paytam,
     upib,
     decrease,

@@ -10,6 +10,13 @@ import { SocialShare } from '../../utils/Popups';
 import {emailSchema, fnameSchema} from '../../utils/validation';
 import { useRef, useState ,useEffect} from 'react';
 import {
+    findE,
+    inspection,
+    closeDeal,
+    handling,
+    amc,
+    shipped,
+    location,
     dummyMap,
     contBtn,
     atcBtn,
@@ -25,6 +32,7 @@ import {
     video_Advt,
     filledStar,
     testimage2,
+    schedule,
 } from '../../assets/images/index';
 import { useFormik } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
@@ -37,6 +45,7 @@ export const ProductDescription=()=>{
     return(
         <div className={styles.pd_container}>
             <DashboardAdvt/>
+            <MMQprocess/>
             <ProductData/>
             <ProductInfo/>
             <RelatedProd/>
@@ -149,7 +158,10 @@ const ProductData=()=>{
                 <div className={styles.p_data}>
                     <div className={styles.p_head}>
                         <div>
-                            <h3>XYZ MACHINE</h3>
+                            <div className={styles.newProd}>
+                              <h3 style={{marginBottom:"0px"}}>XYZ MACHINE</h3>
+                              <span >NEW</span>
+                            </div>
                             <div>
                                 <img src={star} alt='...'/>
                                 <img src={star} alt='...'/>
@@ -229,7 +241,10 @@ export const ProductMeta = () => {
             <img src={testimage2} alt="..." />
             <p>Mr Daniel</p>
           </div>
-          <span>17/08/2023</span>
+          <div style={{display:"flex",alignItems:"center",gap:"5px"}}>
+            <img src={location}  alt="..." />
+            <span>New Delhi</span>
+          </div>
         </div>
       </div>
 
@@ -562,6 +577,38 @@ const ReviewForm=()=>{
       </div>
     );
 }
+
+/* process */
+const MMQprocess=()=>{
+  const processData=[
+    {name:"Find Equipment",img:findE},
+    {name:"Schedule meeting with seller",img:schedule},
+    {name:"Get Inspection Report",img:inspection},
+    {name:"Close The Deal",img:closeDeal},
+    {name:"Get it Shipped",img:shipped},
+    {name:"Handling & Installation",img:handling},
+    {name:"AMC/ CME, Services",img:amc}
+  ];
+  return(
+    <div className={styles.processCont}>
+      {
+        processData.map((value,index)=>{
+          return <ProcessCard key={index} data={value}/>
+        })
+      }
+    </div>
+  );
+}
+const ProcessCard=(props)=>{
+  return(
+    <div className={styles.processCard}>
+      <div className={styles.procImg}>
+        <img src={props.data.img} alt='...'/>
+      </div>
+      <span>{props.data.name}</span>
+    </div>
+  );
+};
 // non component function
 
 const ActivateLinks=({isActive})=>{
