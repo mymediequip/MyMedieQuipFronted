@@ -104,12 +104,20 @@ const ProductData=()=>{
 
     const [openSocial,setOpenSocial]=useState(false);
     const [openMeeting,setMeeting]=useState(false);
+    const [buyClick,setbuyClick]=useState(false);
+    const contRef=useRef(null);
 
-    const sellarClick=(event)=>{
+    const sellarClick=(event,isBuyClick)=>{
         event.preventDefault();
         if(isLogin){
-            setMeeting(!openMeeting);
-            window.scrollTo(0,300);  
+            setMeeting(true);  
+            contRef.current.scrollIntoView();
+            if(isBuyClick){
+              setbuyClick(true);
+            }
+            else{
+              setbuyClick(false);
+            }
         }
         else{
             setBlur(true); 
@@ -119,6 +127,7 @@ const ProductData=()=>{
         }
     };
 
+    
     const handleSocial=(e)=>{
         setOpenSocial(!openSocial);
     }
@@ -142,7 +151,7 @@ const ProductData=()=>{
                 <img src={rightMove} alt='...'/>
                 <NavLink to="/">XYZ Machine</NavLink>
             </div>
-            <div className={styles.prod_data}>
+            <div ref={contRef} className={styles.prod_data}>
                 <div className={styles.prod_imgs}>
                     <div style={prodImgStyle} className={styles.prodBigImg}>
                     </div>
@@ -163,6 +172,7 @@ const ProductData=()=>{
                               <span >NEW</span>
                             </div>
                             <div>
+                                <span className={styles.prodId}>XM-101011QR</span>
                                 <img src={star} alt='...'/>
                                 <img src={star} alt='...'/>
                                 <img src={star} alt='...'/>
@@ -181,10 +191,10 @@ const ProductData=()=>{
                         </div>
                     </div>
                     
-                    {openMeeting?<ScheduleMeeting sellarClick={sellarClick}/>:<ProductMeta/>}
+                    {openMeeting?<ScheduleMeeting isBuyClick={buyClick} setMeeting={setMeeting} sellarClick={sellarClick}/>:<ProductMeta/>}
                     
                     <div className={styles.prodActLinks}>
-                        <NavLink className={styles.contactSellar} onClick={sellarClick}>
+                        <NavLink className={styles.contactSellar} onClick={(e)=>{sellarClick(e,false)}}>
                             <img src={contBtn} height="15px" alt='...'/>
                             <span>CONTACT SELLER</span>
                         </NavLink>
@@ -201,7 +211,7 @@ const ProductData=()=>{
 
                         }
                         
-                        <NavLink style={{backgroundColor:"#FFDD75",color:"black"}} className={styles.contactSellar} onClick={sellarClick}>
+                        <NavLink style={{backgroundColor:"#FFDD75",color:"black"}} onClick={(e)=>{sellarClick(e,true)}} className={styles.contactSellar} >
                             <img src={atcBtn} height="15px" alt='...'/>
                             <span>CLICK TO BUY NOW</span>
                         </NavLink>
@@ -593,16 +603,24 @@ const MMQprocess=()=>{
     <div className={styles.processCont}>
       {
         processData.map((value,index)=>{
-          return <ProcessCard key={index} data={value}/>
+          return <ProcessCard key={index} curr={index} data={value}/>
         })
       }
     </div>
   );
 }
 const ProcessCard=(props)=>{
+  const currBuyStatus=useSelector((state)=>state.profileData.currBuyStatus);
+  const cardActiveStyle={};
+  if(currBuyStatus===props.curr){
+    cardActiveStyle['border']="1px solid #019C89";
+  }
+  else{
+    cardActiveStyle['boxShadow']="rgba(0, 0, 0, 0.16) 0px 1px 4px";
+  }
   return(
     <div className={styles.processCard}>
-      <div className={styles.procImg}>
+      <div className={styles.procImg} style={cardActiveStyle}>
         <img src={props.data.img} alt='...'/>
       </div>
       <span>{props.data.name}</span>

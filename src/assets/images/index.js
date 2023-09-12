@@ -76,7 +76,7 @@ import findE from './process/findEquip.png';
 import schedule from './process/schedule.png';
 import inspection from './process/inspection.png';
 import closeDeal from './process/closeDeal.png';
-import shipped from './process/closeDeal.png';
+import shipped from './process/shipping.png';
 import handling from './process/install.png';
 import amc from './process/amc.png';
 export {

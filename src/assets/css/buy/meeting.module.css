@@ -137,3 +137,27 @@
     margin-bottom: 0px;
     text-align: center;
 }
+.inspectWrn{
+    display: inline-block;
+    margin-top: 20px;
+}
+.skiptBtn{
+    border: 1px solid #E3E3E3;
+    font-size: 14px;
+    padding: 7px 20px 7px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.confrmBtn{
+    background-color: #019C89;
+    font-size: 14px;
+    padding: 7px 20px 7px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #FFFFFF;
+}
+.insBtnD{
+    display: flex;
+    justify-content: right;
+    gap: 10px;
+}

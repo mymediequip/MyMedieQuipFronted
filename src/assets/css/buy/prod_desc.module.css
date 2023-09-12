@@ -418,7 +418,12 @@
     font-weight: 500;
     font-size: 14px;
 }
-
+.prodId{
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 14px;
+    color: #878787;
+}
 /* process */
 .processCont{
     display: flex;
@@ -432,7 +437,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    /* box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; */
 }
 .processCard{
     display: flex;

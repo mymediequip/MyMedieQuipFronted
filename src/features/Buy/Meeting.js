@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from '../../assets/css/buy/meeting.module.css';
 import { BackgroundBlur } from "../../utils/Popups";
 import { Calander } from "../../utils/Calanders";
+import { setCurrBuyStatus } from "../../app/Slices/UserData";
 import {
     meetingImg,
     scheduleBtn,
@@ -12,6 +13,7 @@ import {
     meetIssued
 } from '../../assets/images/index';
 import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 export const ScheduleMeeting=(props)=>{
     const [isBlur,setBlur]=useState(false);
@@ -21,6 +23,8 @@ export const ScheduleMeeting=(props)=>{
     const [isMeetIssue,setMeetIssue]=useState(false);
     const [isBuyIssue,setBuyIssue]=useState(false);
     const [isBuyOption,setBuyOption]=useState(false);
+    const [isBuyClick,setBuyClick]=useState(props.isBuyClick);
+    const dispatch=useDispatch();
     const meetRef=useRef();
     const handleSechedule=(e)=>{
         setBlur(!isBlur);
@@ -28,7 +32,9 @@ export const ScheduleMeeting=(props)=>{
     const handleMeetSuccess=(e)=>{
         setSuccess(!isSuccess);
         setMetScheduled(true);
-    }
+        console.log("meeting scheduled successfuly");
+        dispatch(setCurrBuyStatus({curr:1}));
+    };
     const handleInspection=(e)=>{
         if(isMetScheduled){
             setInpection(!isInspected);
@@ -47,7 +53,7 @@ export const ScheduleMeeting=(props)=>{
             meetRef.current.style.backgroundColor="#E7E7E7";
         }
         
-    }
+    };
     const handleBuyIssue=()=>{
         let popup=false;
         if(isMetScheduled){
@@ -63,11 +69,16 @@ export const ScheduleMeeting=(props)=>{
             popup=isBuyIssue;
         }
         popup?meetRef.current.style.backgroundColor="":meetRef.current.style.backgroundColor="#E7E7E7";
-    }
+    };
+
+    useEffect(()=>{
+        props.isBuyClick?meetRef.current.style.backgroundColor="#E7E7E7":meetRef.current.style.backgroundColor="";
+        setBuyClick(props.isBuyClick);
+    },[props.isBuyClick]);
     return(
         <React.Fragment>
             <div className={styles.meetingCont} ref={meetRef}>
-                <p style={{textAlign:"right",cursor:"pointer"}}><i class="bi bi-x" onClick={props.sellarClick} ></i></p>
+                <p style={{textAlign:"right",cursor:"pointer"}}><i class="bi bi-x" onClick={()=>props.setMeeting(false)} ></i></p>
                 <div className={styles.meetSchedule}>
                     <img src={meetingImg} alt="..."/>
                     <b>Meeting Scheduling</b>
@@ -82,6 +93,7 @@ export const ScheduleMeeting=(props)=>{
                 {isMeetIssue && <MeetingIssue handleInspection={handleInspection} setInpection={setInpection} setMeetIssue={setMeetIssue}/>}
                 {isBuyIssue && <BuyIssue setBuyIssue={setBuyIssue} handleBuyIssue={handleBuyIssue} setBuyOption={setBuyOption}/>}
                 {isBuyOption && <SelectServices handleBuyIssue={handleBuyIssue}/>}
+                {isBuyClick && <AskInspection setBuyOption={setBuyOption}setInpection={setInpection} setBuyClick={setBuyClick}/>}
             </div>
             { 
                 isBlur && 
@@ -189,4 +201,36 @@ const SelectServices=(props)=>{
             <span className={styles.submitBtn} onClick={handlePayment} id={styles.servCont}>CONTINUE</span>
         </div>
     );
+};
+
+const AskInspection=(props)=>{
+    const handleConfirm=(e)=>{
+        props.setBuyClick(false);
+        props.setInpection(true);
+    }
+    const handleSkip=(e)=>{
+        props.setBuyClick(false);
+        props.setBuyOption(true);
+    }
+    const handleClose=(e)=>{
+        props.setBuyClick(false);
+    }
+    return(
+        <div className={styles.inspectCont} style={{paddingBottom:"15px"}}>
+            <div className={styles.inspectTop}>
+                <img src={inspectImg} alt="..."/>
+                <b>Inspection Report</b>
+                <i class="bi bi-x"  style={{cursor:"pointer"}} onClick={handleClose}></i>
+            </div>
+            <span className={styles.inspectWrn}>Do you want to inspect/verify product</span>
+            <p>
+                Terms and Condition For getting a equipment insepected <NavLink>Terms & Condition</NavLink>
+            </p>
+            <div className={styles.insBtnD}>
+                <span className={styles.skiptBtn} onClick={handleSkip} >Skip</span>
+                <span className={styles.confrmBtn} onClick={handleConfirm}>Confirm</span>
+            </div>
+        </div>
+    );
 }
+
