@@ -15,7 +15,7 @@ import {
     Jaipur,
     location
 } from '../assets/images/index';
-
+const profileImg = process.env.REACT_APP_IMAGE_PREVIEW
 export const Navigation=()=>{
     const isLogin=useSelector((state)=>state.auth.isLogin);
     const {pathname}=useLocation();
@@ -33,7 +33,7 @@ export const Navigation=()=>{
     const postlinks=[
         // {name:"Equipment Category",path:"/specialization"},
         {name:"My Profile",path:"/dashboard/"},
-        {name:"My Ads",path:"/"},
+        {name:"My Ads",path:"/dashboard/ads/"},
         {name:"My Messages",path:"/"},
         {name:"My Services",path:"/"},
         {name:"Payment History",path:"/"},
@@ -307,7 +307,7 @@ const ProfileDropDown=()=>{
     return(
         <div className={styles.exploreCont} ref={ref}>
             <div className={styles.profileHead} onClick={handleClick} >
-                <img src={profile_image ? profile_image : testimage2} style={{width:"45px",height:"45px" , borderRadius : "50%"}} alt='Dashboard'/>
+                <img src={profile_image ? `${profileImg}${profile_image}` : testimage2} style={{width:"45px",height:"45px" , borderRadius : "50%"}} alt='Dashboard'/>
                 <img style={{cursor : 'pointer'}} src={downIcon} alt='>'/>
             </div>
             {

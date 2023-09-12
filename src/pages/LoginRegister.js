@@ -259,6 +259,8 @@ export const OtpVervicatonForm=({getOtp,number,setotp , setGetStart ,setBlur})=>
                setOtpError(false)
             toast.success("Verified OTP SuccessFully !")
             localStorage.setItem("token" , res?.data?.token)
+            localStorage.setItem("uid" , res?.data?.uid)
+
             setTimeout(()=>{
                 dispatch(getUserData(res?.data))
                 dispatch(changeLoginStatus(true))

@@ -121,7 +121,6 @@ const ProductData=()=>{
     const handleUserProfile  = async() => {
         const formData =  new FormData()
         formData.append("uid" , item?.uid)
-        formData.append("id" , item?.category)
         const res = await postData("users/get_user_detail/" , formData ,true)
         if(res?.status){
             setProfle(res?.data?.profile)
@@ -134,8 +133,11 @@ const ProductData=()=>{
         if(res?.status){
             setcategory(res?.data)
         }
-
     }
+
+   
+    
+    
     return(
         <React.Fragment>
             <div className={styles.prod_path}>
@@ -293,11 +295,12 @@ const ProductInfo=()=>{
 };
 
 export const ProductImgVideo=({info})=>{
+
     return(
         <div className={styles.prodAsset}>
             {/* <img src={video_Advt} alt='...' style={{width:"100%",height:"400px"}}/> */}
-            <video controls width={"100%"} height={"400px"}>
-                <source src='blob:http://localhost:3000/40522b67-6acd-4bf1-b947-3dc9e143fe5f' type='video/mp4'/>
+            <video src={"http://13.53.198.145:8000/mmq_apps/static/upload/product/video/Screenshot_from_2023-08-25_01-53-00_03092023062327719030.png"} controls width={"100%"} height={"400px"}>
+                {/* <source src={src} type='video/webm'/> */}
             </video>
             <div className={styles.prodsImg}>
                 {
@@ -394,32 +397,72 @@ export const ProductReviewCard=()=>{
 };
 
 const RelatedProd=()=>{
-    const relatedProd=[
-        {title:"Prod 1",des:"space for a small product description.space for a small product",price:"2000"},
-        {title:"Prod 2",des:"space for a small product description.space for a small product",price:"3000"},
-        {title:"Prod 3",des:"space for a small product description.space for a small product",price:"4000"},
-        {title:"Prod 4",des:"space for a small product description.space for a small product",price:"5000"},
-        {title:"Prod 5",des:"space for a small product description.space for a small product",price:"6000"},
-        {title:"Prod 6",des:"space for a small product description.space for a small product",price:"2000"},
-        {title:"Prod 7",des:"space for a small product description.space for a small product",price:"3000"},
-        {title:"Prod 8",des:"space for a small product description.space for a small product",price:"4000"},
-        {title:"Prod 9",des:"space for a small product description.space for a small product",price:"5000"},
-        {title:"Prod 10",des:"space for a small product description.space for a small product",price:"6000"}
-    ];
-    const [prodData,setProdData]=useState(relatedProd.slice(0,4));
-    const [p_pointer,setPointer]=useState({left:0,right:4});
-    // using two pointer
-    const shiftProducts=(e)=>{
-        let name=e.currentTarget.name;
-        if(name==="prev" && p_pointer.left>0){
-            setProdData(relatedProd.slice(p_pointer.left-=1,p_pointer.right-=1));
-        }
-        if(name==="next" && p_pointer.right<relatedProd.length){
-            setProdData(relatedProd.slice(p_pointer.left+=1,p_pointer.right+=1));
-        }  
-        console.log(p_pointer.left,p_pointer.right);
+    const [relatedProducts, setRelatedProducts] = useState([]);
+    // const [prodData,setProdData]=useState(relatedProducts.slice(0,4));
+    // const [p_pointer,setPointer]=useState({left:0,right:4});
+    const [currentIndex ,setCurrentIndex] = useState(0)
+    const [displayedData, setDisplayedData] = useState([]);
 
-    }
+
+    useEffect(() => {
+          fetchRelatedProducts();
+      }, []);
+
+     const  fetchRelatedProducts =  async() =>{
+        const res = await postData("product/filter_list/", "", true);
+        setRelatedProducts(res?.data?.featured_products);
+     }
+
+     const handleScrollLeft = () =>{
+     setCurrentIndex((prev)=>(prev-1 + relatedProducts?.length) % relatedProducts?.length)
+    } 
+  
+    const handleScrollRight = () =>{
+        setCurrentIndex((prev)=> (prev + 1) % relatedProducts?.length)
+       }
+   
+  
+    useEffect(()=>{
+      const updateDisplayedData = () =>{
+        const displayed=[
+            relatedProducts[currentIndex %  relatedProducts?.length],
+            relatedProducts[(currentIndex + 1) % relatedProducts?.length],
+            relatedProducts[(currentIndex + 2) % relatedProducts?.length],
+            relatedProducts[(currentIndex + 3) % relatedProducts?.length],
+        ]
+        setDisplayedData(displayed)
+      }
+  
+      updateDisplayedData();
+    },[currentIndex , relatedProducts])
+
+    
+
+
+    // const relatedProd=[
+    //     {title:"Prod 1",des:"space for a small product description.space for a small product",price:"2000"},
+    //     {title:"Prod 2",des:"space for a small product description.space for a small product",price:"3000"},
+    //     {title:"Prod 3",des:"space for a small product description.space for a small product",price:"4000"},
+    //     {title:"Prod 4",des:"space for a small product description.space for a small product",price:"5000"},
+    //     {title:"Prod 5",des:"space for a small product description.space for a small product",price:"6000"},
+    //     {title:"Prod 6",des:"space for a small product description.space for a small product",price:"2000"},
+    //     {title:"Prod 7",des:"space for a small product description.space for a small product",price:"3000"},
+    //     {title:"Prod 8",des:"space for a small product description.space for a small product",price:"4000"},
+    //     {title:"Prod 9",des:"space for a small product description.space for a small product",price:"5000"},
+    //     {title:"Prod 10",des:"space for a small product description.space for a small product",price:"6000"}
+    // ];
+    // console.log(p_pointer,"data")
+    // using two pointer
+    // const shiftProducts=(e)=>{
+    //     let name=e.currentTarget.name;
+    //     if(name==="prev" && p_pointer.left>0){
+    //         setProdData(relatedProducts.slice(p_pointer.left-=1,p_pointer.right-=1));
+    //     }
+    //     if(name==="next" && p_pointer.right<relatedProducts.length){
+    //         setProdData(relatedProducts.slice(p_pointer.left+=1,p_pointer.right+=1));
+    //     }  
+    //     console.log(p_pointer.left,p_pointer.right);
+    // }
 
     return (
       <React.Fragment>
@@ -429,16 +472,16 @@ const RelatedProd=()=>{
           <hr className={styles.line2} />
         </div>
         <div style={{position:"relative",marginBottom:"40px"}}>
-            <img src={swipetestleft} alt='...' onClick={shiftProducts} name="prev" className={styles.rlatedProdPrev}/>
+            <img src={swipetestleft} alt='...' onClick={handleScrollLeft} name="prev" className={styles.rlatedProdPrev}/>
             <div className={styles.rowws}>
                 {
-                    prodData.map((value,id)=>{
+                    displayedData.map((value,id)=>{
                         return <RelatedProdCard data={value} key={id}/>   
                     })
                 }
                 
             </div>
-            <img src={nextArow} onClick={shiftProducts} className={styles.rlatedProdNext} name="next" alt='...'/>
+            <img src={nextArow} onClick={handleScrollRight} className={styles.rlatedProdNext} name="next" alt='...'/>
         </div>
       </React.Fragment>
     );

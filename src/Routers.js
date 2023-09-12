@@ -13,6 +13,7 @@ import {
   Login
 } from './pages/LoginRegister';
 import PrivateRoutes from './components/PrivateRoute';
+import MyAds from './components/MyAds';
 
 export const Routers=()=>{
     return(
@@ -32,9 +33,10 @@ export const Routers=()=>{
           />
            {/* dashbaord */}
              <Route path="dashboard" element={<DashboardLayout/>}>
-            <Route index element={<MyProfile/>}/>
-          </Route>
-        </Route>
+             <Route index element={<MyProfile/>}/>
+             <Route path='ads' element={<MyAds/>} />
+            </Route>
+       </Route>
         <Route path='/' element={<HomeLayout/>}>
           <Route index element={<ContentConatiner specs={false}/>}/>
           <Route path='specialization' element={<ContentConatiner specs={true}/>}/>

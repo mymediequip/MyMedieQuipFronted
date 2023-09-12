@@ -20,8 +20,8 @@ const [product , setProduct] =  useState({
     },[])
 
     const handleFilterProduct = async()=>{
-        const res  =  await postData("product/filter_list/" , "" , true)
-        // console.log(res.data)
+        const res  =  await postData("product/filter_list/", "" ,true)
+        console.log(res,"res")
         setProduct({
             new : res?.data?.new_products,
             feature : res?.data?.featured_products,
@@ -30,7 +30,6 @@ const [product , setProduct] =  useState({
         
     }
 
-    console.log(product)
     return(
         <React.Fragment>
             {/* <MobileCatogories/> */}
