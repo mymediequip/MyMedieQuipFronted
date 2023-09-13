@@ -7,6 +7,7 @@ import { MyProfile } from './features/User/buyer_seller/ProfilePage';
 import { ProductDescription,ProductImgVideo,ProductMetaData,ProductReview,ProductMeta} from './features/Buy/ProductDesc';
 import { SelectAdvtType,PostAdvt ,AdvtMedia,AdvtLocation,AdvtPrice,AdvtProdData} from './features/Sell/PostAdvt';
 import { Checkout } from './features/Buy/Checkout';
+import { BuySearch } from './features/Buy/Search';
 import { 
   LoginRegister,
   OtpVervicatonForm,
@@ -39,7 +40,10 @@ export const Routers=()=>{
         <Route path='/' element={<HomeLayout/>}>
           <Route index element={<ContentConatiner specs={false}/>}/>
           <Route path='specialization' element={<ContentConatiner specs={true}/>}/>
-        
+           
+           {/* search  */}
+           <Route path='search' element={<BuySearch/>}/>
+
           {/* Authentication */}
           <Route path="/user" element={<LoginRegister/>}>
             <Route path="login" element={<Login/>}/>

@@ -194,7 +194,7 @@ export const Search=({handleChange })=>{
 
 const BuyBtn=()=>{
     return(
-        <NavLink className={styles.BuyBtn} to="/">Buy</NavLink>
+        <NavLink className={styles.BuyBtn} to="/search/">Buy</NavLink>
     )
 };
 
