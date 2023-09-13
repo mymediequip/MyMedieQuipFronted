@@ -60,6 +60,7 @@ import whatsApp2 from './whatsapp2.png';
 import dummyMap from './mapDumy.png';
 import twitter2 from './twitter2.png';
 import email2 from './mail2.png';
+import currency from "./indian-currency.jpg"
 export {
     twitter2,
     email2,
@@ -122,5 +123,6 @@ export {
     video_Advt,
     video2img,
     plus_symbol,
+    currency,
     minus
 };

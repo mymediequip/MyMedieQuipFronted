@@ -164,9 +164,15 @@ export const prodAddSlice = createSlice({
 export const { setType , addImg , removeImg ,addVideos ,removeVideo , setEquipmentName ,setManufacturingYear ,setEquipSpecification , setCompatibleModels ,setProdPrice ,clearProdAddData ,setEquipCondition ,setEquip_Location , fetchEuipCategories , fetchParentName , setCategories ,fetchSpecialName , setSpecality , setLatLong} = prodAddSlice.actions
 
 // Asynchronous thunk action
-export const fetchCategories = (Equip_name)=>async(dispatch)=>{
+export const fetchCategories = (Equip_name , id)=>async(dispatch)=>{
   const formData =  new FormData()
-  formData.append("q" ,Equip_name)
+  if(Equip_name){
+    formData.append("q" , Equip_name)
+  }else if(id){
+    formData.append("id" , id)
+  }else{
+    formData.append("parent" , 1)
+  }
   try {
     const res = await postData("product/category/menulist/" , formData  )
     dispatch(fetchEuipCategories(res?.data))
@@ -176,10 +182,11 @@ export const fetchCategories = (Equip_name)=>async(dispatch)=>{
 }
 export const fetchCategoriesName = (id)=>async(dispatch)=>{
   const formData =  new FormData()
-  formData.append("id" ,id)
+   formData.append("id" ,id)
    try {
      const res = await postData("product/category/menulist/" , formData )
      dispatch(fetchParentName(res?.data))
+     console.log(res.data,"res")
    } catch (error) {
      console.log(error,"error")
    }

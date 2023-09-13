@@ -28,9 +28,9 @@ import {
 } from '../assets/images/index';
 import { useFormik } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
-import Map from '../components/GoogleMap';
 import axios from 'axios';
 import { postData } from '../services';
+import MapView from '../components/GoogleMap';
 
 export const ProductDescription=()=>{
     return(
@@ -58,9 +58,12 @@ const ProductData=()=>{
     const [profile, setProfle] = useState({});
     const [category, setcategory] = useState([]);
     const [openSocial,setOpenSocial]=useState(false);
+    const [apiKey,setapikey]=useState("");
+
 
     useEffect(() => {
         const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
+        setapikey(API_KEY)
         const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${item?.latitude}&lon=${item?.longitude}&format=json&apiKey=${API_KEY}`;
         axios
         .get(API_URL)
@@ -242,7 +245,7 @@ const ProductData=()=>{
                         <b style={{color:"#019C89"}}>Posted in</b>
                         <span>{address}</span>
                         {/* <img src={dummyMap} alt='...'/> */}
-                        <Map lat={location?.lat} long={location?.long}/>
+                        <MapView lat={item?.latitude} long={item?.longitude}/>
                     </div>
 
                     <div className={styles.prodDesclaimer}>

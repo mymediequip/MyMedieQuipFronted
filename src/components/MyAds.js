@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {pngwing} from "../assets/images/index"
+import {pngwing ,currency} from "../assets/images/index"
 import styles from "../assets/css/ads.module.css"
 import {postData} from "../services/index"
 const MyAds = () => {
@@ -25,8 +25,9 @@ const handleAdsDetails = async() =>{
       ads?.length > 0 ?  ads?.map((item)=>{
           return(
             <div className={styles.sub_content}>
-            <img src={pngwing} alt='' className={styles.content_img} />
-            <div className={styles.sub_content_text}>
+              <div className={styles.sub_content1}>
+              <img src={pngwing} alt='' className={styles.content_img} />
+              <div className={styles.sub_content_text}>
               <span className={styles.content_text}>
               <h3>{item?.equip_name}</h3>
               <span className={styles.new_text}>
@@ -37,10 +38,11 @@ const handleAdsDetails = async() =>{
               {/* <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p> */}
               <p>{item?.description}</p>
             </div>
-          <div className={styles.sub_content_status} >
-              <p>RS {Number(item?.asking_price)?.toFixed(2)}</p>
-              <button className={styles.sub_status}>Status</button>
-           </div>
+              <div className={styles.sub_content_status} >
+                 <p style={{display  : 'flex'  ,alignItems : 'center'}}><img src={currency} style={{width : '24px' , height : '24px'}} /> {Number(item?.asking_price)?.toFixed(2)}</p>
+                 <button className={styles.sub_status}>Status</button>
+               </div>
+              </div>
               <span className={styles.select_type}>...</span>
           </div>
           )

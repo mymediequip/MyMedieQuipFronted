@@ -255,7 +255,6 @@ const navigate = useNavigate();
   const selectedPostType = useSelector(
     (state) => state.addProd.prodAddData.selectedPostType
   );
-
 const allData  =  useSelector((state)=>state.addProd.prodAddData)
 const equipName  =  useSelector((state)=>state.addProd.prodAddData.Equip_name)
 const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
@@ -271,10 +270,11 @@ let data = []
     data.push(el?.parent)
 })
 
+
 useEffect(()=>{
 dispatch(fetchCategories(searchName))
 dispatch(fetchCategoriesName(data))
-},[searchName])
+},[searchName ,equipName])
 
 
 useEffect(()=>{
@@ -383,15 +383,28 @@ useEffect(() => {
         <form action="/action_page.php" onSubmit={handleSubmit}>
           <div className={styles.formFiledCont}>
             <div className={styles.labelCol}>
-              <label for="Equip_name">Equipment name</label>
+              <label htmlFor="Equip_name">Equipment name</label>
               <input
-                className={styles.forBotMarg}
+                className={searchName ?  styles.forBotMarg : styles.forBotMarg1}
                 type="text"
                 id="Equip_name"
                 name="Equip_name"
                 onChange={handleChange}
                 value={equipName}
+                autoComplete="off"
               />
+              {searchName && 
+               <div className={categories.length > 5 ?  styles.equipNameDrop : styles.equipNameDrop1}>
+               {categories?.map((el)=>{
+                 return(
+                     <>
+                     <p onClick={()=>{dispatch(setEquipmentName(el?.name)); setSearchName("")}} className={styles.equipnameDropDown}>{el?.name}</p>
+                     </>
+                     )
+                   })}
+               </div>
+              }
+            
               {/* {formik.errors.equipment_name && formik.touched.equipment_name && (<div style={{color : 'red'}}>{formik.errors.equipment_name}</div>)} */}
 
               {(() => {
@@ -401,9 +414,9 @@ useEffect(() => {
             <div className={styles.specialtCont}>
               {selectedPostType === "SPARE & ACCESSORIES" ? (
                 ""
-              ) : (
-                <AdvtCategoriesDorpDown  data={dropCat} />
-              )}
+                ) : (
+                  <AdvtCategoriesDorpDown  data={dropCat} />
+                  )}
               <AdvtSpecialityDorpDown data={dropSpec} />
               {selectedPostType === "SPARE & ACCESSORIES" ? (
                 <div className={styles.prodComptaible}>
@@ -412,7 +425,7 @@ useEffect(() => {
                 </div>
               ) : (
                 ""
-              )}
+                )}
             </div>
           </div>
           <div style={{ textAlign: "center" }}>
@@ -505,7 +518,6 @@ const AdvtSpecialityDorpDown = (props) => {
   const Speciality = useSelector((state)=>state.addProd.prodAddData.specility)
   const [show, setShow] = useState(false);
   const [selectedCat,setSelectedCat]=useState({});
-  console.log(selectedCat)
 
   useEffect(()=>{
     if(!selectedPostType){
@@ -689,7 +701,7 @@ export const AdvtProdData = () => {
   const ManufacturingYear = useSelector((state) => state.addProd.prodAddData.purchase_year);
   const specifications = useSelector((state) => state.addProd.prodAddData.specifications);
   const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
-  const userId =  useSelector((state)=>state.profileData.UserData.uid)
+  const userId = localStorage.getItem("uid")
   const prodPrice =  useSelector((state)=>state.addProd.prodAddData.Prod_price)
   const allData =  useSelector((state)=>state.addProd.prodAddData)
 
@@ -729,8 +741,7 @@ export const AdvtProdData = () => {
   formData.append("other_details" , allData?.specifications?.other_details)
   formData.append("latitude" , allData?.location?.lat)
   formData.append("longitude" , allData?.location?.lang)
-  // formData.append("user" ,userId)
-  formData.append("user" ,"ee0654b0-96d5-4aaa-a39a-caa9b901cf80")
+  formData.append("user" ,userId)
   formData.append("Compatible_Models" ,allData?.Compatible_Models)
   formData.append("Prod_price" ,allData?.Prod_price)
 
@@ -838,7 +849,7 @@ const getAddProdScreen2 = (selectedType , handleLocation  ,dispatch ,CompatibleM
     return (
       <React.Fragment>
         <label for="lname">Where is the Equipment</label>
-        <input type="text" id="Equip_location" name="Equip_location" value={prodLocation} onChange={(e)=>dispatch(setEquip_Location(e.target.value))} />
+        <input type="text" id="Equip_location"  name="Equip_location" value={prodLocation} onChange={(e)=>dispatch(setEquip_Location(e.target.value))} />
         <div  className={styles.locSelect}>
           <img onClick={handleLocation}  className={styles.locationPng} src={location} alt="..." />
           <p onClick={handleLocation}  className={styles.forAlign}>Find the current location</p>

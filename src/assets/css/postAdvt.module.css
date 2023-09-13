@@ -176,6 +176,9 @@
     border: 1px solid #019C89;
 }
 .forBotMarg{
+    margin: 0px;
+}
+.forBotMarg1{
     margin-bottom: 40px; 
 }
 .labelCol label{
@@ -193,13 +196,37 @@
 }
 .checkBox{
     margin-top: -2px;
-    border: 1px solid #9C9E9F;
+    border: 1px solid #0f8274;
     border-top: none;
     position: absolute;
     width: 99.35%;
     height: 156px;
     overflow-y: auto;
     background-color: #FFFFFF;
+}
+.equipNameDrop{
+    border: 1px solid #757474;
+    height: 150px;
+    padding: 10px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    border-radius: 6px;
+}
+.equipNameDrop1{
+    border: 1px solid  #757474;
+    padding: 10px;
+    height:fit-content; 
+    margin-bottom: 10px;
+    border-radius: 6px;
+
+}
+.equipnameDropDown{
+    cursor: pointer;
+}
+.equipnameDropDown:hover{
+    background-color: #0f8274;
+    color: white;
+    width: fit-content;
 }
 .checkBox1{
     margin-top: -2px;
