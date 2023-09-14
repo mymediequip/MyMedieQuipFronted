@@ -1,0 +1,31 @@
+.buySearcCont{
+    width: 91%;
+    margin: 45px auto 100px auto;
+}
+.bSeach input{
+    margin-top: 18px;
+    width: 50%;
+    height: 40px;
+    border: 2px solid #019C89;
+}
+.bSeach{
+    text-align: center;
+}
+.buyBack{
+    display: inline-flex;
+    align-items: center;
+    color: #747474;
+    font-size: 15px;
+    gap: 5px;
+    cursor: pointer;
+}
+.bSeach span{
+    color: #343434;
+    font-size: 24px;
+}
+/* respnsive */
+@media(max-width:1200px){
+    .bSeach{
+        display: none;
+    }
+}

@@ -1,15 +1,22 @@
 import React from 'react';
 
-import { DashboardAdvt } from '../components/Advt';
+import { DashboardAdvt } from '../../components/Advt';
 import { NavLink, Outlet, useLocation, useNavigate} from 'react-router-dom';
-import styles from '../assets/css/prod_desc.module.css';
-import { RelatedProdCard } from '../components/Cards';
-import { GetStarted,BackgroundBlur } from '../utils/Popups';
+import styles from '../../assets/css/buy/prod_desc.module.css';
+import { RelatedProdCard } from '../../components/Cards';
+import { GetStarted,BackgroundBlur } from '../../utils/Popups';
 import * as yup from "yup";
-import { SocialShare } from '../utils/Popups';
-import {emailSchema, fnameSchema} from '../utils/validation';
+import { SocialShare } from '../../utils/Popups';
+import {emailSchema, fnameSchema} from '../../utils/validation';
 import { useRef, useState ,useEffect} from 'react';
 import {
+    findE,
+    inspection,
+    closeDeal,
+    handling,
+    amc,
+    shipped,
+    location,
     dummyMap,
     contBtn,
     atcBtn,
@@ -25,17 +32,23 @@ import {
     video_Advt,
     filledStar,
     testimage2,
-} from '../assets/images/index';
+    schedule,
+} from '../../assets/images/index';
 import { useFormik } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { ScheduleMeeting } from './Meeting';
 import axios from 'axios';
-import { postData } from '../services';
-import MapView from '../components/GoogleMap';
+import { postData } from '../../services';
+import MapView from '../../components/GoogleMap';
+
+const profileImg =  process.env.REACT_APP_IMAGE_PREVIEW
 
 export const ProductDescription=()=>{
     return(
         <div className={styles.pd_container}>
             <DashboardAdvt/>
+            <MMQprocess/>
             <ProductData/>
             {/* <ProductInfo/> */}
             <RelatedProd/>
@@ -52,18 +65,17 @@ const ProductData=()=>{
     const [getStart,setGetStart]=useState(false);
     const [isBlur,setBlur]=useState(false);
     const [address,setaddress]=useState("");
-    const [click,setClick]=useState("");
+    const [click,setClick]=useState("photo");
     const [currentIndex,setCurrentIndex]=useState(0);
     const [displayedData, setDisplayedData] = useState({});
     const [profile, setProfle] = useState({});
     const [category, setcategory] = useState([]);
     const [openSocial,setOpenSocial]=useState(false);
-    const [apiKey,setapikey]=useState("");
+ 
 
 
     useEffect(() => {
         const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
-        setapikey(API_KEY)
         const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${item?.latitude}&lon=${item?.longitude}&format=json&apiKey=${API_KEY}`;
         axios
         .get(API_URL)
@@ -73,21 +85,39 @@ const ProductData=()=>{
             })
             .catch(error => {
                 console.error('Error fetching address:', error);
-            });
-        }, [item]);
-        
-        const phoneNumber = '+919716924981'; // Replace with the actual phone number
-        const encodedPhoneNumber = encodeURIComponent(phoneNumber);
-        const sellarClick=(event)=>{
-            event.preventDefault();
+              });
+          }, [location.lat ,location.long]);
+
+    const phoneNumber = '+919716924981'; // Replace with the actual phone number
+    const encodedPhoneNumber = encodeURIComponent(phoneNumber);
+
+    const [openMeeting,setMeeting]=useState(false);
+    const [buyClick,setbuyClick]=useState(false);
+    const contRef=useRef(null);
+
+    const sellarClick=(event,isBuyClick)=>{
+        event.preventDefault();
+        if(isLogin){
+            setMeeting(true);  
+            contRef.current.scrollIntoView();
+            if(isBuyClick){
+              setbuyClick(true);
+            }
+            else{
+              setbuyClick(false);
+            }
+        }
+        else{
             setBlur(true); 
-            window.scrollTo(0,0);
             setGetStart(!getStart);
             navigate("" ,{state:{navigateTo: "products/xray-machine/"}});
-        };
+            window.scrollTo(0,0);  
+        }
+    };
 
-        const handleSocial=(e)=>{
-            setOpenSocial(!openSocial);
+    
+    const handleSocial=(e)=>{
+        setOpenSocial(!openSocial);
     }
     const prodImgStyle={
         backgroundImage:`url(${displayedData?.product_images ? displayedData?.product_images : pngwing})`,
@@ -150,14 +180,14 @@ const ProductData=()=>{
                 <img src={rightMove} alt='...'/>
                 <NavLink to="/">{item?.equip_name}</NavLink>
             </div>
-            <div className={styles.prod_data}>
+            <div ref={contRef} className={styles.prod_data}>
                 <div className={styles.prod_imgs}>
                     <div style={prodImgStyle} className={styles.prodBigImg}>
                     </div>
                     <div className={styles.imgSlider}>
                     <img src={swipetestleft} onClick={handleLeft} alt='...' style={{width:"25px",height:"25px"}}/>
                     {
-                 item?.product_images.length > 0 ?  item?.product_images?.slice(0,4)?.map((image)=>{
+                      item?.product_images.length > 0 ?  item?.product_images?.slice(0,4)?.map((image)=>{
                         return(
                             <img src={image?.product_images} alt='...' />
                         )
@@ -176,8 +206,12 @@ const ProductData=()=>{
                 <div className={styles.p_data}>
                     <div className={styles.p_head}>
                         <div>
-                            <h3>{item?.equip_name}</h3>
+                            <div className={styles.newProd}>
+                              <h3 style={{marginBottom:"0px"}}>{item?.equip_name}</h3>
+                              <span >NEW</span>
+                            </div>
                             <div>
+                              <span className={styles.prodId}>XM-101011QR</span>
                                 <img src={star} alt='...'/>
                                 <img src={star} alt='...'/>
                                 <img src={star} alt='...'/>
@@ -196,28 +230,10 @@ const ProductData=()=>{
                         </div>
                     </div>
                     
-                    <div>
-                        <div className={styles.pd_links}>
-                            <div className={styles.sellerName}>
-                                <img src={profile?.profile_image ? profile?.profile_image  : testimage2} alt='...'/>
-                                <p>{`${profile?.first_name} ${profile?.last_name}`}</p>
-                            </div>
-                            <span>{item?.date}</span>
-                        </div>
-                    </div>
-
-                    <div>
-                        <p style={{color:"#019C89"}}>Product Details</p>
-                        <p>{item?.description}</p>
-                    </div>
-
-                    <div>
-                        <h3>₹ {item?.asking_price}</h3>
-                        <p>(Plus Shipping and VAT tax included)</p>
-                    </div>
+                    {openMeeting?<ScheduleMeeting isBuyClick={buyClick} setMeeting={setMeeting} sellarClick={sellarClick}/>:<ProductMeta info={item} data={profile}/>}
                     
                     <div className={styles.prodActLinks}>
-                        <NavLink className={styles.contactSellar} onClick={sellarClick}>
+                        <NavLink className={styles.contactSellar} onClick={(e)=>{sellarClick(e,false)}}>
                             <img src={contBtn} height="15px" alt='...'/>
                             <span>CONTACT SELLER</span>
                         </NavLink>
@@ -234,7 +250,7 @@ const ProductData=()=>{
 
                         }
                         
-                        <NavLink style={{backgroundColor:"#FFDD75",color:"black"}} className={styles.contactSellar} onClick={sellarClick}>
+                        <NavLink style={{backgroundColor:"#FFDD75",color:"black"}} onClick={(e)=>{sellarClick(e,true)}} className={styles.contactSellar} >
                             <img src={atcBtn} height="15px" alt='...'/>
                             <span>CLICK TO BUY NOW</span>
                         </NavLink>
@@ -282,6 +298,37 @@ const ProductData=()=>{
             </div>
         </React.Fragment>
     );
+};
+
+export const ProductMeta = ({info , data}) => {
+  return (
+    <React.Fragment>
+      <div>
+        <div className={styles.pd_links}>
+          <div className={styles.sellerName}>
+            <img src={data?.image ? `${profileImg}${data?.image}` :  testimage2} alt="..." />
+            <p>{`${data?.first_name} ${data?.last_name}`}</p>
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:"5px"}}>
+            <img src={location}  alt="..." />
+            <span>New Delhi</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p style={{ color: "#019C89" }}>Product Details</p>
+        <p>
+          {info?.description}
+        </p>
+      </div>
+
+      <div>
+        <h3>₹ {info?.asking_price}</h3>
+        <p>(Plus Shipping and VAT tax included)</p>
+      </div>
+    </React.Fragment>
+  );
 };
 
 const ProductInfo=()=>{
@@ -631,6 +678,46 @@ const ReviewForm=()=>{
       </div>
     );
 }
+
+/* process */
+const MMQprocess=()=>{
+  const processData=[
+    {name:"Find Equipment",img:findE},
+    {name:"Schedule meeting with seller",img:schedule},
+    {name:"Get Inspection Report",img:inspection},
+    {name:"Close The Deal",img:closeDeal},
+    {name:"Get it Shipped",img:shipped},
+    {name:"Handling & Installation",img:handling},
+    {name:"AMC/ CME, Services",img:amc}
+  ];
+  return(
+    <div className={styles.processCont}>
+      {
+        processData.map((value,index)=>{
+          return <ProcessCard key={index} curr={index} data={value}/>
+        })
+      }
+    </div>
+  );
+}
+const ProcessCard=(props)=>{
+  const currBuyStatus=useSelector((state)=>state.profileData.currBuyStatus);
+  const cardActiveStyle={};
+  if(currBuyStatus===props.curr){
+    cardActiveStyle['border']="1px solid #019C89";
+  }
+  else{
+    cardActiveStyle['boxShadow']="rgba(0, 0, 0, 0.16) 0px 1px 4px";
+  }
+  return(
+    <div className={styles.processCard}>
+      <div className={styles.procImg} style={cardActiveStyle}>
+        <img src={props.data.img} alt='...'/>
+      </div>
+      <span>{props.data.name}</span>
+    </div>
+  );
+};
 // non component function
 
 const ActivateLinks=({isActive})=>{

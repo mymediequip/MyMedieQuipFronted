@@ -3,15 +3,17 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { HomeLayout } from './layouts/HomeLayout';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { ContentConatiner } from './components/ContentContainer';
-import { MyProfile } from './pages/ProfilePage';
-import { ProductDescription,ProductImgVideo,ProductMetaData,ProductReview} from './pages/ProductDesc';
-import { SelectAdvtType,PostAdvt ,AdvtMedia,AdvtLocation,AdvtPrice,AdvtProdData} from './pages/PostAdvt';
+import { MyProfile } from './features/User/buyer_seller/ProfilePage';
+import { ProductDescription,ProductImgVideo,ProductMetaData,ProductReview,ProductMeta} from './features/Buy/ProductDesc';
+import { SelectAdvtType,PostAdvt ,AdvtMedia,AdvtLocation,AdvtPrice,AdvtProdData} from './features/Sell/PostAdvt';
+import { Checkout } from './features/Buy/Checkout';
+import { BuySearch } from './features/Buy/Search';
 import { 
   LoginRegister,
   OtpVervicatonForm,
   Signup,
   Login
-} from './pages/LoginRegister';
+} from './features/Auth/LoginRegister';
 import PrivateRoutes from './components/PrivateRoute';
 import MyAds from './components/MyAds';
 
@@ -40,7 +42,10 @@ export const Routers=()=>{
         <Route path='/' element={<HomeLayout/>}>
           <Route index element={<ContentConatiner specs={false}/>}/>
           <Route path='specialization' element={<ContentConatiner specs={true}/>}/>
-        
+           
+           {/* search  */}
+           <Route path='search' element={<BuySearch/>}/>
+
           {/* Authentication */}
           <Route path="/user" element={<LoginRegister/>}>
             <Route path="login" element={<Login/>}/>
@@ -54,6 +59,9 @@ export const Routers=()=>{
             {/* <Route path='info' element={<ProductMetaData/>}/> */}
             <Route path='review' element={<ProductReview/>}/>
           </Route>
+
+          {/* checkout */}
+          <Route path='products/:proddetails/checkout' element={<Checkout/>}/>
 
           {/* post advertisement */}
 

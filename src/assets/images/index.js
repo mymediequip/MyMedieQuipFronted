@@ -61,7 +61,45 @@ import dummyMap from './mapDumy.png';
 import twitter2 from './twitter2.png';
 import email2 from './mail2.png';
 import currency from "./indian-currency.jpg"
+import meetingImg from './meeting.png';
+import scheduleBtn from './schedulBtnImg.png';
+import inspectionBtn from './inspection_btn.png';
+import buyBtn from './buy_btn.png';
+import meetSuccess from './meetSuccess.png';
+import inspectImg from './inspectImg.png';
+import meetIssued from './meetIssued.png';
+import currLocat from './currenLocat.png';
+import decrease from './decrease.png';
+import incrase from './increase.png';
+import paytam from './paytm.png';
+import upib from './upiB.png';
+import findE from './process/findEquip.png';
+import schedule from './process/schedule.png';
+import inspection from './process/inspection.png';
+import closeDeal from './process/closeDeal.png';
+import shipped from './process/shipping.png';
+import handling from './process/install.png';
+import amc from './process/amc.png';
 export {
+    findE,
+    schedule,
+    inspection,
+    closeDeal,
+    handling,
+    amc,
+    shipped,
+    paytam,
+    upib,
+    decrease,
+    incrase,
+    buyBtn,
+    currLocat,
+    meetIssued,
+    inspectImg,
+    meetSuccess,
+    inspectionBtn,
+    scheduleBtn,
+    meetingImg,
     twitter2,
     email2,
     whatsApp2,

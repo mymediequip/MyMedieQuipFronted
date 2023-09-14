@@ -41,7 +41,85 @@
     background-color: #0e0e0ed1;
     z-index: 1;
 }
+/* calander */
+.calanderCont{
+    width: 70vw;
+    height: 470px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFFFFF;
+    z-index: 2;
+    margin: auto;
+    display: flex;
+}
+.calSummary{
+    background-color: #282828;
+    color: #FFFFFF;
+    width: 40%;
+}
 
+
+.calanderCusttom abbr{
+    text-decoration: none;
+}
+.react-calendar__month-view__weekdays {
+    margin-bottom: 20px;
+}
+.calSumTop,.calSubmit{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.calSumTop h1{
+    font-size: 5vw;
+    text-align: center;
+}
+.pickSlot{
+    padding: 30px;
+}
+.calSummary input{
+    background: none;
+    border: 1px solid #A1A1A1;
+    outline: none;
+    padding-left: 5px;
+    color: #FFFFFF;
+    height: 27px;
+    width: 160px;
+    border-radius: 3px;
+}
+.pickSlot>div{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+.pickSlot>p{
+    color: #FFFFFF;
+    font-size: 15px;
+    
+}
+.pickSlot span,.remindMe span{
+    display: inline-block;
+    color: #ededed99;
+    width: 100px;
+}
+
+.remindMe{
+    padding-left: 30px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 14px;
+}
+.calanderCusttom{
+    border: none;
+    padding: 30px;
+    width: 60% !important;
+}
 @media(max-width:1200px){
     .getStartContainer{
         top: 100px;

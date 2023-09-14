@@ -105,14 +105,12 @@
 /* mobile catories design */
 .mobileCatContainer{
     width: 100%;
-    margin: 20px 0px 20px 0px;
-    display: none;
+    margin: 60px auto 20px auto;
+    display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    /* flex-direction: column; */
+    /* justify-content: space-around;  */
     align-items: center;
-    height: 400px;
-    overflow-y: auto;
+    
 }
 .catTitle span{
     color: var(--common-color);
@@ -124,11 +122,12 @@
 .subCatogories{
     width: 280px;
     display: flex;
-    height: 340px;
+    height: fit-content;
     overflow-y: auto;
     position: absolute;
     flex-direction: column;
-    background-color:#EAF6F2;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    background-color:#FFFFFF;
     border-top: 1px solid var(--common-color);
 }
 .subCatogories a{
@@ -137,14 +136,15 @@
 }
 .catTitle{
     background-color: #EAF6F2;
+    border-radius: 5px;
     padding: 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
 }
 .catDrop{
     width: 280px;
-    border-radius: 4px;
     font-size: 14px;
     margin: 10px;
 }
@@ -162,13 +162,16 @@
         font-size: 20px;
         font-weight: 400;
     }
-    .mobileCatContainer{
-        display: flex;
-    }
+    
     .heroContainer{
         display: none;
     }
     
 }
 
+@media(max-width:989px){
+    .mobileCatContainer{
+        justify-content: space-around;
+    }
+}
 

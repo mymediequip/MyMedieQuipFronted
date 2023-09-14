@@ -8,6 +8,6 @@ export default configureStore({
      auth:authSlice,
      addProd:prodAddSlice,
      profileData:UserData
-  },
+  }, 
   middleware : [thunk]
 });

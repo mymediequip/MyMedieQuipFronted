@@ -36,41 +36,50 @@ export const Hero=(props)=>{
     );
 };
 
-const Catogories=()=>{
-const dispatch =  useDispatch()
-const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
+const Catogories = () => {
+  const dispatch = useDispatch();
+  const categories = useSelector(
+    (state) => state.addProd.prodAddData.Equip_categories
+  );
 
-const [filterEquip ,setFilterEquip] =  useState("")
- const handleChange = (event) =>{
-       setFilterEquip(event.target.value)
-    }
-
-useEffect(()=>{
-    dispatch(fetchCategories(filterEquip))
-},[filterEquip])
-      
-
-const handleItemClick = equipment => {
-    // Handle the item click here, e.g., update state, show details, etc.
-    console.log('Clicked on:', equipment.name);
+  const [filterEquip, setFilterEquip] = useState("");
+  const handleChange = (event) => {
+    setFilterEquip(event.target.value);
   };
-   
-    return(
-        <div className={styles.catogories_container}>
-            <div className={styles.upper_part}>
-                <span>FILTER</span>
-                <Search handleChange={handleChange} />
-                <p>EQUIPMENT</p>
-            </div> 
-            <div className={styles.lower_part}>
-                {
-                    categories?.slice()?.sort((a, b) => a.name.localeCompare(b.name))?.map((topLevelEquipment)=>{
-                        return <CatItem key={topLevelEquipment.id} pic={plus_symbol} equipment={topLevelEquipment} onItemClick={handleItemClick}/> 
-                    })
-                }
-            </div>
-        </div>
-    );
+
+  useEffect(() => {
+    dispatch(fetchCategories(filterEquip));
+  }, [filterEquip]);
+
+  const handleItemClick = (equipment) => {
+    // Handle the item click here, e.g., update state, show details, etc.
+    console.log("Clicked on:", equipment.name);
+  };
+
+  return (
+    <div className={styles.catogories_container}>
+      <div className={styles.upper_part}>
+        <span>FILTER</span>
+        <Search handleChange={handleChange} />
+        <p>EQUIPMENT</p>
+      </div>
+      <div className={styles.lower_part}>
+        {categories
+          ?.slice()
+          ?.sort((a, b) => a.name.localeCompare(b.name))
+          ?.map((topLevelEquipment) => {
+            return (
+              <CatItem
+                key={topLevelEquipment.id}
+                pic={plus_symbol}
+                equipment={topLevelEquipment}
+                onItemClick={handleItemClick}
+              />
+            );
+          })}
+      </div>
+    </div>
+  );
 };
 
 const CatItem=({equipment , onItemClick , pic})=>{
@@ -107,7 +116,7 @@ export const MobileHero=()=>{
         </div>
     );
 };
-const MobileSearch=()=>{
+export const MobileSearch=()=>{
     return(
         <form className={styles.mobileSearch}>
             <input type='text' placeholder='Find medical instrument..'/>
@@ -117,11 +126,20 @@ const MobileSearch=()=>{
 };
 
 export const MobileCatogories=()=>{
-    const catKeys=Object.keys(catog_data);
+    const dispatch=useDispatch();
+    const categories = useSelector(
+        (state) => state.addProd.prodAddData.Equip_categories
+    ).slice()?.sort((a, b) => a.id>b.id);
+    
+    useEffect(() => {
+        dispatch(fetchCategories(""));
+    }, []);
+
+    console.log(categories.reverse());
     return(
         <div className={styles.mobileCatContainer}>
             {
-                catKeys.map((values,index)=>{
+                categories.map((values,index)=>{
                     return <CatgoriesDropDown key={index} data={values}/>
                 })
             }
@@ -130,21 +148,18 @@ export const MobileCatogories=()=>{
 };
 const CatgoriesDropDown=(props)=>{
     const [isOpen,setIsOpen]=useState(false);
-    const subcat=catog_data[props.data];
-    const handleIsopen=()=>{
-        setIsOpen(!isOpen);
-    }
+    const subcat=props.data?.children;
     return(
-        <div className={styles.catDrop}>
-            <div className={styles.catTitle} onClick={handleIsopen}>
-                <span>{props.data}</span>
+        <div className={styles.catDrop} onMouseOver={()=>setIsOpen(true)} onMouseLeave={()=>setIsOpen(false)}>
+            <div className={styles.catTitle} >
+                <span>{props.data?.name}</span>
                 <img src={downIcon} alt='...'/>
             </div>
             {
                 isOpen?<div className={styles.subCatogories}>
                     {
                         subcat.map((value,index)=>{
-                            return <NavLink to="/" key={index}>{value}</NavLink>
+                            return <NavLink to="/" key={index}>{value?.name}</NavLink>
                         })
                     }
                 </div>:""

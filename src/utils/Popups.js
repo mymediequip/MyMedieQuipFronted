@@ -1,5 +1,5 @@
 import React from 'react';
-import { Login,OtpVervicatonForm} from '../pages/LoginRegister';
+import { Login,OtpVervicatonForm} from '../features/Auth/LoginRegister';
 import styles from '../assets/css/utils.module.css';
 import { useState } from 'react';
 import { FacebookShareButton, TwitterShareButton ,LinkedinShareButton,EmailShareButton,WhatsappShareButton} from 'react-share';

@@ -1,0 +1,163 @@
+.meetingCont{
+    position: relative;
+    padding: 10px 10px 30px 10px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+.meetingCont img{
+    cursor: pointer;
+}
+.meetingCont i{
+    text-align: center;
+    font-size: 30px;
+}
+.meetSchedule img{
+    margin: 10px 0px 10px 0px;
+}
+.meetSchedule b{
+    color:#101828;
+}
+.meetingCont p{
+    color: #888888;
+    text-align: center;
+}
+.meetSchedule{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* min-height: 300px; */
+}
+.meetButons{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 35px 0px 0px 0px;
+}
+
+.meetSuccessCont{
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFFFFF;
+    z-index: 2;
+
+    display: flex;
+    border-radius: 5px;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+}
+.meetSuccessCont p{
+    text-align: center;
+    margin-top: 0px;
+}
+.successCross{
+    display: flex;
+    width: 100%;
+    justify-content: right;
+    font-size: 30px;
+    cursor: pointer;
+}
+.termCond{
+    display: flex;
+    /* align-items: center; */
+    gap: 5px;
+}
+.meetNotify{
+    margin: 10px 0px 10px 0px;
+    font-weight: bold;
+}
+.termCond a{
+    color: #019C89;
+}
+.submitBtn{
+    background-color: #019C89;
+    color: #FFFFFF;
+    padding: 8px 60px 8px 60px;
+    margin: 20px 0px 20px 0px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+/* inspection popup */
+
+.inspectCont{
+    background-color: #FFFFFF;
+    position: absolute;
+    text-align: center;
+    padding: 20px;
+    padding-bottom: 50px;
+    top: 50%;
+    left: 50%;
+    border-radius: 5px;
+    transform: translate(-50%, -50%);
+}
+.inspectTop{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.inspectCont p{
+    margin: 30px 0px 30px 0px;
+}
+
+/* Select Services */
+.buyServiceCont{
+    position: absolute;
+    padding: 25px;
+    top: 50%;
+    left: 50%;
+    border-radius: 5px;
+    transform: translate(-50%, -50%);
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+}
+.buyServiceOpt span{
+    padding: 15px 50px 15px 50px;
+    color: #6D6D6D;
+    font-size: 15px;
+}
+.buyServiceOpt{
+    padding: 10px 0px 10px 0px;
+    border-bottom: 1px solid #F3F3F3;
+}
+.buyServiceTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    color: #019C89;
+    font-weight:600;
+}
+#servCont{
+    margin-bottom: 0px;
+    text-align: center;
+}
+.inspectWrn{
+    display: inline-block;
+    margin-top: 20px;
+}
+.skiptBtn{
+    border: 1px solid #E3E3E3;
+    font-size: 14px;
+    padding: 7px 20px 7px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.confrmBtn{
+    background-color: #019C89;
+    font-size: 14px;
+    padding: 7px 20px 7px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #FFFFFF;
+}
+.insBtnD{
+    display: flex;
+    justify-content: right;
+    gap: 10px;
+}

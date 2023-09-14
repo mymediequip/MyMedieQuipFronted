@@ -5,6 +5,7 @@ export const UserSlice = createSlice({
   initialState: {
     UserData : {},
     profile_image : null,
+    currBuyStatus:0,
   },
   reducers: {
     getUserData : (state,action)=>{
@@ -12,12 +13,15 @@ export const UserSlice = createSlice({
     },
     getProfileImage : (state,action)=>{
         state.profile_image=action.payload
-      }
+    },
+    setCurrBuyStatus:(state,action)=>{
+      state.currBuyStatus=action.payload.curr;
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { getUserData ,getProfileImage} = UserSlice.actions
+export const { getUserData ,getProfileImage,setCurrBuyStatus} = UserSlice.actions
 
 
 export default UserSlice.reducer
