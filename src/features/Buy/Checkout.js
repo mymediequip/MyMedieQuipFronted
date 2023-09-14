@@ -9,6 +9,7 @@ import {
     paytam,
     upib
 } from '../../assets/images/index';
+import { useLocation } from "react-router-dom";
 
 export const Checkout=()=>{
     return(
@@ -87,8 +88,8 @@ const CheckoutDataHead=(props)=>{
 };
 
 const DelieveryAddress=()=>{
-    const [showAddress,setAddress]=useState(true);
-    
+    const [showAddress,setAddress]=useState(false);
+
     return (
       <div>
         <CheckoutDataHead

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { DashboardAdvt } from '../../components/Advt';
-import { NavLink, Outlet, useNavigate} from 'react-router-dom';
+import { NavLink, Outlet, useNavigate,useLocation} from 'react-router-dom';
 import styles from '../../assets/css/buy/prod_desc.module.css';
 import { RelatedProdCard } from '../../components/Cards';
 import { GetStarted,BackgroundBlur } from '../../utils/Popups';
@@ -9,6 +9,7 @@ import * as yup from "yup";
 import { SocialShare } from '../../utils/Popups';
 import {emailSchema, fnameSchema} from '../../utils/validation';
 import { useRef, useState ,useEffect} from 'react';
+
 import {
     findE,
     inspection,
@@ -40,8 +41,8 @@ import { useSelector } from 'react-redux';
 import { ScheduleMeeting } from './Meeting';
 import Map from '../../components/GoogleMap';
 import axios from 'axios';
-import { postData } from '../services';
-import MapView from '../components/GoogleMap';
+import { postData } from '../../services';
+import MapView from '../../components/GoogleMap';
 
 export const ProductDescription=()=>{
     return(
@@ -232,7 +233,7 @@ const ProductData=()=>{
                     </div>
                     
                     {openMeeting?<ScheduleMeeting isBuyClick={buyClick} setMeeting={setMeeting} sellarClick={sellarClick}/>:<ProductMeta/>}
-                    <div>
+                    {/* <div>
                         <div className={styles.pd_links}>
                             <div className={styles.sellerName}>
                                 <img src={profile?.profile_image ? profile?.profile_image  : testimage2} alt='...'/>
@@ -240,9 +241,9 @@ const ProductData=()=>{
                             </div>
                             <span>{item?.date}</span>
                         </div>
-                    </div>
+                    </div> */}
 
-                    <div>
+                    {/* <div>
                         <p style={{color:"#019C89"}}>Product Details</p>
                         <p>{item?.description}</p>
                     </div>
@@ -250,7 +251,7 @@ const ProductData=()=>{
                     <div>
                         <h3>₹ {item?.asking_price}</h3>
                         <p>(Plus Shipping and VAT tax included)</p>
-                    </div>
+                    </div> */}
                     
                     <div className={styles.prodActLinks}>
                         <NavLink className={styles.contactSellar} onClick={(e)=>{sellarClick(e,false)}}>
@@ -742,7 +743,7 @@ const ProcessCard=(props)=>{
   const currBuyStatus=useSelector((state)=>state.profileData.currBuyStatus);
   const cardActiveStyle={};
   if(currBuyStatus===props.curr){
-    cardActiveStyle['border']="1px solid #019C89";
+    cardActiveStyle['backgroundColor']="aquamarine";
   }
   else{
     cardActiveStyle['boxShadow']="rgba(0, 0, 0, 0.16) 0px 1px 4px";

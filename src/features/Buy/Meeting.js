@@ -27,6 +27,10 @@ export const ScheduleMeeting=(props)=>{
     const dispatch=useDispatch();
     const meetRef=useRef();
     const handleSechedule=(e)=>{
+        let name=e.currentTarget.name;
+        if(name=="meetSC"){
+            setSuccess(false);
+        }
         setBlur(!isBlur);
     }
     const handleMeetSuccess=(e)=>{
@@ -83,7 +87,7 @@ export const ScheduleMeeting=(props)=>{
                     <img src={meetingImg} alt="..."/>
                     <b>Meeting Scheduling</b>
                     <p>Schedule a online meeting with the seller to get equipment Information.</p>
-                    <img alt="..." src={scheduleBtn} height="55px" onClick={handleSechedule}/>
+                    <img alt="..." src={scheduleBtn} height="55px" name="meetSC" onClick={handleSechedule}/>
                 </div>
                 <div className={styles.meetButons}>
                     <img alt="..." src={inspectionBtn} onClick={handleInspection} height="55px"/>
@@ -99,7 +103,7 @@ export const ScheduleMeeting=(props)=>{
                 isBlur && 
                 <React.Fragment>
                     <BackgroundBlur/>
-                    { isSuccess?<MeetingSuccess handleSechedule={handleSechedule}/>:<Calander handleMeetSuccess={handleMeetSuccess}/> }
+                    { isSuccess?<MeetingSuccess isMetScheduled={isMetScheduled} handleSechedule={handleSechedule}/>:<Calander handleMeetSuccess={handleMeetSuccess}/> }
                 </React.Fragment>  
             }
         </React.Fragment>
@@ -107,17 +111,28 @@ export const ScheduleMeeting=(props)=>{
 };
 
 const MeetingSuccess=(props)=>{
+    const [terms,setTerms]=useState(false);
+    const handleTermCond=()=>{
+        setTerms(!terms);
+    }
     return(
         <div className={styles.meetSuccessCont}>
             <div className={styles.successCross}><i class="bi bi-x" onClick={props.handleSechedule}></i></div>
             <img alt="..." src={meetSuccess} style={{marginBottom:"10px"}} />
             <b style={{marginBottom:"10px"}}>Meeting Scheduled</b>
             <p className={styles.meetNotify}>The Meeting link is scheduled via zoom, You will receive link on ur register Email and WhatsApp number.</p>
-            <div className={styles.termCond}>
-                <input type="checkbox"/>
+            {
+                // props.isMetScheduled?"":
+                (<div className={styles.termCond}>
+                <input type="checkbox" checked={terms} onChange={handleTermCond}/>
                 <p>I agree to all the Terms and condition given from MediqueQuip.  <NavLink>Terms & Condition</NavLink></p>
-            </div>
-            <span className={styles.submitBtn} onClick={props.handleSechedule}>CONTINUE</span>
+                </div>)
+            }
+            
+            {
+                terms?<span className={styles.submitBtn} name="meetCNF" onClick={props.handleSechedule}>CONTINUE</span>:
+                <span className={styles.submitBtn} style={{backgroundColor:"#019c8938"}} >CONTINUE</span>
+            }
         </div>
     );
 };
@@ -232,5 +247,5 @@ const AskInspection=(props)=>{
             </div>
         </div>
     );
-}
+};
 
