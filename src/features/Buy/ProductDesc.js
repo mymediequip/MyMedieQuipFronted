@@ -40,6 +40,8 @@ import { useSelector } from 'react-redux';
 import { ScheduleMeeting } from './Meeting';
 import Map from '../../components/GoogleMap';
 import axios from 'axios';
+import { postData } from '../services';
+import MapView from '../components/GoogleMap';
 
 export const ProductDescription=()=>{
     return(
@@ -47,54 +49,41 @@ export const ProductDescription=()=>{
             <DashboardAdvt/>
             <MMQprocess/>
             <ProductData/>
-            <ProductInfo/>
+            {/* <ProductInfo/> */}
             <RelatedProd/>
         </div>
     );
 }; 
 
 const ProductData=()=>{
- 
+    const  location  =  useLocation()
+    const item =  location?.state?.prodDetails
+    // console.log(item,"item")
     const navigate  =  useNavigate()
     let isLogin = localStorage.getItem("token")
     const [getStart,setGetStart]=useState(false);
     const [isBlur,setBlur]=useState(false);
     const [address,setaddress]=useState("");
-    const [location ,setLocation] =  useState({
-        lat : null,
-        long : null
-    }) 
-   
-    const handleLocation = () =>{
-        if("geolocation" in navigator){
-          navigator.geolocation.getCurrentPosition(
-            position=>setLocation({
-                lat  : position.coords.latitude,
-                long : position.coords.longitude
-            }),
-            error =>{
-              console.log(error , "error getting location")
-            }
-          )
-        }else{
-          console.log("Gelocation is not available");
-        }
-      }
+    const [click,setClick]=useState("");
+    const [currentIndex,setCurrentIndex]=useState(0);
+    const [displayedData, setDisplayedData] = useState({});
+    const [profile, setProfle] = useState({});
+    const [category, setcategory] = useState([]);
+    const [openSocial,setOpenSocial]=useState(false);
+    const [apiKey,setapikey]=useState("");
 
-    useEffect(()=>{
-        handleLocation()
-    },[])
-       
-        useEffect(() => {
-            const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
-            const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${location?.lat}&lon=${location?.long}&format=json&apiKey=${API_KEY}`;
-            axios
-              .get(API_URL)
-              .then(response => {
+
+    useEffect(() => {
+        const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
+        setapikey(API_KEY)
+        const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${item?.latitude}&lon=${item?.longitude}&format=json&apiKey=${API_KEY}`;
+        axios
+        .get(API_URL)
+        .then(response => {
                 // console.log(response)
                 setaddress(response?.data?.display_name)
-              })
-              .catch(error => {
+            })
+            .catch(error => {
                 console.error('Error fetching address:', error);
               });
           }, [location.lat ,location.long]);
@@ -102,7 +91,6 @@ const ProductData=()=>{
     const phoneNumber = '+919716924981'; // Replace with the actual phone number
     const encodedPhoneNumber = encodeURIComponent(phoneNumber);
 
-    const [openSocial,setOpenSocial]=useState(false);
     const [openMeeting,setMeeting]=useState(false);
     const [buyClick,setbuyClick]=useState(false);
     const contRef=useRef(null);
@@ -132,36 +120,87 @@ const ProductData=()=>{
         setOpenSocial(!openSocial);
     }
     const prodImgStyle={
-        backgroundImage:`url(${pngwing})`,
+        backgroundImage:`url(${displayedData?.product_images ? displayedData?.product_images : pngwing})`,
     };
     const ref=useRef();
     useEffect(()=>{
         document.addEventListener("click",(e)=>{
-        if(ref.current && !ref.current.contains(e.target)){
-            setOpenSocial(false);
-        }
-      });
+            if(ref.current && !ref.current.contains(e.target)){
+                setOpenSocial(false);
+            }
+        });
     },[])
+    
+    const handleLeft = () =>{
+        setCurrentIndex((prev)=>(prev -1 + item?.product_images.length) % item?.product_images.length)
+
+    }
+    const handleRight = () =>{
+        setCurrentIndex((prev)=>prev+1 % item?.product_images.length)
+    }
+    useEffect(()=>{
+        const updateDisplayedData = () =>{
+            const displayed=item?.product_images[(currentIndex) % item?.product_images?.length]
+            setDisplayedData(displayed)
+        }
+        updateDisplayedData();
+    },[currentIndex])
+
+    useEffect(()=>{
+        handleUserProfile()
+        handleCategory()
+    },[item])
+
+    const handleUserProfile  = async() => {
+        const formData =  new FormData()
+        formData.append("uid" , item?.uid)
+        const res = await postData("users/get_user_detail/" , formData ,true)
+        if(res?.status){
+            setProfle(res?.data?.profile)
+        }
+    }
+    const handleCategory  = async() => {
+        const formData =  new FormData()
+        formData.append("id" , item?.category)
+        const res = await postData("product/category/menulist/" , formData)
+        if(res?.status){
+            setcategory(res?.data)
+        }
+    }
+
+   
+    
+    
     return(
         <React.Fragment>
             <div className={styles.prod_path}>
                 <img src={homeIcon} alt='...'/>
                 <img src={rightMove} alt='...'/>
-                <NavLink to="/">Ultrasound Machine</NavLink>
+                <NavLink to="/">{item?.equip_name}</NavLink>
                 <img src={rightMove} alt='...'/>
-                <NavLink to="/">XYZ Machine</NavLink>
+                <NavLink to="/">{item?.equip_name}</NavLink>
             </div>
             <div ref={contRef} className={styles.prod_data}>
                 <div className={styles.prod_imgs}>
                     <div style={prodImgStyle} className={styles.prodBigImg}>
                     </div>
                     <div className={styles.imgSlider}>
-                        <img src={swipetestleft} alt='...' style={{width:"25px",height:"25px"}}/>
-                        <img src={pngwing} alt='...'/>
-                        <img src={pngwing} alt='...'/>
-                        <img src={pngwing} alt='...'/>
-                        <img src={pngwing} alt='...'/>
-                        <img src={nextArow} style={{width:"25px",height:"25px"}} alt='...'/>
+                    <img src={swipetestleft} onClick={handleLeft} alt='...' style={{width:"25px",height:"25px"}}/>
+                    {
+                 item?.product_images.length > 0 ?  item?.product_images?.slice(0,4)?.map((image)=>{
+                        return(
+                            <img src={image?.product_images} alt='...' />
+                        )
+                    }) :  
+                    (<>
+                    <img src={pngwing} alt='...'/>
+                    <img src={pngwing} alt='...'/>
+                    <img src={pngwing} alt='...'/>
+                    <img src={pngwing} alt='...'/>
+                    </>)
+
+                }
+                        <img src={nextArow} onClick={handleRight} style={{width:"25px",height:"25px"}} alt='...'/>
                     </div>
                 </div>
                 <div className={styles.p_data}>
@@ -171,6 +210,7 @@ const ProductData=()=>{
                               <h3 style={{marginBottom:"0px"}}>XYZ MACHINE</h3>
                               <span >NEW</span>
                             </div>
+                            <h3>{item?.equip_name}</h3>
                             <div>
                                 <span className={styles.prodId}>XM-101011QR</span>
                                 <img src={star} alt='...'/>
@@ -192,6 +232,25 @@ const ProductData=()=>{
                     </div>
                     
                     {openMeeting?<ScheduleMeeting isBuyClick={buyClick} setMeeting={setMeeting} sellarClick={sellarClick}/>:<ProductMeta/>}
+                    <div>
+                        <div className={styles.pd_links}>
+                            <div className={styles.sellerName}>
+                                <img src={profile?.profile_image ? profile?.profile_image  : testimage2} alt='...'/>
+                                <p>{`${profile?.first_name} ${profile?.last_name}`}</p>
+                            </div>
+                            <span>{item?.date}</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p style={{color:"#019C89"}}>Product Details</p>
+                        <p>{item?.description}</p>
+                    </div>
+
+                    <div>
+                        <h3>₹ {item?.asking_price}</h3>
+                        <p>(Plus Shipping and VAT tax included)</p>
+                    </div>
                     
                     <div className={styles.prodActLinks}>
                         <NavLink className={styles.contactSellar} onClick={(e)=>{sellarClick(e,false)}}>
@@ -222,7 +281,7 @@ const ProductData=()=>{
                         <b style={{color:"#019C89"}}>Posted in</b>
                         <span>{address}</span>
                         {/* <img src={dummyMap} alt='...'/> */}
-                        <Map lat={location?.lat} long={location?.long}/>
+                        <MapView lat={item?.latitude} long={item?.longitude}/>
                     </div>
 
                     <div className={styles.prodDesclaimer}>
@@ -231,6 +290,7 @@ const ProductData=()=>{
                     </div>
 
                 </div>
+                
             </div>
             {
                 getStart?<GetStarted setGetStart={setGetStart} setBlur={setBlur}/>:""
@@ -238,6 +298,24 @@ const ProductData=()=>{
             {
                 isBlur?<BackgroundBlur/>:""
             }
+
+        <div className={styles.pd_info}>
+            <div className={styles.pd_info_links}>
+                <div style={{marginRight : '20px'}} onClick={()=>setClick("details")} className={`${click == "details" ? styles.isActive : styles.isDeactive}`}>DETAILS</div>
+                <div onClick={()=>setClick("photo")} className={`${click == "photo" ? styles.isActive : styles.isDeactive}`}  >PHOTOS</div>
+                <div style={{marginLeft : '20px'}} onClick={()=>setClick("review")} className={`${click == "review" ? styles.isActive : styles.isDeactive}`}  >REVIEWS</div>
+            </div>
+        </div>
+        <div>
+                {
+                    click == "details" ? 
+                    <ProductMetaData info={item} cat={category} /> 
+                    : click == "photo" ?
+                    <ProductImgVideo info={item}/>
+                    : click == "review" ?
+                    <ProductReview/> : ""
+                }
+            </div>
         </React.Fragment>
     );
 };
@@ -295,7 +373,7 @@ const ProductInfo=()=>{
     return(
         <div className={styles.pd_info}>
             <div className={styles.pd_info_links}>
-                <NavLink style={ActivateLinks} to="/products/xray-machine/info/" >DETAILS</NavLink>
+                <NavLink style={ActivateLinks} to={`/products/xray-machine/info/`} >DETAILS</NavLink>
                 <NavLink style={ActivateLinks} to="/products/xray-machine/" >PHOTOS</NavLink>
                 <NavLink style={ActivateLinks} to="/products/xray-machine/review/" >REVIEWS</NavLink>
             </div>
@@ -304,30 +382,41 @@ const ProductInfo=()=>{
     );
 };
 
-export const ProductImgVideo=()=>{
+export const ProductImgVideo=({info})=>{
+
     return(
         <div className={styles.prodAsset}>
-            <img src={video_Advt} alt='...' style={{width:"100%",height:"400px"}}/>
+            {/* <img src={video_Advt} alt='...' style={{width:"100%",height:"400px"}}/> */}
+            <video src={"http://13.53.198.145:8000/mmq_apps/static/upload/product/video/Screenshot_from_2023-08-25_01-53-00_03092023062327719030.png"} controls width={"100%"} height={"400px"}>
+                {/* <source src={src} type='video/webm'/> */}
+            </video>
             <div className={styles.prodsImg}>
-                <img src={pngwing} alt='...' style={{width:"190px",height:"250px"}}/>
-                <img src={pngwing} alt='...' style={{width:"190px",height:"250px"}}/>
-                <img src={pngwing} alt='...' style={{width:"190px",height:"250px"}}/>
+                {
+                    info?.product_images?.slice(0,5)?.map((image)=>{
+                        return(
+                            <img src={image?.product_images} alt='...' style={{width:"190px",height:"250px"}}/>
+                        )
+                    })
+
+                }
+               
             </div>
         </div>
     );
 };
 
-export const ProductMetaData=()=>{
+export const ProductMetaData=({info ,cat})=>{
+
     const productdedtails=[ 
-        {pname:'Brand' ,pvalue:'ABC'},
-        {pname:'Model',pvalue:'PQR'},
-        {pname:'Condition',pvalue:'EXCELLENT '},
-        {pname:'Warrenty',pvalue:'Not Specifies '},
-        {pname:'Shipping From',pvalue:' India'},
+        {pname:'Brand' ,pvalue: info?.brand},
+        {pname:'Model',pvalue:info?.model},
+        {pname:'Condition',pvalue:info?.equip_condition == 1 ? "Good" :info?.equip_condition == 2 ? "Excellent" : "As Good as New" },
+        {pname:'Warrenty',pvalue: info?.warranty == 1  ? "YES" : "NO"},
+        {pname:'Shipping From',pvalue: info?.address},
         {pname:'Advert#',pvalue:'20212922'},
-        {pname:'Catagory',pvalue:'Ultrasound Machine'},
-        {pname:'Posted',pvalue:'12-07-2022'},
-        {pname:'Visits',pvalue:'12'}
+        {pname:'Catagory',pvalue: cat ? cat?.map((el)=>el?.name) : 'Ultrasound Machine'},
+        {pname:'Posted',pvalue: info?.date},
+        {pname:'Visits',pvalue: info?.visit ? info?.visit :  '0'}
     ]
     return(
         <table className={styles.prodMetaContainer}>
@@ -396,32 +485,72 @@ export const ProductReviewCard=()=>{
 };
 
 const RelatedProd=()=>{
-    const relatedProd=[
-        {title:"Prod 1",des:"space for a small product description.space for a small product",price:"2000"},
-        {title:"Prod 2",des:"space for a small product description.space for a small product",price:"3000"},
-        {title:"Prod 3",des:"space for a small product description.space for a small product",price:"4000"},
-        {title:"Prod 4",des:"space for a small product description.space for a small product",price:"5000"},
-        {title:"Prod 5",des:"space for a small product description.space for a small product",price:"6000"},
-        {title:"Prod 6",des:"space for a small product description.space for a small product",price:"2000"},
-        {title:"Prod 7",des:"space for a small product description.space for a small product",price:"3000"},
-        {title:"Prod 8",des:"space for a small product description.space for a small product",price:"4000"},
-        {title:"Prod 9",des:"space for a small product description.space for a small product",price:"5000"},
-        {title:"Prod 10",des:"space for a small product description.space for a small product",price:"6000"}
-    ];
-    const [prodData,setProdData]=useState(relatedProd.slice(0,4));
-    const [p_pointer,setPointer]=useState({left:0,right:4});
-    // using two pointer
-    const shiftProducts=(e)=>{
-        let name=e.currentTarget.name;
-        if(name==="prev" && p_pointer.left>0){
-            setProdData(relatedProd.slice(p_pointer.left-=1,p_pointer.right-=1));
-        }
-        if(name==="next" && p_pointer.right<relatedProd.length){
-            setProdData(relatedProd.slice(p_pointer.left+=1,p_pointer.right+=1));
-        }  
-        console.log(p_pointer.left,p_pointer.right);
+    const [relatedProducts, setRelatedProducts] = useState([]);
+    // const [prodData,setProdData]=useState(relatedProducts.slice(0,4));
+    // const [p_pointer,setPointer]=useState({left:0,right:4});
+    const [currentIndex ,setCurrentIndex] = useState(0)
+    const [displayedData, setDisplayedData] = useState([]);
 
-    }
+
+    useEffect(() => {
+          fetchRelatedProducts();
+      }, []);
+
+     const  fetchRelatedProducts =  async() =>{
+        const res = await postData("product/filter_list/", "", true);
+        setRelatedProducts(res?.data?.featured_products);
+     }
+
+     const handleScrollLeft = () =>{
+     setCurrentIndex((prev)=>(prev-1 + relatedProducts?.length) % relatedProducts?.length)
+    } 
+  
+    const handleScrollRight = () =>{
+        setCurrentIndex((prev)=> (prev + 1) % relatedProducts?.length)
+       }
+   
+  
+    useEffect(()=>{
+      const updateDisplayedData = () =>{
+        const displayed=[
+            relatedProducts[currentIndex %  relatedProducts?.length],
+            relatedProducts[(currentIndex + 1) % relatedProducts?.length],
+            relatedProducts[(currentIndex + 2) % relatedProducts?.length],
+            relatedProducts[(currentIndex + 3) % relatedProducts?.length],
+        ]
+        setDisplayedData(displayed)
+      }
+  
+      updateDisplayedData();
+    },[currentIndex , relatedProducts])
+
+    
+
+
+    // const relatedProd=[
+    //     {title:"Prod 1",des:"space for a small product description.space for a small product",price:"2000"},
+    //     {title:"Prod 2",des:"space for a small product description.space for a small product",price:"3000"},
+    //     {title:"Prod 3",des:"space for a small product description.space for a small product",price:"4000"},
+    //     {title:"Prod 4",des:"space for a small product description.space for a small product",price:"5000"},
+    //     {title:"Prod 5",des:"space for a small product description.space for a small product",price:"6000"},
+    //     {title:"Prod 6",des:"space for a small product description.space for a small product",price:"2000"},
+    //     {title:"Prod 7",des:"space for a small product description.space for a small product",price:"3000"},
+    //     {title:"Prod 8",des:"space for a small product description.space for a small product",price:"4000"},
+    //     {title:"Prod 9",des:"space for a small product description.space for a small product",price:"5000"},
+    //     {title:"Prod 10",des:"space for a small product description.space for a small product",price:"6000"}
+    // ];
+    // console.log(p_pointer,"data")
+    // using two pointer
+    // const shiftProducts=(e)=>{
+    //     let name=e.currentTarget.name;
+    //     if(name==="prev" && p_pointer.left>0){
+    //         setProdData(relatedProducts.slice(p_pointer.left-=1,p_pointer.right-=1));
+    //     }
+    //     if(name==="next" && p_pointer.right<relatedProducts.length){
+    //         setProdData(relatedProducts.slice(p_pointer.left+=1,p_pointer.right+=1));
+    //     }  
+    //     console.log(p_pointer.left,p_pointer.right);
+    // }
 
     return (
       <React.Fragment>
@@ -431,16 +560,16 @@ const RelatedProd=()=>{
           <hr className={styles.line2} />
         </div>
         <div style={{position:"relative",marginBottom:"40px"}}>
-            <img src={swipetestleft} alt='...' onClick={shiftProducts} name="prev" className={styles.rlatedProdPrev}/>
+            <img src={swipetestleft} alt='...' onClick={handleScrollLeft} name="prev" className={styles.rlatedProdPrev}/>
             <div className={styles.rowws}>
                 {
-                    prodData.map((value,id)=>{
+                    displayedData.map((value,id)=>{
                         return <RelatedProdCard data={value} key={id}/>   
                     })
                 }
                 
             </div>
-            <img src={nextArow} onClick={shiftProducts} className={styles.rlatedProdNext} name="next" alt='...'/>
+            <img src={nextArow} onClick={handleScrollRight} className={styles.rlatedProdNext} name="next" alt='...'/>
         </div>
       </React.Fragment>
     );

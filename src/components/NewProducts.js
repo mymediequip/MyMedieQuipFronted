@@ -19,7 +19,7 @@ export const NewProducts=(props)=>{
         const handleResize = () => {
           setIsMobileView(window.innerWidth <= 768); // Adjust breakpoint as needed
         };
-    
+
         handleResize(); // Set initial view on component mount
         window.addEventListener('resize', handleResize);
         return () => {
@@ -30,44 +30,35 @@ export const NewProducts=(props)=>{
 
     const handleScrollLeft = () =>{
         setScroll(true)
-     setCurrentIndex((prev)=>(prev-1 + cardData?.length) % cardData?.length)
+     setCurrentIndex((prev)=>(prev-1 + props?.data?.length) % props?.data?.length)
     } 
   
     const handleScrollRight = () =>{
         setScroll(true)
-        setCurrentIndex((prev)=> (prev + 1) % cardData?.length)
+        setCurrentIndex((prev)=> (prev + 1) % props?.data?.length)
        }
    
   
     useEffect(()=>{
       const updateDisplayedData = () =>{
         const displayed=[
-          cardData[currentIndex % cardData?.length],
-          cardData[(currentIndex + 1) % cardData?.length],
-          cardData[(currentIndex + 2) % cardData?.length],
-          cardData[(currentIndex + 3) % cardData?.length],
-          cardData[(currentIndex + 4) % cardData?.length],
+          props?.data[currentIndex % props?.data?.length],
+          props?.data[(currentIndex + 1) % props?.data?.length],
+          props?.data[(currentIndex + 2) % props?.data?.length],
+          props?.data[(currentIndex + 3) % props?.data?.length],
+          props?.data[(currentIndex + 4) % props?.data?.length],
 
         ]
         setDisplayedData(displayed)
       }
   
       updateDisplayedData();
-    },[currentIndex])
+    },[currentIndex , props?.data])
 
-    const cardData=[
-        {title:"Product Title",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-        {title:"Product Title",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-        {title:"Product Title",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-        {title:"Product",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-        {title:"1",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-        {title:"2",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-        {title:"3 Title",desc:"space for a small product description.. space for a small product description..space for a small product description",dis_price:"50000.00",t_price:65000.00},
-    ];
-
+    
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentData = cardData.slice(startIndex, endIndex);
+  const currentData = props?.data?.slice(startIndex, endIndex);
 
   const handlePageChange = (page) => {
     setScroll(false)
@@ -84,7 +75,7 @@ export const NewProducts=(props)=>{
                     currentData.map((values,index)=>{
                         return <NewProductsCard isNew={props.isnew} key={index} data={values}/>
                     }) : 
-                    displayedData.map((values,index)=>{
+                    displayedData?.map((values,index)=>{
                         return <NewProductsCard isNew={props.isnew} key={index} data={values}/>
                     })
                 }
@@ -92,7 +83,7 @@ export const NewProducts=(props)=>{
             </div>
         <NextProductTab 
            currentPage={currentPage}
-           totalPages={Math.ceil(cardData.length / itemsPerPage)}
+           totalPages={Math.ceil(props?.data.length / itemsPerPage)}
            onPageChange={handlePageChange}
            handleScrollRight={handleScrollRight}
            isMobileView={isMobileView}

@@ -1,26 +1,27 @@
-import React from "react"
-import { GoogleMap , LoadScript } from "@react-google-maps/api"
+import React, { useEffect, useState } from 'react'
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+const MapView = ({lat ,long}) => {
+    const [currentLocation, setCurrentLocation] = useState(null);
 
-const Map = ({lat ,long}) =>{
-    const containerStyle = {
-        width : "100%",
-        height : "350px",
-    }
+  useEffect(() => {
+      setCurrentLocation({ lat: lat, lng: long });
+  }, [lat ,long]);
 
-    const center = {
-        lat : lat,
-        long : long,
-    }
-    return(
-        <LoadScript googleMapsApiKey="AIzaSyC_vsrDa_FhSmu8jClERaVOcWVk-q0Dlok">
-            <GoogleMap
-             mapContainerStyle={containerStyle}
-             center={center}
-             zoom={10}
-            >
-            </GoogleMap>
-        </LoadScript>
-    )
+  // Ensure that currentLocation exists before rendering the map
+  if (!currentLocation) {
+    return <div>Loading...</div>;
+  }
+  return (
+       <LoadScript googleMapsApiKey="AIzaSyADGoHCfvvOG_3Ym3WxRD-yg4-3-KvR8xA">
+       <GoogleMap
+         center={currentLocation}
+         zoom={13}
+         mapContainerStyle={{ width: '100%', height: '400px' }}
+       >
+         {currentLocation && <Marker position={currentLocation} />}
+       </GoogleMap>
+     </LoadScript>
+  )
 }
 
-export default Map;
+export default MapView

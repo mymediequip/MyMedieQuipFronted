@@ -15,6 +15,8 @@ import {
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
+const imagePreviewUrl = process.env.REACT_APP_IMAGE_PREVIEW
+console.log(imagePreviewUrl , "img")
 
 export const ClientCard=({clientList})=>{
   return(
@@ -22,7 +24,7 @@ export const ClientCard=({clientList})=>{
           <img className={styles.suffixMark}  src={  suffix}/>
           <p className={styles.testCardDesc}>{clientList?.description}</p>
           <img src={line2} alt='...'/>
-          <img className={styles.clientImage} src={clientList?.image ? `http://13.53.198.145:8000${clientList?.image}` : testimage2} alt='...'/>
+          <img className={styles.clientImage} src={clientList?.image ? `${imagePreviewUrl}${clientList?.image}` : testimage2} alt='...'/>
           <p className={styles.clientName}>{clientList?.name}</p>
     </div>
   );
@@ -31,7 +33,7 @@ export const ClientCard=({clientList})=>{
 export const ExpertCard=({expertise})=>{
   return(
     <div className={styles.expertComp} key={expertise?.id}>
-            <img  className={styles.expImage} src={expertise?.image ?  `http://13.53.198.145:8000${expertise?.image}` : expert} alt="expert" />
+            <img  className={styles.expImage} src={expertise?.image ?  `${imagePreviewUrl}${expertise?.image}` : expert} alt="expert" />
             <p className={styles.expTitle}>{expertise?.name}</p>
             <p className={styles.expDesc}> {expertise?.description} </p>
       </div>
@@ -42,8 +44,9 @@ export const NewProductsCard = (props) => {
   const [getStart,setGetStart]=useState(false);
   const [isBlur,setBlur]=useState(false);
   const navigate=useNavigate();
-  const productClick = () => {
-      navigate("/products/xray-machine/")
+  const productClick = (item) => {
+    console.log(item,"item")
+      navigate(`/products/${item?.equip_name}/` , {state : {prodDetails : item}})
       window.scrollTo(0,0);
   };
 
@@ -56,7 +59,7 @@ export const NewProductsCard = (props) => {
 
   return (
     <React.Fragment>
-      <div className={styles.cardContainer} onClick={productClick}>
+      <div className={styles.cardContainer} onClick={()=>productClick(props?.data)}>
         <div className={styles.cardContent}>
           <div className={styles.equipImage}>
             <div className={styles.productImage}>
@@ -67,7 +70,7 @@ export const NewProductsCard = (props) => {
                   className={styles.newBanner}
                 />
               )}
-              <img src={pngwing} className={styles.productimg} />
+              <img src={props?.data?.product_images?.length > 0 ? `${props?.data?.product_images[0]?.product_images}` :pngwing} className={styles.productimg} />
               <div
                 className={styles.favCart}
                 style={{ top: props.isNew ? "-188px" : "-165px" }}
@@ -84,13 +87,13 @@ export const NewProductsCard = (props) => {
             </div>
           </div>
           <div className={styles.title_desk}>
-            <h5>{props.data.title}</h5>
-            <p>{props.data.desc}</p>
+            <h5>{props?.data?.equip_name}</h5>
+            <p>{props?.data?.description}</p>
           </div>
           <div className={styles.price}>
             <div className={styles.priceTag}>
-              <h5>₹ {props.data.dis_price}</h5>
-              <p>₹{props.data.t_price}</p>
+              <h5>₹ {props?.data?.asking_price}</h5>
+              <p>₹{props?.data?.asking_price}</p>
             </div>
             <div>
               <NavLink className={styles.PriceBtn} onClick={sellarClick}>
@@ -112,17 +115,17 @@ export const RelatedProdCard=(props)=>{
       <div className={styles.imagess}>
         <img
           className={styles.images}
-          src={relatedImg}
+          src={props?.data?.product_images[0]?.product_images ? props?.data?.product_images[0]?.product_images :  relatedImg}
           alt="Jane"
           style={{ width: "100%", height: "100%" }}
         />
         <div className={styles.contain}>
-          <h5 className={styles.prodtitle}>{props.data.title}</h5>
+          <h5 className={styles.prodtitle}>{props?.data?.equip_name}</h5>
           <p className={styles.containDis}>
             {" "}
-            {props.data.des}
+            {props?.data?.description}
           </p>
-          <h4 className={styles.pprice}>₹ {props.data.price}</h4>
+          <h4 className={styles.pprice}>₹ {props?.data?.asking_price}</h4>
         </div>
       </div>
     </div>

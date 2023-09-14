@@ -10,7 +10,6 @@ import {
     m_search,
     downIcon
 } from '../assets/images/index';
-import { postData } from '../services';
 import { fetchCategories } from '../app/Slices/ProdAddSlice';
 import { useDispatch, useSelector } from 'react-redux';
 

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { postData, postData1 } from '../../services';
+import {  postData } from '../../services';
 
 export const prodAddSlice = createSlice({
   name: 'prodAdd',
@@ -14,7 +14,7 @@ export const prodAddSlice = createSlice({
         specialtiey_name:[],
         categories:[],
         specility:[],
-        Equip_spacality:null,
+        // Equip_spacality:null,
         Equip_location:null,
         Compatible_Models:null,
         Prod_price:null,
@@ -131,7 +131,7 @@ export const prodAddSlice = createSlice({
         specialtiey_name:[],
         categories:[],
         specility:[],
-        Equip_spacality:null,
+        // Equip_spacality:null,
         Equip_location:null,
         Compatible_Models:null,
         Prod_price:null,
@@ -164,31 +164,36 @@ export const prodAddSlice = createSlice({
 export const { setType , addImg , removeImg ,addVideos ,removeVideo , setEquipmentName ,setManufacturingYear ,setEquipSpecification , setCompatibleModels ,setProdPrice ,clearProdAddData ,setEquipCondition ,setEquip_Location , fetchEuipCategories , fetchParentName , setCategories ,fetchSpecialName , setSpecality , setLatLong} = prodAddSlice.actions
 
 // Asynchronous thunk action
-export const fetchCategories = (Equip_name)=>async(dispatch)=>{
- const data  = {
-   q : Equip_name 
- }
+export const fetchCategories = (Equip_name , id)=>async(dispatch)=>{
+  const formData =  new FormData()
+  if(Equip_name){
+    formData.append("q" , Equip_name)
+  }else if(id){
+    formData.append("id" , id)
+  }else{
+    formData.append("parent" , 1)
+  }
   try {
-    const res = await postData("product/category/menulist/" , data )
+    const res = await postData("product/category/menulist/" , formData  )
     dispatch(fetchEuipCategories(res?.data))
   } catch (error) {
     console.log(error,"error")
   }
 }
 export const fetchCategoriesName = (id)=>async(dispatch)=>{
-  const data  = {
-    id : id
-  }
+  const formData =  new FormData()
+   formData.append("id" ,id)
    try {
-     const res = await postData("product/category/menulist/" , data)
+     const res = await postData("product/category/menulist/" , formData )
      dispatch(fetchParentName(res?.data))
+     console.log(res.data,"res")
    } catch (error) {
      console.log(error,"error")
    }
  }
  export const fetchSpecialityName = ()=>async(dispatch)=>{
    try {
-     const res = await postData1("product/speciality/lists/")
+     const res = await postData("product/speciality/lists/" , "" , true)
      dispatch(fetchSpecialName(res?.data))
    } catch (error) {
      console.log(error,"error")

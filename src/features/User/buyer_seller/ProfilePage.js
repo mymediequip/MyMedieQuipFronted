@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { Toaster } from '../../../utils/Toaster';
 import { useDispatch } from 'react-redux';
 import { getProfileImage } from '../../../app/Slices/UserData';
+const imagePreviewUrl = process.env.REACT_APP_IMAGE_PREVIEW
 
 export const MyProfile=()=>{
   const dispatch  =  useDispatch()
@@ -52,7 +53,7 @@ export const MyProfile=()=>{
    const res = await postData("users/get_user_detail/" ,"", true)
    if(res?.status){
     setPreviewImage(res?.data?.profile?.image)
-    dispatch(getProfileImage(res?.data?.profile?.profile_image));
+    dispatch(getProfileImage(res?.data?.profile?.image));
     
     formik.setValues({
       fname : res?.data?.profile?.first_name,
@@ -91,7 +92,7 @@ export const MyProfile=()=>{
         formData.append('image', selectedFile);
        }
 
-        const res = await postDataFIle("users/add_profile/" , formData , true)
+        const res = await postData("users/add_profile/" , formData , true)
         if(res.status){
           setSelectedFile(null)
           toast.success("Profile Updated SuccessFully !")
@@ -125,7 +126,7 @@ export const MyProfile=()=>{
           <div className={styles.column1}>
             <div 
             className={styles.image} 
-            style={{backgroundImage:`url(${blob ?   blob   :  previewImage ? `http://13.53.198.145:8000${previewImage}` : testimage2})`}}
+            style={{backgroundImage:`url(${blob ?   blob   :  previewImage ? `${imagePreviewUrl}${previewImage}` : testimage2})`}}
             >
             </div>
               <a style={{cursor  : "pointer"}} onClick={handleLinkClick}>Edit Profile Image </a>
@@ -219,7 +220,7 @@ export const MyProfile=()=>{
 export const DashboardMenu=()=>{
     const profileLinks=[
         {title:"MY Profile",path:"/dashboard/"},
-        {title:"MY ADS",path:"/"},
+        {title:"MY ADS",path:"/dashboard/ads/"},
         {title:"MY MESSAGES",path:"/"},
         {title:"ADS AWAITING PAYMENT",path:"/"},
         {title:"PAYMENT HISTORY",path:"/"},

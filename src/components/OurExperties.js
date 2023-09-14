@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../assets/css/content.module.css';
 import { ExpertCard } from './Cards';
-import { postData } from '../services';
+import {  postData} from '../services';
 export const OurExperties=()=>{
     const [expertData ,setExpertData] =  useState([])
 

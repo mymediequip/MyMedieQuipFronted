@@ -139,6 +139,7 @@
     width: fit-content;
     margin: 0px auto 40px auto;
     font-size: 15px;
+    cursor: pointer;
 }
 .pd_info_links a{
     /* color: #4F4F4F; */
@@ -504,4 +505,17 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
-
+.isActive{
+    border-bottom: 2px solid #019C89;
+    color: #019C89;
+}
+.isDeactive{
+    border-bottom: none;
+    color: #4F4F4F;
+}
+.prod_details{
+    margin-right: "1rem";
+}
+.prod_review{
+    margin-left: "1rem";
+}

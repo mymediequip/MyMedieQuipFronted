@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "../../assets/css/postAdvt.module.css";
 import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories, fetchCategoriesName, setCategories, fetchSpecialityName, setSpecality, setLatLong } from "../../app/Slices/ProdAddSlice";
 import GeoCode from "react-geocode"
+
 import {
   ImageUpload,
   arrLeft,
@@ -78,7 +79,7 @@ export const SelectAdvtType = () => {
       <div className={styles.selectAdvtCont}>
         <h3>Post Your Adv</h3>
         <div className={styles.slectTypes}>
-          {selectTypes.map((value, index) => {
+          {selectTypes?.map((value, index) => {
             return (
               <span 
                 onClick={changeColor}
@@ -187,7 +188,7 @@ export const AdvtMedia = () => {
                     />
                     <img src={ImageUpload} alt="Upload" />
                   </label>
-                  {selectedImages.map((value, index) => {
+                  {selectedImages?.map((value, index) => {
                     return (
                       <div style={{ margin: "10px", display: "flex" }}>
                         <img src={value?.imageUrl} key={value?.id} />
@@ -258,7 +259,6 @@ const navigate = useNavigate();
   const selectedPostType = useSelector(
     (state) => state.addProd.prodAddData.selectedPostType
   );
-
 const allData  =  useSelector((state)=>state.addProd.prodAddData)
 const equipName  =  useSelector((state)=>state.addProd.prodAddData.Equip_name)
 const categories =  useSelector((state)=>state.addProd.prodAddData.Equip_categories)
@@ -274,10 +274,11 @@ let data = []
     data.push(el?.parent)
 })
 
+
 useEffect(()=>{
 dispatch(fetchCategories(searchName))
 dispatch(fetchCategoriesName(data))
-},[searchName])
+},[searchName ,equipName])
 
 
 useEffect(()=>{
@@ -386,15 +387,28 @@ useEffect(() => {
         <form action="/action_page.php" onSubmit={handleSubmit}>
           <div className={styles.formFiledCont}>
             <div className={styles.labelCol}>
-              <label for="Equip_name">Equipment name</label>
+              <label htmlFor="Equip_name">Equipment name</label>
               <input
-                className={styles.forBotMarg}
+                className={searchName ?  styles.forBotMarg : styles.forBotMarg1}
                 type="text"
                 id="Equip_name"
                 name="Equip_name"
                 onChange={handleChange}
                 value={equipName}
+                autoComplete="off"
               />
+              {searchName && 
+               <div className={categories.length > 5 ?  styles.equipNameDrop : styles.equipNameDrop1}>
+               {categories?.map((el)=>{
+                 return(
+                     <>
+                     <p onClick={()=>{dispatch(setEquipmentName(el?.name)); setSearchName("")}} className={styles.equipnameDropDown}>{el?.name}</p>
+                     </>
+                     )
+                   })}
+               </div>
+              }
+            
               {/* {formik.errors.equipment_name && formik.touched.equipment_name && (<div style={{color : 'red'}}>{formik.errors.equipment_name}</div>)} */}
 
               {(() => {
@@ -404,9 +418,9 @@ useEffect(() => {
             <div className={styles.specialtCont}>
               {selectedPostType === "SPARE & ACCESSORIES" ? (
                 ""
-              ) : (
-                <AdvtCategoriesDorpDown  data={dropCat} />
-              )}
+                ) : (
+                  <AdvtCategoriesDorpDown  data={dropCat} />
+                  )}
               <AdvtSpecialityDorpDown data={dropSpec} />
               {selectedPostType === "SPARE & ACCESSORIES" ? (
                 <div className={styles.prodComptaible}>
@@ -415,7 +429,7 @@ useEffect(() => {
                 </div>
               ) : (
                 ""
-              )}
+                )}
             </div>
           </div>
           <div style={{ textAlign: "center" }}>
@@ -445,7 +459,6 @@ const AdvtCategoriesDorpDown = (props) => {
   const handleCategoriesName = (event,catgorie) =>{
     dispatch(setCategories(Number(event.target.value)));
     selectedCat[catgorie]=event.target.checked;
-    // console.log(event.target.checked,event.target.value,catgorie);
   }
   const ref=useRef();
   useEffect(()=>{
@@ -484,8 +497,8 @@ const AdvtCategoriesDorpDown = (props) => {
       </div>
 
       {show && (
-        <div className={styles.checkBox}>
-          {props.data.dataList.map((value, index) => {
+        <div className={props?.data?.dataList.length > 1 ?  styles.checkBox : styles.checkBox1}>
+          {props?.data?.dataList?.map((value, index) => {
             return (
               <div className={styles.checkboxCont} key={value.id}>
                 <input type="checkbox" id="categories" value={value?.id} checked={categoriesId?.includes(value.id)} name="categories" onChange={(e)=>handleCategoriesName(e,value?.name)}  />
@@ -508,15 +521,16 @@ const AdvtSpecialityDorpDown = (props) => {
   );
   const Speciality = useSelector((state)=>state.addProd.prodAddData.specility)
   const [show, setShow] = useState(false);
-
+  const [selectedCat,setSelectedCat]=useState({});
 
   useEffect(()=>{
     if(!selectedPostType){
       navigate("/post/")
     }
   },[selectedPostType])
-  const handleCategoriesName = (event) =>{
+  const handleCategoriesName = (event ,catgorie) =>{
     dispatch(setSpecality(event.target.value))
+    selectedCat[catgorie]=event.target.checked;
   }
   const ref=useRef();
   useEffect(()=>{
@@ -532,16 +546,34 @@ const AdvtSpecialityDorpDown = (props) => {
         <p>{props.data.title}</p>
       </div>
       <div className={styles.selectEquipDiv} onClick={() => setShow(!show)}>
-        <p>{props.data.placeholder}</p>
+        <p>
+        {(()=>{
+            let keys=Object.keys(selectedCat);
+            if(keys.length===0){
+              return props.data.placeholder;
+            }
+            else{
+              let temp="";
+              for(let i=0;i<keys.length;i++){
+                if(selectedCat[keys[i]]){
+                  temp+=keys[i]+";";
+                }
+              }
+              return temp.slice(0,40)+"....";
+            }
+            
+          })()
+          }
+        </p>
         <img className={styles.dropDownImage} src={postDropdown} alt="..." />
       </div>
 
       {show && (
-        <div className={styles.checkBox}>
-          {props.data.dataList.map((value, index) => {
+        <div className={props?.data?.dataList.length > 4 ?  styles.checkBox : styles.checkBox1}>
+          {props?.data?.dataList?.map((value, index) => {
             return (
               <div className={styles.checkboxCont} key={value.id}>
-                <input type="checkbox" id="specility" value={value?.name} checked={Speciality?.includes(value?.name)} name="specility" onChange={handleCategoriesName}  />
+                <input type="checkbox" id="specility" value={value?.name} checked={Speciality?.includes(value?.name)} name="specility" onChange={(e)=>handleCategoriesName(e,value?.name)}  />
                 <label for="checkbox1">{value?.name}</label>
               </div>
             );
@@ -673,7 +705,7 @@ export const AdvtProdData = () => {
   const ManufacturingYear = useSelector((state) => state.addProd.prodAddData.purchase_year);
   const specifications = useSelector((state) => state.addProd.prodAddData.specifications);
   const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
-  const userId =  useSelector((state)=>state.profileData.UserData.uid)
+  const userId = localStorage.getItem("uid")
   const prodPrice =  useSelector((state)=>state.addProd.prodAddData.Prod_price)
   const allData =  useSelector((state)=>state.addProd.prodAddData)
 
@@ -713,12 +745,11 @@ export const AdvtProdData = () => {
   formData.append("other_details" , allData?.specifications?.other_details)
   formData.append("latitude" , allData?.location?.lat)
   formData.append("longitude" , allData?.location?.lang)
-  // formData.append("user" ,userId)
-  formData.append("user" ,"ee0654b0-96d5-4aaa-a39a-caa9b901cf80")
+  formData.append("user" ,userId)
   formData.append("Compatible_Models" ,allData?.Compatible_Models)
   formData.append("Prod_price" ,allData?.Prod_price)
 
-    const res =  await postDataFIle("product/add/" , formData , true)
+    const res =  await postData("product/add/" , formData , true)
     console.log(res,"res")
     if(res.status){
       toast.success("Product Added SuccessFully !")
@@ -822,7 +853,7 @@ const getAddProdScreen2 = (selectedType , handleLocation  ,dispatch ,CompatibleM
     return (
       <React.Fragment>
         <label for="lname">Where is the Equipment</label>
-        <input type="text" id="Equip_location" name="Equip_location" value={prodLocation} onChange={(e)=>dispatch(setEquip_Location(e.target.value))} />
+        <input type="text" id="Equip_location"  name="Equip_location" value={prodLocation} onChange={(e)=>dispatch(setEquip_Location(e.target.value))} />
         <div  className={styles.locSelect}>
           <img onClick={handleLocation}  className={styles.locationPng} src={location} alt="..." />
           <p onClick={handleLocation}  className={styles.forAlign}>Find the current location</p>

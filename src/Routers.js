@@ -15,6 +15,7 @@ import {
   Login
 } from './features/Auth/LoginRegister';
 import PrivateRoutes from './components/PrivateRoute';
+import MyAds from './components/MyAds';
 
 export const Routers=()=>{
     return(
@@ -34,9 +35,10 @@ export const Routers=()=>{
           />
            {/* dashbaord */}
              <Route path="dashboard" element={<DashboardLayout/>}>
-            <Route index element={<MyProfile/>}/>
-          </Route>
-        </Route>
+             <Route index element={<MyProfile/>}/>
+             <Route path='ads' element={<MyAds/>} />
+            </Route>
+       </Route>
         <Route path='/' element={<HomeLayout/>}>
           <Route index element={<ContentConatiner specs={false}/>}/>
           <Route path='specialization' element={<ContentConatiner specs={true}/>}/>
@@ -54,7 +56,7 @@ export const Routers=()=>{
           {/* ProductDescription */}
           <Route path='products/:proddetails' element={<ProductDescription/>}>
             <Route index element={<ProductImgVideo/>}/>
-            <Route path='info' element={<ProductMetaData/>}/>
+            {/* <Route path='info' element={<ProductMetaData/>}/> */}
             <Route path='review' element={<ProductReview/>}/>
           </Route>
 
