@@ -9,6 +9,10 @@ import {
     paytam,
     upib
 } from '../../assets/images/index';
+import {useFormik } from "formik";
+import * as yup  from "yup"
+import axios from "axios";
+import { addressSchema, addressTypeSchema, citySchema, fnameSchema, nationalitySchema, pincodeSchema, pnumberSchema, stateSchema } from "../../utils/validation";
 
 export const Checkout=()=>{
     return(
@@ -88,7 +92,90 @@ const CheckoutDataHead=(props)=>{
 
 const DelieveryAddress=()=>{
     const [showAddress,setAddress]=useState(true);
+    const [usecurrentLocation,setCurrentLocation]=useState(false);
+    const [latlng ,setlatlng] =  useState({
+      lat : null ,
+      lng : null
+    })
+    const handleLocation  = () =>{
+      if("geolocation" in navigator){
+        navigator.geolocation.getCurrentPosition(
+          (position)=>setlatlng({
+            lat : position.coords.latitude,
+            lng : position.coords.longitude
+          })
+        )
+      }
+    }
+
+  useEffect(()=>{
+    handleLocation()
+  },[usecurrentLocation])
+
+  useEffect(()=>{
+    const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${latlng?.lat}&lon=${latlng?.lng}&format=json`;
+    axios
+    .get(API_URL)
+    .then(response=>{
+      // console.log(response?.data?.address,"res")
+      formik.setValues({
+        user_pincode : response?.data?.address?.postcode,
+        user_country : response?.data?.address?.country,
+        user_address : response?.data?.display_name,
+        user_city : response?.data?.address?.state_district,
+        user_state : response?.data?.address?.state,
+      })
+    })
+    .catch(error=>{
+      console.error('Error fetching address:', error);
+    })
+
+  },[usecurrentLocation])
+
     
+    const formik =  useFormik({
+      initialValues : {
+        user_name : "",
+        user_mobile : "",
+        user_pincode : "",
+        user_country : "",
+        user_address : "",
+        user_city : "",
+        user_state : "",
+        user_landmark : "",
+        user_alternate_number : "",
+        delivery_add : ""
+      },
+      validationSchema : yup.object().shape({
+          user_name : fnameSchema,
+          user_mobile: pnumberSchema,
+          user_pincode:pincodeSchema,
+          user_country : nationalitySchema,
+          user_address: addressSchema,
+          user_city : citySchema,
+          user_state : stateSchema,
+          delivery_add : addressTypeSchema
+      }),
+      onSubmit: function (values){
+        handleSubmit(values)
+      }
+    })
+
+    // console.log(formik?.values)
+
+    const handleSubmit = (val) =>{
+         console.log(val)
+    }
+
+    const handleReset = () =>{
+      setlatlng({
+        lat : "",
+        lng : ""
+      })
+      formik.handleReset();
+      setCurrentLocation(false);
+    }
+    console.log(usecurrentLocation ,latlng)
     return (
       <div>
         <CheckoutDataHead
@@ -99,47 +186,83 @@ const DelieveryAddress=()=>{
         />
         {showAddress && (
           <div  className={styles.deliveryAdd}>
-            <form className={styles.addressForm}>
-              <div className={styles.currLocat}>
+            <form className={styles.addressForm} onSubmit={formik.handleSubmit}>
+              <div onClick={()=>setCurrentLocation(true)} className={styles.currLocat}>
                 <img src={currLocat} alt="..." />
                 <span>Use my current location</span>
               </div>
               <div>
-                <input type="text" placeholder="Enter Name" />
-                <input type="number" placeholder="10-digit mobile number" />
+                <input type="text" placeholder="Enter Name" onBlur={formik.handleBlur}  onChange={formik.handleChange} value={formik.values.user_name} name="user_name" />
+                <input type="number" placeholder="10-digit mobile number" onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.user_mobile} name="user_mobile"  />
               </div>
+           <div>
+         <div style={{display : 'flex' ,justifyContent : "flex-start"}}>
+         {formik.touched.user_name && formik.errors.user_name ? 
+                <span style={{color : 'red' ,width : "50%"  }}>{formik.errors.user_name}</span>  : null
+                }
+
+                {formik.touched.user_mobile && formik.errors.user_mobile ? 
+                <span style={{color : 'red'}}>{formik.errors.user_mobile}</span> : null
+                     }
+         </div>
+           </div>
               <div>
-                <input type="number" placeholder="Pincode" />
-                <input type="text" placeholder="Locality" />
+                <input type="number" placeholder="Pincode" onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.user_pincode} name="user_pincode" />
+                <input type="text" placeholder="Locality" onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.user_country} name="user_country"/>
               </div>
+              <div style={{display : 'flex' ,justifyContent : "flex-start"}}>
+             {formik.touched.user_pincode && formik.errors.user_pincode ? 
+                <div style={{color : 'red' ,width : "50%"}}>{formik.errors.user_pincode}</div> : null
+                }
+
+                {formik.touched.user_country && formik.errors.user_country ? 
+                <div style={{color : 'red' ,width : '50%' , float : "right"}}>{formik.errors.user_country}</div> : null
+                     }
+             </div>
               <div>
-              <textarea placeholder="Address (Area & Street)"></textarea>
+              <textarea placeholder="Address (Area & Street)" onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.user_address} name="user_address"></textarea>
               </div>
+              {
+                formik.touched.user_address && formik.errors.user_address ?
+                <div style={{color : "red"}}>{formik.errors.user_address}</div> : null
+              }
               <div>
-                <input type="text" placeholder="City/District/Town" />
-                <input type="text" placeholder="State" />
+                <input type="text" placeholder="City/District/Town" onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.user_city} name="user_city" />
+                <input type="text" placeholder="State" onBlur={formik.handleBlur}  onChange={formik.handleChange} value={formik.values.user_state} name="user_state"/>
               </div>
-              <div>
-                <input type="text" placeholder="Landmark (Optional)" />
-                <input type="number" placeholder="Alternate Phone (Optional)" />
+               <div style={{display : 'flex' ,justifyContent : "flex-start"}}>
+             {formik.touched.user_city && formik.errors.user_city ? 
+                <div style={{color : 'red' ,width : "50%"}}>{formik.errors.user_city}</div> : null
+                }
+
+                {formik.touched.user_state && formik.errors.user_state ? 
+                <div style={{color : 'red'}}>{formik.errors.user_state}</div> : null
+                     }
+             </div>
+              <div> 
+                <input type="text" placeholder="Landmark (Optional)" onChange={formik.handleChange} value={formik.values.user_landmark} name="user_landmark"/>
+                <input type="number" placeholder="Alternate Phone (Optional)" onChange={formik.handleChange} value={formik.values.user_alternate_number} name="user_alternate_number" />
               </div>
               <div className={styles.addresTy}>
                 <p>Address Type</p>
                 <div className={styles.addRadio}>
                   <div>
-                    <input type="radio" name="add" />
+                    <input type="radio" name="delivery_add" value="home" onChange={formik.handleChange} checked={formik.values.delivery_add == "home"} />
                     <span>Home (All day delivery)</span>
                   </div>
                   <div>
-                    <input type="radio" name="add" />
+                    <input type="radio" name="delivery_add" value="work" onChange={formik.handleChange} checked={formik.values.delivery_add == "work"}/>
                     <span>Work (Delivery between 10AM-PM)</span>
                   </div>
                 </div>
               </div>
-
+              {
+                formik.touched.delivery_add && formik.errors.delivery_add ? 
+                <div style={{color :'red'}}>{formik.errors.delivery_add}</div> : null
+              }
               <div className={styles.saveData}>
                 <input type="submit" value="SAVE AND DELIVER HERE" />
-                <span>CANCEL</span>
+                <span onClick={handleReset}>CANCEL</span>
               </div>
             </form>
           </div>

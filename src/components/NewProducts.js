@@ -83,7 +83,7 @@ export const NewProducts=(props)=>{
             </div>
         <NextProductTab 
            currentPage={currentPage}
-           totalPages={Math.ceil(props?.data.length / itemsPerPage)}
+           totalPages={Math.ceil(props?.data?.length / itemsPerPage)}
            onPageChange={handlePageChange}
            handleScrollRight={handleScrollRight}
            isMobileView={isMobileView}
