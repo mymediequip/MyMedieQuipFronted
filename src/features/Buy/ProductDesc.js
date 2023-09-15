@@ -230,7 +230,7 @@ const ProductData=()=>{
                         </div>
                     </div>
                     
-                    {openMeeting?<ScheduleMeeting isBuyClick={buyClick} setMeeting={setMeeting} sellarClick={sellarClick}/>:<ProductMeta info={item} data={profile}/>}
+                    {openMeeting?<ScheduleMeeting isBuyClick={buyClick} setMeeting={setMeeting} sellarClick={sellarClick} data={item} profile={profile} />:<ProductMeta info={item} data={profile}/>}
                     
                     <div className={styles.prodActLinks}>
                         <NavLink className={styles.contactSellar} onClick={(e)=>{sellarClick(e,false)}}>

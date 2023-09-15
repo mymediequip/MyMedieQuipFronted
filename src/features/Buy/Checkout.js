@@ -13,21 +13,29 @@ import {useFormik } from "formik";
 import * as yup  from "yup"
 import axios from "axios";
 import { addressSchema, addressTypeSchema, citySchema, fnameSchema, nationalitySchema, pincodeSchema, pnumberSchema, stateSchema } from "../../utils/validation";
+import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setEquipPriceStatus } from "../../app/Slices/UserData";
 
 export const Checkout=()=>{
+  const price =  useSelector((state)=>state.profileData.eqip_price_update)
+  const location  =  useLocation()
+  let details  =  location?.state?.details
+  console.log(details)
+  let profileDetails = location?.state?.profileDetails
     return(
         <div className={styles.checkoutCont}>
             <div className={styles.checkoutData}>
                 <PayLogin/>
-                <DelieveryAddress />
-                <OrderSummary/>
+                <DelieveryAddress lat={details?.latitude} lng={details?.longitude}/>
+                <OrderSummary details={details} profileDetails={profileDetails}/>
                 <PaymentOptions/>
             </div>
             <div className={styles.checkoutPriceData}>
               <p>TOTAL PRICING</p>
               <div>
                 <span>Equipment Cost :</span>
-                <span>₹10000</span>
+                <span>₹{price ? price : "10000"}</span>
               </div>
               <div>
                 <span>Negotiable Deal Price :</span>
@@ -63,9 +71,11 @@ export const Checkout=()=>{
 };
 
 const CheckoutDataHead=(props)=>{
+  console.log(props,"props")
     const defaultStyle={backgroundColor:"#FFFFFF"};
     const selectedStyle={backgroundColor:"#019C89"};
     const ref=useRef();
+
 
     const handleClick=(e)=>{
         props.setShowBottom(!props.showBottom);
@@ -90,30 +100,16 @@ const CheckoutDataHead=(props)=>{
     );
 };
 
-const DelieveryAddress=()=>{
+const DelieveryAddress=({lat,lng})=>{
     const [showAddress,setAddress]=useState(true);
+    
+    console.log(showAddress,"showAddress")
     const [usecurrentLocation,setCurrentLocation]=useState(false);
-    const [latlng ,setlatlng] =  useState({
-      lat : null ,
-      lng : null
-    })
-    const handleLocation  = () =>{
-      if("geolocation" in navigator){
-        navigator.geolocation.getCurrentPosition(
-          (position)=>setlatlng({
-            lat : position.coords.latitude,
-            lng : position.coords.longitude
-          })
-        )
-      }
-    }
+
+
 
   useEffect(()=>{
-    handleLocation()
-  },[usecurrentLocation])
-
-  useEffect(()=>{
-    const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${latlng?.lat}&lon=${latlng?.lng}&format=json`;
+    const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
     axios
     .get(API_URL)
     .then(response=>{
@@ -168,14 +164,9 @@ const DelieveryAddress=()=>{
     }
 
     const handleReset = () =>{
-      setlatlng({
-        lat : "",
-        lng : ""
-      })
       formik.handleReset();
       setCurrentLocation(false);
     }
-    console.log(usecurrentLocation ,latlng)
     return (
       <div>
         <CheckoutDataHead
@@ -272,7 +263,7 @@ const DelieveryAddress=()=>{
 
 };
 
-const OrderSummary=()=>{
+const OrderSummary=({details , profileDetails})=>{
     const [showOrder,setOrder]=useState(false);
     return (
       <React.Fragment>
@@ -285,7 +276,7 @@ const OrderSummary=()=>{
         />
         {showOrder && (
           <div  className={styles.deliveryAdd}>
-            <OrderSummaryCard/>
+            <OrderSummaryCard details={details} profileDetails={profileDetails}/>
 
           </div>
         )}
@@ -301,11 +292,25 @@ const OrderSummary=()=>{
     );
 };
 
-const OrderSummaryCard=()=>{
+const OrderSummaryCard=({details ,profileDetails})=>{
+    const dispatch =  useDispatch()
     const [quant,setQuant]=useState(1);
     const handleQuant=(e)=>{
         let name=e.currentTarget.name;
         name==="dec"?setQuant(quant-1<1?1:quant-1):setQuant(quant+1);
+    }
+    
+    useEffect(()=>{
+      handlePrice()
+    },[quant])
+    
+    
+    const handlePrice = () =>{
+      let price = details?.asking_price
+        for(let i = quant ; i <= quant ; i++){
+              price = price*i
+        }
+        dispatch(setEquipPriceStatus(price))
     }
     return(
         <div className={styles.orderCardCont}>
@@ -313,11 +318,11 @@ const OrderSummaryCard=()=>{
                 <div className={styles.prodData}>
                     <img src={video2img} width="190px" height="165px" alt="..."/>
                     <div>
-                        <h4>XYZ MACHINE</h4>
-                        <p>Seller : Dr. Borako</p>
+                        <h4>{details?.equip_name}</h4>
+                        <p>Seller : {profileDetails ? `${profileDetails?.first_name}${" "}${profileDetails.last_name}` : "Dr .Avdesh"}</p>
                         <div className={styles.sumLoc}>
                             <img src={location} width="17px" alt="..."/>
-                            <span>New Delhi</span>
+                            <span>{profileDetails?.location}</span>
                         </div>
                     </div>
                 </div>
@@ -350,6 +355,53 @@ const OrderSummaryCard=()=>{
 
 const PaymentOptions=()=>{
     const [payOption,setPayOption]=useState(false);
+
+    const [book, setBook] = useState({
+      name: "MYMedieQuip",
+      author: "Avdesh",
+      img: "https://images-na.ssl-images-amazon.com/images/I/817tHNcyAgL.jpg",
+      price: 25000,
+    });
+  
+    const initPayment = (data) => {
+      const options = {
+        key: "rzp_test_T0NoaQ1qdAoZ1s",
+        amount: data.amount,
+        currency: data.currency,
+        name: book.name,
+        description: "Test Transaction",
+        image: book.img,
+        order_id: data.id,
+        handler: async (response) => {
+          try {
+            const verifyUrl = "http://localhost:8080/api/payment/verify";
+            const { data } = await axios.post(verifyUrl, response);
+            console.log(data);
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+      const rzp1 = new window.Razorpay(options);
+      console.log(rzp1,"rzpl")
+      rzp1.open();
+    };
+  
+    const handlePayment = async () => {
+      try {
+        const orderUrl = "http://localhost:8080/api/payment/orders";
+        const { data } = await axios.post(orderUrl, { amount: book.price });
+        console.log(data);
+        initPayment(data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+  
     return (
         <div style={{boxShadow:"none",padding:"0px"}}>
         <CheckoutDataHead
@@ -357,15 +409,17 @@ const PaymentOptions=()=>{
           name="PAYMENT OPTIONS"
           setShowBottom={setPayOption}
           showBottom={payOption}
+          setseq="4"
         />
         {payOption && (
           <div  className={styles.payOptions} >
-            <PaymentOptCard data={{name:"Paytm UPI",img:paytam}}/>
+            <button onClick={handlePayment}>BUY</button>
+            {/* <PaymentOptCard data={{name:"Paytm UPI",img:paytam}}/>
             <PaymentOptCard data={{name:"Wallet",img:paytam}}/>
             <PaymentOptCard data={{name:"UPI",img:upib}}/>
             <PaymentOptCard data={{name:"Credit/ Debit / ATM Card",tag:"Add and secure your card as per RBI guidelines"}}/>
             <PaymentOptCard data={{name:"Net Banking",tag:"This instrument has low success, use UPI or cards for better experience"}}/>
-            <PaymentOptCard data={{name:"EMI (Easily Installment)"}}/>
+            <PaymentOptCard data={{name:"EMI (Easily Installment)"}}/> */}
           </div>
         )}
       </div>
@@ -393,6 +447,7 @@ const PaymentOptCard=(props)=>{
 
 const PayLogin=()=>{
   const [loginData,setLoginData]=useState(false);
+  console.log(loginData,"loginData")
   
   return (
     <div>
@@ -403,7 +458,7 @@ const PayLogin=()=>{
         showBottom={loginData}
       />
       {loginData && (
-        <div  className={styles.deliveryAdd}>
+        <div lassName={styles.deliveryAdd}>
           <form className={styles.addressForm}>
             
             <div>
