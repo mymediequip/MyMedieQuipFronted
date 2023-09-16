@@ -26,6 +26,9 @@
     padding: 7px 30px 7px 30px;
     border-radius: 20px;
 }
+.buyBtn:hover{
+    background-color: var(--common-color);
+}
 .postAdvt{
     margin-top: 60px;
     color: #FFFFFF;

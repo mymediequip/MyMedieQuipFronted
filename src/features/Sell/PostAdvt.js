@@ -181,7 +181,7 @@ export const AdvtMedia = () => {
                   <label for="inputimg">
                     <input
                       type="file"
-                      id="inputimg"
+                      id="inputimg" 
                       accept="image/*"
                       onChange={handlImages}
                       name="image"
