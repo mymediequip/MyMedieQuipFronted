@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import {pngwing ,currency,ImageUpload} from "../../../assets/images/index";
+import React, { useEffect, useRef, useState } from 'react';
+import {pngwing ,currency,ImageUpload, postDropdown} from "../../../assets/images/index";
 import styles from "../../../assets/css/user/buyer_seller/ads.module.css";
 import {postData} from "../../../services/index";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useFormik } from 'formik';
 
 
 const MyAds = () => {
@@ -30,7 +32,7 @@ const MyAds = () => {
   return (
     <div className={styles.main_content}>
       {
-        editForm?<EditAds setEditForm={setEditForm} />:
+        editForm?<EditAds setEditForm={setEditForm}  />:
         (ads?.length > 0 ? (
           ads?.map((item) => {
             return <MyAdsCard item={item} handleEditForm={handleEditForm}/>;
@@ -98,6 +100,21 @@ const EditAds=(props)=>{
   const [images,setImages]=useState([]);
   const [videos,setVideos]=useState([]);
 
+  const formik =  useFormik({
+    initialValues : {
+      equip_name : "",
+      equip_location : "",
+      equip_category : "",
+      equip_specality : ""
+    },
+    onSubmit : function (values){
+      console.log(values)
+    }
+  })
+
+  console.log(formik.values)
+
+
   const handleImges=(event)=>{
     const current = event.target;
     const imageUrl = URL.createObjectURL(current.files[0]);
@@ -121,6 +138,17 @@ const EditAds=(props)=>{
     videos.splice(index,1);
     setVideos([...videos]);
   };
+  const dropsp = {
+    title : "Speciality",
+    description : "Select the equipment Specialities",
+    dataList: ["Lorem ipsum dolor sit amet", "Lorem ipsum dolor sit amet"],
+  }
+
+  const dropCat = {
+    title : "Category",
+    description : "Select the equipment Categories",
+    dataList: ["Lorem ipsum dolor sit amet", "Lorem ipsum dolor sit amet"],
+  }
   return(
     <div className={styles.editAddCont}>
       <div onClick={()=>props.setEditForm(false)} className={styles.backTab}><i class="bi bi-arrow-left-short"></i><span>Back</span></div>
@@ -130,13 +158,151 @@ const EditAds=(props)=>{
           <MediaComp media={images} dtype="image" setMedia={handleImges} removeMedia={removeImges}/>
           <MediaComp media={videos} dtype="video" setMedia={handlesetVideos} removeMedia={removeVideo}/>
         </div>
-        <div className={styles.formData}>
-          
-        </div>
+         <div className={styles.eqip_container}>
+          <div className={styles.equip_innerContainer}>
+           <label htmlFor="equip_name">Equipment Name</label>
+            <input className={styles.text_input}  type='text' placeholder='equip_name' name="equip_name"/>
+          </div>
+            <AdvCategories data={dropCat}/>
+         </div>
+         <div className={styles.eqip_container}>
+          <div className={styles.equip_innerContainer}>
+            <label htmlFor="equip_location">Location/City</label>
+            <input className={styles.text_input} type='text' placeholder='equip_location' name="equip_location"/>  
+          </div>
+             <AdvCategories data={dropsp}/>
+         </div>
+         <div className={styles.eqip_container}>
+          <div className={styles.equip_innerContainer}>
+            <h3 className={styles.title}>Equipment Condition</h3>
+          <div>
+            <div className={styles.radios}>
+            <div>
+            <input type="radio" value="1" name="condition"  />
+            <label className={styles.rdt}>Good</label>
+          </div>
+          <div>
+            <input className={styles.rd} type="radio" value="2" name="condition"  />
+            <label className={styles.rdt}>Excellent</label>
+          </div>
+          <div>
+            <input className={styles.rd} type="radio" value="3" name="condition"  />
+            <label className={styles.rdt}>As Good as New</label>
+          </div>
+           </div>
+            </div>
+          </div>
+         <div className={styles.equip_innerContainer}>
+            <label htmlFor="prod_price">Product Price</label>
+            <input className={styles.text_input} type='text' placeholder='Product price' name="prod_price"/>  
+          </div>
+         </div>
+         <div className={styles.eqip_container}>
+          <div className={styles.equip_innerContainer}>
+            <h3 className={styles.title}>Negotiable</h3>
+          <div>
+            <div className={styles.radio}>
+            <div>
+            <input type="radio" value="1" name="condition"  />
+            <label className={styles.rdt}>Negotiable</label>
+          </div>
+          <div>
+            <input className={styles.rd} type="radio" value="2" name="condition"  />
+            <label className={styles.rdt}>Slightly Negotiable</label>
+          </div>
+          <div>
+            <input className={styles.rd} type="radio" value="3" name="condition"  />
+            <label className={styles.rdt}>Non-Negotiable</label>
+          </div>
+           </div>
+            </div>
+          </div>
+          <div className={styles.equip_innerContainer}>
+            <label htmlFor="prod_Des">Product Description</label>
+            <textarea className={styles.textarea_sty} type='text' placeholder='Enter Product desc' name="prod_Des"/>  
+          </div>
+         </div>
+         <div>
+         <div className={styles.eqip_container}>
+           <div className={styles.equip_innerContainer}>
+            <label htmlFor="purchase_year">Manufacturing/ Purchase Year</label>
+             <input className={styles.text_input} type='text' placeholder='Select the year' name="purchase_year"/>
+          </div>
+         </div>
+          <h3 className={styles.title1}>Product Specifications :</h3>
+         </div>
+         <div className={styles.eqip_container}>
+           <div className={styles.equip_innerContainer}>
+            <label htmlFor="equip_brand">Brand/Company : </label>
+             <input className={styles.text_input} type='text' placeholder='Brand/company name' name="equip_brand"/>
+          </div>
+          <div className={styles.equip_innerContainer}>
+            <label htmlFor="equip_Model">Model number :</label>
+             <input className={styles.text_input} type='number' placeholder='equip_Model' name="equip_Model"/>
+          </div>
+         </div>
+         <div className={styles.eqip_container}>
+           <div className={styles.equip_innerContainer}>
+            <label htmlFor="equip_name">Under Warranty : </label>
+             <input className={styles.text_input} type='text' placeholder='equip_name' name="equip_name"/>
+          </div>
+          <div className={styles.equip_innerContainer}>
+            <label htmlFor="equip_amc_cme">Existing AMC/CME :</label>
+             <input className={styles.text_input} type='number' placeholder='equip_amc_cme' name="equip_amc_cme"/>
+          </div>
+         </div>
+         <div className={styles.eqip_container}>
+           <div className={styles.equip_innerContainer}>
+            <label htmlFor="equip_name">Other Description :</label>
+             <textarea className={styles.textarea_sty} type='text' placeholder='other_des' name="other_des"/>
+          </div>
+         </div>
+         <p style={{marginTop : "3rem"}}> 
+         Please Note : Once Seller Added the details, it will go for the admin approval, after admin approved them only this will be visible on home page
+         </p>
+         <input type="submit" className={styles.bttn} value="Submit Response" />
       </form>
     </div>
   );
 };
+
+const AdvCategories = (props) =>{
+  const [show, setShow] = useState(false);
+
+  const ref=useRef();
+  useEffect(()=>{
+      document.addEventListener("click",(e)=>{
+      if(ref.current && !ref.current.contains(e.target)){
+        setShow(false)
+      }
+    });
+  },[])
+  return(
+    <div className={styles.equip_innerContainer} ref={ref}>
+      <div className={styles.specTag}>
+        <p>{props.data.title}</p>
+      </div>
+      <div className={styles.selectEquipDiv} onClick={() => setShow(!show)}>
+        <p>{props.data.description}</p>
+        <img className={styles.dropDownImage} src={postDropdown} alt="..." />
+      </div>
+
+      {show && (
+        <div className={styles.checkBox}>
+          {props.data.dataList.map((value, index) => {
+            return (
+              <div className={styles.checkboxCont} >
+                <input type="checkbox" id="category" value={value}  name="category"   />
+                <label for="checkbox1">{value}</label>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  )
+
+}
 
 const MediaComp=({media,setMedia,dtype,removeMedia})=>{
   
