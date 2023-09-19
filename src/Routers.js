@@ -15,7 +15,7 @@ import {
   Login
 } from './features/Auth/LoginRegister';
 import PrivateRoutes from './components/PrivateRoute';
-import MyAds from './components/MyAds';
+import MyAds from './features/User/buyer_seller/MyAds';
 
 export const Routers=()=>{
     return(

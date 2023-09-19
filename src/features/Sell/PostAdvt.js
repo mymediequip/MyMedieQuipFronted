@@ -4,6 +4,8 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../../assets/css/postAdvt.module.css";
 import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories, fetchCategoriesName, setCategories, fetchSpecialityName, setSpecality, setLatLong } from "../../app/Slices/ProdAddSlice";
+import GeoCode from "react-geocode"
+
 import {
   ImageUpload,
   arrLeft,
@@ -177,7 +179,7 @@ export const AdvtMedia = () => {
                   <label for="inputimg">
                     <input
                       type="file"
-                      id="inputimg"
+                      id="inputimg" 
                       accept="image/*"
                       onChange={handlImages}
                       name="image"

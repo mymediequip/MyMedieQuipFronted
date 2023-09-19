@@ -14,6 +14,9 @@ import {
 } from '../assets/images/index';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '../app/Slices/UserData';
+import { ToastContainer, toast} from 'react-toastify';
 
 const imagePreviewUrl = process.env.REACT_APP_IMAGE_PREVIEW
 console.log(imagePreviewUrl , "img")
@@ -44,6 +47,8 @@ export const NewProductsCard = (props) => {
   const [getStart,setGetStart]=useState(false);
   const [isBlur,setBlur]=useState(false);
   const navigate=useNavigate();
+  const dispatch =useDispatch();
+  const carts=useSelector((state)=>state.profileData.cart);
   const productClick = (item) => {
     console.log(item,"item")
       navigate(`/products/${item?.equip_name}/` , {state : {prodDetails : item}})
@@ -57,8 +62,23 @@ export const NewProductsCard = (props) => {
     setGetStart(!getStart);
   };
 
+  const handleATC=(e)=>{
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if(carts.indexOf(props?.data?.id)===-1){
+      dispatch(addToCart(props?.data?.id));
+      toast.success(`${props?.data?.equip_name} is added in cart`,{autoClose:1800});
+    }
+    else{
+      toast.info(`${props?.data?.equip_name} is already added in cart`,{autoClose:1800});
+    }
+   
+  }
+
   return (
     <React.Fragment>
+      <ToastContainer/>
       <div className={styles.cardContainer} onClick={()=>productClick(props?.data)}>
         <div className={styles.cardContent}>
           <div className={styles.equipImage}>
@@ -76,11 +96,9 @@ export const NewProductsCard = (props) => {
                 style={{ top: props.isNew ? "-188px" : "-165px" }}
               >
                 <a href="#">
-                  {" "}
                   <img src={favouriate} alt=".." />
                 </a>
-                <a href="#">
-                  {" "}
+                <a href="#" onClick={handleATC}>
                   <img src={cart} alt=".." />
                 </a>
               </div>

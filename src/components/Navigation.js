@@ -385,9 +385,12 @@ const Humberger=()=>{
 };
 
 const AddToCart=()=>{
+    const carts=useSelector((state)=>state.profileData.cart);
+    console.log(carts);
     return(
         <div className={styles.AddToCart}>
             <img src={actimg} alt='atc'/>
+            <span>{carts.length}</span>
         </div>
     );
 };

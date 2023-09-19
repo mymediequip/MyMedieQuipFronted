@@ -9,6 +9,7 @@ import * as yup from "yup";
 import { SocialShare } from '../../utils/Popups';
 import {emailSchema, fnameSchema} from '../../utils/validation';
 import { useRef, useState ,useEffect} from 'react';
+
 import {
     findE,
     inspection,
@@ -210,6 +211,7 @@ const ProductData=()=>{
                               <h3 style={{marginBottom:"0px"}}>{item?.equip_name}</h3>
                               <span >NEW</span>
                             </div>
+                            <h3>{item?.equip_name}</h3>
                             <div>
                               <span className={styles.prodId}>XM-101011QR</span>
                                 <img src={star} alt='...'/>
@@ -704,7 +706,7 @@ const ProcessCard=(props)=>{
   const currBuyStatus=useSelector((state)=>state.profileData.currBuyStatus);
   const cardActiveStyle={};
   if(currBuyStatus===props.curr){
-    cardActiveStyle['border']="1px solid #019C89";
+    cardActiveStyle['backgroundColor']="aquamarine";
   }
   else{
     cardActiveStyle['boxShadow']="rgba(0, 0, 0, 0.16) 0px 1px 4px";

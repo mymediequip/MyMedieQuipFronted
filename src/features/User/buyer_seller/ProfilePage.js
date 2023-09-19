@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styles from '../../../assets/css/profile.module.css'
+import styles from '../../../assets/css/user/buyer_seller/profile.module.css';
 import { NavLink, json } from 'react-router-dom';
 import { Logout } from '../../../components/Navigation';
 import { testimage2 } from '../../../assets/images';

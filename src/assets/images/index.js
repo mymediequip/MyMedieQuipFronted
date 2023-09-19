@@ -81,6 +81,7 @@ import shipped from './process/shipping.png';
 import handling from './process/install.png';
 import amc from './process/amc.png';
 export {
+    currency,
     findE,
     schedule,
     inspection,
@@ -161,6 +162,5 @@ export {
     video_Advt,
     video2img,
     plus_symbol,
-    currency,
     minus
 };
