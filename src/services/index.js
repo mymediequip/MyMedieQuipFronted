@@ -13,7 +13,7 @@ const postData = async (url,formData,isAuthenticated) => {
     headers.Authorization = `Token ${token}`;
   }
   const response = await fetch(`${BaseURL}/${url}`, {
-    mode: "no-cors",
+    mode: "cors",
     method: "POST",
     headers: headers,
     body: formData,
@@ -36,7 +36,7 @@ const postData1 = async (url,body,isAuthenticated) => {
     headers.Authorization = `Token ${token}`;
   }
   const response = await fetch(`${BaseURL}/${url}`, {
-    mode: "no-cors",
+    mode: "cors",
     method: "POST",
     headers: headers,
     body: JSON.stringify(body),
