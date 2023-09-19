@@ -6,7 +6,9 @@ export const UserSlice = createSlice({
     UserData : {},
     profile_image : null,
     currBuyStatus:0,
-    eqip_price_update:0
+    eqip_price_update:0,
+    eqip_discount:0,
+    inspection_status : false,
   },
   reducers: {
     getUserData : (state,action)=>{
@@ -20,12 +22,18 @@ export const UserSlice = createSlice({
     },
     setEquipPriceStatus:(state,action)=>{
       state.eqip_price_update=action.payload
+    },
+    setDiscountPriceStatus:(state,action)=>{
+      state.eqip_discount=action.payload
+    },
+    setInspectionStatus:(state)=>{
+      state.inspection_status= !state.inspection_status
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { getUserData ,getProfileImage,setCurrBuyStatus , setEquipPriceStatus} = UserSlice.actions
+export const { getUserData ,getProfileImage,setCurrBuyStatus , setEquipPriceStatus , setInspectionStatus , setDiscountPriceStatus} = UserSlice.actions
 
 
 export default UserSlice.reducer

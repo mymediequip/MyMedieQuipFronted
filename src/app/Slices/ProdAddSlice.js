@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {  postData } from '../../services';
+import {  postData, postData1 } from '../../services';
 
 export const prodAddSlice = createSlice({
   name: 'prodAdd',
@@ -181,10 +181,11 @@ export const fetchCategories = (Equip_name , id)=>async(dispatch)=>{
   }
 }
 export const fetchCategoriesName = (id)=>async(dispatch)=>{
-  const formData =  new FormData()
-   formData.append("id" ,id)
+  let data = {
+     id  : id
+  }
    try {
-     const res = await postData("product/category/menulist/" , formData )
+     const res = await postData1("product/category/menulist/" , data )
      dispatch(fetchParentName(res?.data))
      console.log(res.data,"res")
    } catch (error) {

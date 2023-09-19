@@ -473,12 +473,12 @@ const AdvtCategoriesDorpDown = (props) => {
         <p>
           {(()=>{
             let keys=Object.keys(selectedCat);
-            if(keys.length===0){
+            if(keys?.length===0){
               return props.data.placeholder;
             }
             else{
               let temp="";
-              for(let i=0;i<keys.length;i++){
+              for(let i=0;i<keys?.length;i++){
                 if(selectedCat[keys[i]]){
                   temp+=keys[i]+";";
                 }
@@ -493,7 +493,7 @@ const AdvtCategoriesDorpDown = (props) => {
       </div>
 
       {show && (
-        <div className={props?.data?.dataList.length > 1 ?  styles.checkBox : styles.checkBox1}>
+        <div className={props?.data?.dataList?.length > 4 ?  styles.checkBox : styles.checkBox1}>
           {props?.data?.dataList?.map((value, index) => {
             return (
               <div className={styles.checkboxCont} key={value.id}>
@@ -545,12 +545,12 @@ const AdvtSpecialityDorpDown = (props) => {
         <p>
         {(()=>{
             let keys=Object.keys(selectedCat);
-            if(keys.length===0){
+            if(keys?.length===0){
               return props.data.placeholder;
             }
             else{
               let temp="";
-              for(let i=0;i<keys.length;i++){
+              for(let i=0;i<keys?.length;i++){
                 if(selectedCat[keys[i]]){
                   temp+=keys[i]+";";
                 }
@@ -565,7 +565,7 @@ const AdvtSpecialityDorpDown = (props) => {
       </div>
 
       {show && (
-        <div className={props?.data?.dataList.length > 4 ?  styles.checkBox : styles.checkBox1}>
+        <div className={props?.data?.dataList?.length > 4 ?  styles.checkBox : styles.checkBox1}>
           {props?.data?.dataList?.map((value, index) => {
             return (
               <div className={styles.checkboxCont} key={value.id}>

@@ -13,23 +13,25 @@ import {useFormik } from "formik";
 import * as yup  from "yup"
 import axios from "axios";
 import { addressSchema, addressTypeSchema, citySchema, fnameSchema, nationalitySchema, pincodeSchema, pnumberSchema, stateSchema } from "../../utils/validation";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setEquipPriceStatus } from "../../app/Slices/UserData";
 
 export const Checkout=()=>{
   const price =  useSelector((state)=>state.profileData.eqip_price_update)
+  const discount =  useSelector((state)=>state.profileData.eqip_discount)
+  const inspectionStatus =  useSelector((state)=>state.profileData.inspection_status)
   const location  =  useLocation()
   let details  =  location?.state?.details
-  console.log(details)
   let profileDetails = location?.state?.profileDetails
+  console.log(price)
     return(
         <div className={styles.checkoutCont}>
             <div className={styles.checkoutData}>
                 <PayLogin/>
-                <DelieveryAddress lat={details?.latitude} lng={details?.longitude}/>
+                <DelieveryAddress lat={details?.latitude} lng={details?.longitude} inspection={inspectionStatus} />
                 <OrderSummary details={details} profileDetails={profileDetails}/>
-                <PaymentOptions/>
+                <PaymentOptions inspection={inspectionStatus} discount={discount}/>
             </div>
             <div className={styles.checkoutPriceData}>
               <p>TOTAL PRICING</p>
@@ -71,18 +73,17 @@ export const Checkout=()=>{
 };
 
 const CheckoutDataHead=(props)=>{
-  console.log(props,"props")
     const defaultStyle={backgroundColor:"#FFFFFF"};
     const selectedStyle={backgroundColor:"#019C89"};
     const ref=useRef();
-
-
+    
     const handleClick=(e)=>{
-        props.setShowBottom(!props.showBottom);
+      props.setShowBottom(!props.showBottom);
     };
+
   //   useEffect(()=>{
   //     document.addEventListener("click",(e)=>{
-  //     if(ref.current && !ref.current.contains(e.target)){
+  //       if(ref.current && !ref.current.contains(e.target)){
   //       props.setShowBottom(false);
   //     }
   //   });
@@ -100,32 +101,36 @@ const CheckoutDataHead=(props)=>{
     );
 };
 
-const DelieveryAddress=({lat,lng})=>{
+const DelieveryAddress=({lat,lng , inspection})=>{
     const [showAddress,setAddress]=useState(true);
-    
-    console.log(showAddress,"showAddress")
     const [usecurrentLocation,setCurrentLocation]=useState(false);
-
-
+  
+   useEffect(()=>{
+       if(inspection){
+        setAddress(false)
+       }
+   },[inspection])
+    
 
   useEffect(()=>{
-    const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
-    axios
-    .get(API_URL)
-    .then(response=>{
-      // console.log(response?.data?.address,"res")
-      formik.setValues({
-        user_pincode : response?.data?.address?.postcode,
-        user_country : response?.data?.address?.country,
-        user_address : response?.data?.display_name,
-        user_city : response?.data?.address?.state_district,
-        user_state : response?.data?.address?.state,
+    if(usecurrentLocation){
+      const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
+      axios
+      .get(API_URL)
+      .then(response=>{
+        // console.log(response?.data?.address,"res")
+        formik.setValues({
+          user_pincode : response?.data?.address?.postcode,
+          user_country : response?.data?.address?.country,
+          user_address : response?.data?.display_name,
+          user_city : response?.data?.address?.state_district,
+          user_state : response?.data?.address?.state,
+        })
       })
-    })
-    .catch(error=>{
-      console.error('Error fetching address:', error);
-    })
-
+      .catch(error=>{
+        console.error('Error fetching address:', error);
+      })
+    }
   },[usecurrentLocation])
 
     
@@ -164,8 +169,8 @@ const DelieveryAddress=({lat,lng})=>{
     }
 
     const handleReset = () =>{
-      formik.handleReset();
       setCurrentLocation(false);
+      formik.handleReset();
     }
     return (
       <div>
@@ -353,14 +358,14 @@ const OrderSummaryCard=({details ,profileDetails})=>{
     );
 };
 
-const PaymentOptions=()=>{
+const PaymentOptions=({inspection , discount})=>{
     const [payOption,setPayOption]=useState(false);
-
+  const navigate =  useNavigate()
     const [book, setBook] = useState({
       name: "MYMedieQuip",
       author: "Avdesh",
       img: "https://images-na.ssl-images-amazon.com/images/I/817tHNcyAgL.jpg",
-      price: 25000,
+      price: discount ? discount : 5000,
     });
   
     const initPayment = (data) => {
@@ -386,7 +391,6 @@ const PaymentOptions=()=>{
         },
       };
       const rzp1 = new window.Razorpay(options);
-      console.log(rzp1,"rzpl")
       rzp1.open();
     };
   
@@ -396,11 +400,18 @@ const PaymentOptions=()=>{
         const { data } = await axios.post(orderUrl, { amount: book.price });
         console.log(data);
         initPayment(data.data);
+        // window.open(orderUrl, '_blank');
       } catch (error) {
         console.log(error);
       }
     };
 
+  useEffect(()=>{
+  if(inspection){
+      setPayOption(true)
+       handlePayment()
+    }
+  },[inspection])
   
     return (
         <div style={{boxShadow:"none",padding:"0px"}}>
@@ -427,6 +438,8 @@ const PaymentOptions=()=>{
     );
 };
 
+
+
 const PaymentOptCard=(props)=>{
     return(
         <div className={styles.payCard}>
@@ -447,7 +460,27 @@ const PaymentOptCard=(props)=>{
 
 const PayLogin=()=>{
   const [loginData,setLoginData]=useState(false);
-  console.log(loginData,"loginData")
+
+  const formik =  useFormik({
+    initialValues:{
+      luser : "",
+      lmobile : ""
+    },
+    validationSchema : yup.object().shape({
+       luser : fnameSchema,
+       lmobile : pnumberSchema
+    }),
+    onSubmit : function(values){
+      // console.log(values,"values")
+      handleSubmit(values)
+    }
+  })
+
+  
+  const handleSubmit = (val) =>{
+    console.log(val,"formik")
+
+  }
   
   return (
     <div>
@@ -458,14 +491,23 @@ const PayLogin=()=>{
         showBottom={loginData}
       />
       {loginData && (
-        <div lassName={styles.deliveryAdd}>
-          <form className={styles.addressForm}>
-            
+        <div className={styles.deliveryAdd}>
+          <form className={styles.addressForm} onSubmit={formik.handleSubmit}>
             <div>
-              <input type="text" placeholder="Login Name" />
-              <input type="number" placeholder="Login mobile number" />
+              <input type="text" placeholder="Login Name" value={formik.values.luser} onChange={formik.handleChange} onBlur={formik.handleChange} name="luser" />
+              <input type="number" placeholder="Login mobile number" value={formik.values.lmobile} onChange={formik.handleChange} onBlur={formik.handleChange} name="lmobile" />
             </div>
-            
+             <div style={{display : "flex" , justifyContent : "space-between"}}>
+             {
+                formik.touched.luser && formik.errors.luser ? 
+                <div style={{color : "red"}}>{formik.errors.luser}</div> : null
+              }
+               {
+                formik.touched.lmobile && formik.errors.lmobile ? 
+                <div style={{color : "red"}}>{formik.errors.lmobile}</div> : null
+               }
+             </div>
+
             <div className={styles.saveData}>
               <input type="submit" value="CHANGED" />
               {/* <span>CANCEL</span> */}
@@ -477,3 +519,4 @@ const PayLogin=()=>{
   );
 
 };
+

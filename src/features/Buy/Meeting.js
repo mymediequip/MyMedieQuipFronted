@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from '../../assets/css/buy/meeting.module.css';
 import { BackgroundBlur } from "../../utils/Popups";
 import { Calander } from "../../utils/Calanders";
-import { setCurrBuyStatus } from "../../app/Slices/UserData";
+import { setCurrBuyStatus, setDiscountPriceStatus, setInspectionStatus } from "../../app/Slices/UserData";
 import {
     meetingImg,
     scheduleBtn,
@@ -125,8 +125,12 @@ const MeetingSuccess=(props)=>{
 };
 
 const InspectionReport=(props)=>{
+    let dicount = (10*Number(props?.item?.asking_price))/100
+    const dispatch =  useDispatch()
     const navigate=useNavigate();
     const handlePayment=(e)=>{
+        dispatch(setDiscountPriceStatus(dicount))
+        dispatch(setInspectionStatus(true))
         navigate(`/products/${props?.item?.equip_name}/checkout/` , {state : {details : props?.item , profileDetails : props?.profileDetails}});
         window.scrollTo(0,0);
     }
@@ -209,6 +213,7 @@ const AskInspection=(props)=>{
     const handleConfirm=(e)=>{
         props.setBuyClick(false);
         props.setInpection(true);
+        
     }
     const handleSkip=(e)=>{
         props.setBuyClick(false);
