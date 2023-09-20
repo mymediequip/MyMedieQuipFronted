@@ -194,7 +194,7 @@ export const fetchCategoriesName = (id)=>async(dispatch)=>{
  }
  export const fetchSpecialityName = ()=>async(dispatch)=>{
    try {
-     const res = await postData1("product/speciality/lists/" , "" , true)
+     const res = await postData("product/speciality/lists/" , "" , true)
      dispatch(fetchSpecialName(res?.data))
    } catch (error) {
      console.log(error,"error")
