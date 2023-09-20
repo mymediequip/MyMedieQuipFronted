@@ -33,14 +33,14 @@ export const Advt2=()=>{
     );
 };
 
-export const DashboardAdvt=()=>{
+export const DashboardAdvt=(props)=>{
     const dashStyle={
         backgroundImage:`url(${dashAdvt})`,
         backgroundSize:"cover",
         backgroundPosition:"center",
         width:"83vw",
         height:"160px",
-        margin:"20px auto 50px auto"
+        margin:"20px auto 50px auto",
     };
     return(
         <div style={dashStyle}></div>

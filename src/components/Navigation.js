@@ -276,8 +276,13 @@ const Speciality=()=>{
 };
 
 const LoginBtn=()=>{
+    const navigate=useNavigate();
+    const handlClick=(e)=>{
+        e.preventDefault();
+        navigate("/user/login/",{state:{navigateTo:"/"}})
+    }
     return(
-        <NavLink className={styles.LoginBtn} to="/user/login/">
+        <NavLink className={styles.LoginBtn} onClick={handlClick}>
             <img src={profileIcon} alt='profile'/>
             <span>Login</span>
         </NavLink>

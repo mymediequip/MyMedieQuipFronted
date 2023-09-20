@@ -32,6 +32,7 @@ export const ScheduleMeeting=(props)=>{
             setSuccess(false);
         }
         setBlur(!isBlur);
+        window.scrollTo(0,0);
     }
     const handleMeetSuccess=(e)=>{
         setSuccess(!isSuccess);

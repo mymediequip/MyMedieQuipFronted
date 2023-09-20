@@ -47,8 +47,10 @@ import MapView from '../../components/GoogleMap';
 export const ProductDescription=()=>{
     return(
         <div className={styles.pd_container}>
-            <DashboardAdvt/>
-            <MMQprocess/>
+            <div className={styles.prod_advtsment}>
+              <DashboardAdvt/>
+              <MMQprocess/>
+            </div>
             <ProductData/>
             {/* <ProductInfo/> */}
             <RelatedProd/>

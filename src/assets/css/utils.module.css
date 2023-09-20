@@ -44,20 +44,22 @@
 /* calander */
 .calanderCont{
     width: 70vw;
-    height: 470px;
-    position: fixed;
+    /* height: 470px; */
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #FFFFFF;
+    /* background-color: #FFFFFF; */
     z-index: 2;
     margin: auto;
     display: flex;
+    /* flex-wrap: wrap; */
 }
 .calSummary{
     background-color: #282828;
     color: #FFFFFF;
     width: 40%;
+    min-width: 350px;
 }
 
 
@@ -111,14 +113,16 @@
 .remindMe{
     padding-left: 30px;
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     align-items: center;
     font-size: 14px;
 }
 .calanderCusttom{
-    border: none;
+    border: none !important;
     padding: 30px;
     width: 60% !important;
+    min-width: 350px;
 }
 
 
@@ -127,10 +131,26 @@
         top: 100px;
     }
 }
+@media(max-width:900px){
+    .calanderCont{
+        width: fit-content;
+        flex-wrap: wrap;
+        /* overflow-x: auto; */
+        margin-bottom: 30px;
+        
+
+    }
+    .calSumTop{
+        margin-top: 30px;
+    }
+}
 
 @media(max-width:435px){
     .getStartContainer{
         width: 92vw;
         top: 100px;
+    }
+    .calanderCusttom,.calSummary{
+        min-width:  95vw;
     }
 }

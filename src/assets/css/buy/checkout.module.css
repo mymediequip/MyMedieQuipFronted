@@ -2,8 +2,11 @@
     background-color: #F1F6F5;
     min-height: 400px;
     display: flex;
-    padding-top: 40px;
-    justify-content: center
+    flex-wrap: wrap;
+    /* flex-direction: column-reverse; */
+    justify-content: center;
+    /* align-items: center; */
+    padding: 40px 20px 0px 20px;
 }
 .checkoutData{
     width: 55%;
@@ -12,6 +15,7 @@
 }
 .checkoutData>div{
     margin-bottom: 23px;
+    min-width: 300px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
@@ -77,7 +81,7 @@
 .addressForm>div{
     margin: 20px;
     display: flex;
-    
+    /* flex-wrap: wrap; */
 }
 .addressForm{
     padding: 10px;
@@ -102,6 +106,7 @@
 }
 .addRadio{
     display: flex;
+    flex-wrap: wrap;
     gap: 40px;
     margin-top: 8px;
 }
@@ -136,12 +141,14 @@
 /* OrderSummary */
 .orderCardCont{
     display: flex;
+    flex-wrap: wrap;
     padding: 23px;
     gap: 100px;
     /* justify-content: space-between; */
 }
 .prodData{
     display: flex;
+    flex-wrap: wrap;
     gap: 25px;
 }
 .prodData h4{
@@ -258,7 +265,8 @@
     color: #7B7B7B;
 }
 .checkoutPriceData{
-    width: 20%;
+    min-width:  260px;
+    
     background-color: #FFFFFF;
     height: fit-content;
     padding: 25px;
@@ -271,4 +279,54 @@
     color: #2d2d2db0;
     font-size: 15px;
     
+}
+@media(max-width:840px){
+    .checkoutData{
+        width:auto;
+    }
+}
+@media(max-width:700px){
+    .checkoutData{
+        /* width:90vw; */
+        width: 96%;
+        margin-right: 0px;
+    }
+    .checkoutPriceData{
+        width: 88%;
+        margin-bottom: 30px;
+        padding: 15px;
+    }
+    .checkoutCont{
+        justify-content: unset;
+        padding: 35px 16px 30px 16px;
+        flex-direction: column-reverse;
+    }
+    .checkoutDataHead,.deliveryAdd{
+        padding: 12px 5px 12px 5px;
+    }
+    .addressForm>div{
+        
+        flex-wrap: wrap;
+    }
+    .addressForm input[type=text],.pincLoca>input{
+        margin-bottom: 20px;
+    }
+    .addRadio{
+        gap: 10px;
+    }
+    .saveData,.orderCardCont{
+        gap: 30px;
+    }
+    .payCard>div,.payCard p{
+        margin-left: 0px;
+    }
+    .payCard{
+        padding-right: 0px;
+    }
+    .orderContinue,.checkoutData>div{
+        width: unset;
+    }
+    .orderContinue {
+        gap: 10px;
+    }
 }

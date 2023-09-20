@@ -456,6 +456,12 @@
     margin-top: 15px;
 }
 
+@media(max-width:1200px){
+    .prod_advtsment{
+        display: none;
+    }
+}
+
 @media(max-width:848px){
     .userPic{
         display: none;
@@ -475,6 +481,17 @@
     }
     .p_data{
         margin: 20px 0px 0px 0px;
+    }
+}
+@media(max-width:450px){
+    .contactSellar{
+        display: flex;
+        justify-content: center;
+        height:22px;
+        width: 100%;
+    }
+    .prodLocation{
+        margin: 20px auto 5px auto;
     }
 }
 @media(max-width:400px){

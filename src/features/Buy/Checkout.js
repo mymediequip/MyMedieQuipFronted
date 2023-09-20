@@ -109,7 +109,7 @@ const DelieveryAddress=()=>{
                 <input type="text" placeholder="Enter Name" />
                 <input type="number" placeholder="10-digit mobile number" />
               </div>
-              <div>
+              <div className={styles.pincLoca}>
                 <input type="number" placeholder="Pincode" />
                 <input type="text" placeholder="Locality" />
               </div>
@@ -243,7 +243,7 @@ const PaymentOptions=()=>{
             <PaymentOptCard data={{name:"UPI",img:upib}}/>
             <PaymentOptCard data={{name:"Credit/ Debit / ATM Card",tag:"Add and secure your card as per RBI guidelines"}}/>
             <PaymentOptCard data={{name:"Net Banking",tag:"This instrument has low success, use UPI or cards for better experience"}}/>
-            <PaymentOptCard data={{name:"EMI (Easily Installment)"}}/>
+            <PaymentOptCard data={{name:"Finance (Easily Installment)"}}/>
           </div>
         )}
       </div>
