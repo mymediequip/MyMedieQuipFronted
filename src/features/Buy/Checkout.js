@@ -24,7 +24,6 @@ export const Checkout=()=>{
   const location  =  useLocation()
   let details  =  location?.state?.details
   let profileDetails = location?.state?.profileDetails
-  console.log(price)
     return(
         <div className={styles.checkoutCont}>
             <div className={styles.checkoutData}>
@@ -516,7 +515,7 @@ const PayLogin=()=>{
         </div>
       )}
     </div>
-  );
+  ):
 
 };
 
