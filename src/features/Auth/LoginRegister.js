@@ -181,6 +181,7 @@ export const Login=(props)=>{
 export const OtpVervicatonForm=({getOtp,number,setotp , setGetStart ,setBlur})=>{
      const reLoadPage = useSelector((state)=>state.auth.onReload)
      const location  =  useLocation()
+     console.log(location,"loc")
      let  preOtp = location?.state?.otp;
      let  preNumber = location?.state?.number;
      const [otp, setOtp] = useState("");

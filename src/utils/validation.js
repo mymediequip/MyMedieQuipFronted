@@ -30,6 +30,9 @@ export const citySchema = yup.string().required("Please Enter your City")
 
 export const addressTypeSchema = yup.string().required("Please Choose Address Type")
 
+export const prodYearSchema = yup.string().matches(/^\d{4}$/ ,"Please enter a valid year (e.g., 2023)").required("Please enter a valid year (e.g., 2023)")
+
+
 
 
 

@@ -176,7 +176,7 @@ const LocationDropDown=(props)=>{
 export const Search=({handleChange })=>{
     const handleKeyPress = (e) =>{
         const  {key, keyCode} = e;
-        if(keyCode == 13){
+        if(keyCode ===13){
             e.preventDefault()
         }
     }

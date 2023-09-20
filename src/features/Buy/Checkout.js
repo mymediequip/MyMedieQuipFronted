@@ -515,7 +515,7 @@ const PayLogin=()=>{
         </div>
       )}
     </div>
-  ):
+  )
 
 };
 

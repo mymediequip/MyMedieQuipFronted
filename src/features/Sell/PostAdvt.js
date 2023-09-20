@@ -746,7 +746,6 @@ export const AdvtProdData = () => {
   formData.append("user" ,userId)
   formData.append("Compatible_Models" ,allData?.Compatible_Models)
   formData.append("Prod_price" ,allData?.Prod_price)
-
     const res =  await postData("product/add/" , formData , true)
     console.log(res,"res")
     if(res.status){

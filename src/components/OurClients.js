@@ -62,7 +62,7 @@ export const OurClients=()=>{
           </div>
           {
             displayedData?.map((client)=>{
-               return   <ClientCard clientList={client} />
+               return   <ClientCard clientList={client} key={client?.id} />
             })
           }
         

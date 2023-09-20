@@ -19,7 +19,6 @@ import { addToCart } from '../app/Slices/UserData';
 import { ToastContainer, toast} from 'react-toastify';
 
 const imagePreviewUrl = process.env.REACT_APP_IMAGE_PREVIEW
-console.log(imagePreviewUrl , "img")
 
 export const ClientCard=({clientList})=>{
   return(
@@ -50,7 +49,6 @@ export const NewProductsCard = (props) => {
   const dispatch =useDispatch();
   const carts=useSelector((state)=>state.profileData.cart);
   const productClick = (item) => {
-    console.log(item,"item")
       navigate(`/products/${item?.equip_name}/` , {state : {prodDetails : item}})
       window.scrollTo(0,0);
   };
