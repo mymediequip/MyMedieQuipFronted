@@ -79,8 +79,16 @@ import closeDeal from './process/closeDeal.png';
 import shipped from './process/shipping.png';
 import handling from './process/install.png';
 import amc from './process/amc.png';
-import currency from './indian-currency.jpg'
+import currency from './indian-currency.jpg';
+import manuSearch from './menuSeach.png';
+import searchDrop from './searDrop.png';
+import brand1 from './manufacture/div.v-image__image.png';
+import philips from './manufacture/philips.png';
 export {
+    brand1,
+    philips,
+    searchDrop,
+    manuSearch,
     currency,
     findE,
     schedule,

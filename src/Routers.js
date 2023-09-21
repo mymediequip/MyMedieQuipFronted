@@ -6,6 +6,7 @@ import { ContentConatiner } from './components/ContentContainer';
 import { MyProfile } from './features/User/buyer_seller/ProfilePage';
 import { ProductDescription,ProductImgVideo,ProductMetaData,ProductReview,ProductMeta} from './features/Buy/ProductDesc';
 import { SelectAdvtType,PostAdvt ,AdvtMedia,AdvtLocation,AdvtPrice,AdvtProdData} from './features/Sell/PostAdvt';
+import { Manufacturer } from './features/Distributor_manufacture/manufacturer';
 import { Checkout } from './features/Buy/Checkout';
 import { BuySearch } from './features/Buy/Search';
 import { 
@@ -39,6 +40,7 @@ export const Routers=()=>{
              <Route path='ads' element={<MyAds/>} />
             </Route>
        </Route>
+
         <Route path='/' element={<HomeLayout/>}>
           <Route index element={<ContentConatiner specs={false}/>}/>
           <Route path='specialization' element={<ContentConatiner specs={true}/>}/>
@@ -72,6 +74,10 @@ export const Routers=()=>{
               <Route path='pricing' element={<AdvtPrice/>}/>
               <Route path='specifications' element={<AdvtProdData/>}/>
           </Route>
+
+          {/* Distributor & Manufacturer */}
+
+          <Route path='manufacturers' element={<Manufacturer/>}/>
 
         </Route>
       </Routes>

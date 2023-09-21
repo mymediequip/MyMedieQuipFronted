@@ -27,7 +27,7 @@ export const Navigation=()=>{
         {name:"New Equipment",path:"/"},
         {name:"Service",path:"/"},
         {name:"Spare & Accessories",path:"/"},
-        {name:"Distributor & Manufacturer",path:"/"},
+        {name:"Manufactures & Distribution",path:"/manufacturers/"},
         {name:"Contact Us",path:"/"}
     ];
     const postlinks=[
@@ -362,7 +362,7 @@ const Humberger=()=>{
         {name:"NEW EQUIPMENTS",path:"/"},
         {name:"SERVICES",path:"/"},
         {name:"SPARE & ACCESSORIES",path:"/"},
-        {name:"Distributor & Manufacturer",path:"/"},
+        {name:"Manufactures & Distribution",path:"/manufacturers/"},
         {name:"CONTACT US",path:"/"},
         {name:"POST ADVERT",path:"/"}
     ];
