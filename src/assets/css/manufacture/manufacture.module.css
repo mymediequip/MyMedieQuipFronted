@@ -5,8 +5,8 @@
 .manuSubCont{
     display: flex;
     gap: 20px;
-    width: 80%;
-    margin: auto;
+    width: 85%;
+    margin: auto; 
 }
 .manuPath a{
     color: #585757bf;
@@ -93,10 +93,11 @@
 }
 .mfProdCard{
     display: flex;
-    padding: 12px;
+    padding: 15px 12px 15px 12px;
     gap: 10px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
     background-color: #FFFFFF;
+    margin-bottom: 30px;
 }
 .mfTitile{
     display: flex;
@@ -120,4 +121,37 @@
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
     padding: 5px 10px 5px 10px;
     border-radius: 3px;
+}
+.mfProdData>h3{
+    font-weight: 400;
+    font-size: 16px;
+    margin: 13px 0px 10px 0px;
+}
+.mfProdData>p,.pricing>p{
+    font-size: 15px;
+    color: #757672;
+    margin-bottom: 15px;
+}
+.priceCont{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.demo{
+    font-size: 15px;
+    border: 2px solid #019C89;
+    padding: 7px 13px 7px 13px;
+    border-radius: 5px;
+    color:#019C89;
+    cursor: pointer;
+    margin-right: 15px;
+}
+.gotoEquip{
+    font-size: 15px;
+    background-color:#019C89;
+    padding: 7px 13px 7px 13px;
+    border: 2px solid #019C89;
+    border-radius: 5px;
+    color:#FFFFFF;
+    cursor: pointer;
 }

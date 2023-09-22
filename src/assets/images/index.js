@@ -84,7 +84,11 @@ import manuSearch from './menuSeach.png';
 import searchDrop from './searDrop.png';
 import brand1 from './manufacture/div.v-image__image.png';
 import philips from './manufacture/philips.png';
+import bussWithUs from './bussWithus.png';
+import manIcon from './manIcon.png';
 export {
+    manIcon,
+    bussWithUs,
     brand1,
     philips,
     searchDrop,

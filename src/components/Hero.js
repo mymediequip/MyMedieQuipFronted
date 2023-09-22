@@ -2,19 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { hero } from "../assets/images/index";
 import { Search } from './Navigation'
 import styles from '../assets/css/hero.module.css';
-import catog_data from '../assets/data/specialization.json';
 import { NavLink } from 'react-router-dom';
+import { AskType } from '../features/Distributor_manufacture/forms';
 import {
     plus_symbol,
     minus,
     m_search,
-    downIcon
+    downIcon,
+    bussWithUs
 } from '../assets/images/index';
 import { fetchCategories } from '../app/Slices/ProdAddSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 export const Hero=(props)=>{
-   
+    const  [isAsk,setIsAsk]=useState(false);
+    const handleClick=()=>{
+        setIsAsk(!isAsk);
+    }
     const heroStyle={
         backgroundImage:`url(${hero})`,
         backgroundSize:"cover",
@@ -30,6 +34,10 @@ export const Hero=(props)=>{
                     <p className={styles.heroDesc}>Precision measurements, advanced technology. Take control of your health with accurate blood pressure monitoring for informed decisions and optimal well-being</p>
                     <NavLink to="/" className={styles.buyBtn}>Buy Product</NavLink>
                     <NavLink to="/" className={styles.postAdvt}>Post Your Advertisement</NavLink>
+                    <img onClick={handleClick} className={styles.bussWithUs} src={bussWithUs} alt='business wih us'/>
+                    {
+                       isAsk &&  <AskType handleClick={handleClick}/>
+                    }
                 </div>
             </div>
         </div>

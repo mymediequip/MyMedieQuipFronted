@@ -9,6 +9,7 @@ import { SelectAdvtType,PostAdvt ,AdvtMedia,AdvtLocation,AdvtPrice,AdvtProdData}
 import { Manufacturer } from './features/Distributor_manufacture/manufacturer';
 import { Checkout } from './features/Buy/Checkout';
 import { BuySearch } from './features/Buy/Search';
+import { DistributorFrom } from './features/Distributor_manufacture/forms';
 import { 
   LoginRegister,
   OtpVervicatonForm,
@@ -78,6 +79,7 @@ export const Routers=()=>{
           {/* Distributor & Manufacturer */}
 
           <Route path='manufacturers' element={<Manufacturer/>}/>
+          <Route path="distributor-form" element={<DistributorFrom/>}/>
 
         </Route>
       </Routes>

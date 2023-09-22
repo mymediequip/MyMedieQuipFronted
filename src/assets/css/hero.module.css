@@ -151,6 +151,14 @@
     font-size: 14px;
     margin: 10px;
 }
+.bussWithUs{
+    width: 45px;
+    position: fixed;
+    top: 167px;
+    right: 0px;
+    z-index: 3;
+    cursor: pointer;
+}
 /* Mobile Responsive */
 
 @media(max-width:1200px){

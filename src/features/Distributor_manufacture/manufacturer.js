@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import styles from '../../assets/css/manufacture/manufacture.module.css';
+import { setSelectedMF,removeSelectedMF,setSelectedCat,removeSelectCat } from "../../app/Slices/ManufacturerSlice";
 import { NavLink } from "react-router-dom";
 import {
     manuSearch,
@@ -8,8 +9,14 @@ import {
     philips,
     relatedImg
 } from '../../assets/images/index';
+import { useDispatch, useSelector } from "react-redux";
 
 export const Manufacturer=()=>{
+    const selectedMF=useSelector((state)=>state.mfSlice.selectedMF);
+    const selectedCat=useSelector((state)=>state.mfSlice.selectedCat);
+    console.log(selectedMF,selectedCat);
+    const isOptionSelectd=selectedMF.length>0 || selectedCat.length>0?true:false;
+
     let manufacture={title:"MANUFACTURE",sub:["PHILIPS","Siemens","Mindray","Hitachi","Pentex","Lecia","Zimmer"]};
     let Category={title:"Equipment CATEGORY",sub:["Anesthesia Equipment/ICU","Cardiology Equipment","Cosmetic Equipment","Dental Equipment","Dental Lab Equipment","ENT Equipment","Emt training"]};
     let adds={title:"AD NAME", sub:[]}
@@ -22,23 +29,32 @@ export const Manufacturer=()=>{
                         <i style={{fontSize:"12px",color:"black"}} className="bi bi-chevron-right"></i>
                         <NavLink>Manufacture & Distribution</NavLink>
                     </div>
-                    <ManuSearch data={manufacture} ads={false}/>
-                    <ManuSearch data={Category} ads={false}/>
-                    <ManuSearch data={adds} ads={true}/>
+                    <ManuSearch data={manufacture} searchFor={1} />
+                    <ManuSearch data={Category} searchFor={2} />
+                    <ManuSearch data={adds} ads={true} searchFor={3}/>
                 </div>
                 <div className={styles.manuContent}>
                     <h1>Medical Equipment Manufacturers</h1>
                     <p style={{fontSize:"15px",marginTop:"8px"}}>Found 1175 manufacturers</p>
-                    {/* <div className={styles.manuBrand}>
-                        {
-                            (new Array(10).fill(0)).map((data,index)=>{
-                                return <img alt="..." src={brand1} key={index}/>
-                            })
-                        }
-                    </div> */}
-                    <div className={styles.mfContent}>
-                        <MFProdCard/>
-                    </div>
+                    {
+                        isOptionSelectd?(
+                        <div className={styles.mfContent}>
+                            <MFProdCard/>
+                            <MFProdCard/>
+                            <MFProdCard/>
+                            <MFProdCard/>
+                        </div>
+                        ):(
+                        <div className={styles.manuBrand}>
+                            {
+                                (new Array(10).fill(0)).map((data,index)=>{
+                                    return <img alt="..." src={brand1} key={index}/>
+                                })
+                            }
+                        </div>
+                        )
+                    }
+                      
                 </div>
                 
             </div>
@@ -58,7 +74,7 @@ const ManuSearch=(props)=>{
                 </div>
                 {
                     props.data.sub.map((data,index)=>{
-                        return <SearchDropDown data={data} key={index}/>
+                        return <SearchDropDown searchFor={props.searchFor} data={data} key={index}/>
 
                     })
                 }
@@ -74,19 +90,23 @@ const ManuSearch=(props)=>{
 
 const SearchDropDown=(props)=>{
     const [isDropOpen,setIsDropOpen]=useState(false);
+    const update=useUpdateselection();
     const handleDrop=(e)=>{
         let iconStyle=e.currentTarget.style;
         isDropOpen?iconStyle.rotate="0deg":iconStyle.rotate="90deg";
         setIsDropOpen(!isDropOpen);
     }
-
+    const handleChange=(e)=>{
+        let isChecked=e.currentTarget.checked;
+        update(isChecked,props.searchFor,props.data);
+    }
 
     return(
         <div className={styles.searchDropCont}>
             <div className={styles.searchTitle}>
                 <div className={styles.subSearchT}>
                     <img src={searchDrop} alt="search drop" onClick={handleDrop}/>
-                    <input type="checkbox"/>
+                    <input type="checkbox" onChange={handleChange}/>
                     <span>{props.data}</span>
                 </div>
                 <span>(4)</span>
@@ -108,6 +128,7 @@ const SearchDropDown=(props)=>{
 };
 
 const DropCard = () => {
+    
   return (
       <div className={styles.searchTitle}>
         <div className={styles.subSearchT}>
@@ -123,7 +144,7 @@ const DropCard = () => {
 const MFProdCard=()=>{
     return(
         <div className={styles.mfProdCard}>
-            <img src={relatedImg} style={{width:"200px",height:"180px"}} alt="..."/>
+            <img src={relatedImg} style={{width:"200px",height:"200px"}} alt="..."/>
             <div className={styles.mfProdData}>
                 <div className={styles.mfTitile}>
                     <h4>XYR Machine</h4>
@@ -137,15 +158,43 @@ const MFProdCard=()=>{
                 </div>
                 <h3>Seller : XYZ</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut libero odio.ante quis aliquet adipiscing elit. Phasell lobortis,  Read more</p>
-                <div>
-                    <div>
-                        <h2>₹50000</h2>
-                        <p>(Plus Shipping and GST tax included)</p>
+                <div className={styles.priceCont}>
+                    <div className={styles.pricing}>
+                        <h2>₹ 50000</h2>
+                        <p style={{fontSize:"12px",marginBottom:"0px"}}>(Plus Shipping and GST tax included)</p>
                     </div>
-                    <span>ARRANGE DEMO</span>
-                    <span>GO TO EQUIPMENT</span>
+                    <div>
+                        <span className={styles.demo}>ARRANGE DEMO</span>
+                        <span className={styles.gotoEquip}>GO TO EQUIPMENT</span>
+                    </div>
                 </div>
             </div>
         </div>
     );
 };
+
+
+/* Custom Hooks */
+
+function useUpdateselection(){
+    const dispatch=useDispatch();
+    const updateSelection=(isChecked,searchFor,data)=>{
+        if(isChecked){
+            if(searchFor===1){
+                dispatch(setSelectedMF(data));
+            }
+            else if(searchFor===2){
+                dispatch(setSelectedCat(data));
+            }
+        }
+        else{
+            if(searchFor===1){
+                dispatch(removeSelectedMF(data));
+            }
+            else if(searchFor===2){
+                dispatch(removeSelectCat(data));
+            }
+        }
+    }
+    return updateSelection;
+}
