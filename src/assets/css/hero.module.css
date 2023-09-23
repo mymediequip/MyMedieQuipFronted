@@ -100,6 +100,14 @@
     padding: 0px 20px 0px 20px;
     margin-left: 10px;
 }
+
+.mobileSearch1{
+    border: 10px solid #019C89;
+    height: 22vh;
+    width: 50vw;
+    border-radius: 33px;
+    margin: auto;
+}
 .mobileSearch img{
     position: relative;
     left: -37px;
@@ -115,6 +123,66 @@
     align-items: center;
     
 }
+.grid_container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 4 columns in each row */
+    grid-gap: 10px; /* Adjust as needed for spacing between items */
+    padding: 20px;
+  }
+  
+  .grid_item {
+    /* width: fit-content; */
+    background-color: #b3adad;
+    padding: 8px;
+    border: 1px solid #ccc; 
+    border-radius: 10px;
+    text-align: center;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .searchCont1{
+    height: 140px;
+    overflow-y: auto;
+  }
+  .searchBtn{
+    float: right;
+    width: 100px;
+    height: 40px;
+    border: none;
+    margin-top: 10px;
+    margin-right: 5px;
+    border-radius: 20px;
+}
+.searchBtn:hover{
+     cursor: pointer;
+     background-color: #999595;
+  }
+  
+.searchText{
+font-size: 18px;
+margin: 20px;
+}
+.searchItem1{
+    height: 46px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 20px;
+}
+.searchItem:hover{
+    background-color: whitesmoke;
+    cursor: pointer;
+}
+.searchItem1:hover{
+    background-color: whitesmoke;
+    cursor: pointer;
+}
+  
+  
 .catTitle span{
     color: var(--common-color);
 }

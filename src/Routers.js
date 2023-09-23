@@ -16,6 +16,7 @@ import {
 } from './features/Auth/LoginRegister';
 import PrivateRoutes from './components/PrivateRoute';
 import MyAds from './features/User/buyer_seller/MyAds';
+import AllFilterProduct from './components/AllFilterProduct';
 
 export const Routers=()=>{
     return(
@@ -59,6 +60,9 @@ export const Routers=()=>{
             {/* <Route path='info' element={<ProductMetaData/>}/> */}
             <Route path='review' element={<ProductReview/>}/>
           </Route>
+
+          {/* search product items  */}
+          <Route path='search/search-items/:searchitems' element={<AllFilterProduct/>}/>
 
           {/* checkout */}
           <Route path='products/:proddetails/checkout' element={<Checkout/>}/>
