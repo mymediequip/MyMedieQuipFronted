@@ -1,18 +1,38 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import styles from '../../assets/css/manufacture/forms.module.css';
 import {
-    manIcon
+    manIcon,
+    meetSuccess
 } from '../../assets/images/index';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { AdvtCategoriesDorpDown } from '../Sell/PostAdvt';
+
+import { ToastContainer,toast } from 'react-toastify';
 
 export const AskType=(props)=>{
     const navigate=useNavigate();
+    const [selectedOpt,setSelectOpt]=useState(-1);
+
+    const handleChange=(e)=>{
+        setSelectOpt(e.currentTarget.name);
+    }
+
     const handleContinue=()=>{
-        navigate("/distributor-form/");
+        if(selectedOpt==="0"){
+            navigate("/distributor-form/");
+        }
+        else if(selectedOpt==="1"){
+            navigate("/manufacturer-form/");
+        }
+        else{
+            toast.info("Please Select Any One Option !",{autoClose:2000});
+        }
         window.scrollTo(0,0);
     }
     return(
-        <div className={styles.askTypeCont}>
+        <React.Fragment>
+            <ToastContainer/>
+            <div className={styles.askTypeCont}>
             <div className={styles.asktop}>
                 <div className={styles.askPos}>
                     <img style={{marginRight:"8px"}} src={manIcon} alt='...'/>
@@ -24,29 +44,40 @@ export const AskType=(props)=>{
             <b>You are*</b>
             <div className={styles.askOptions}>
                 <div>
-                    <input type="radio" name='askopt'/>
+                    <input type="radio" onChange={handleChange} name='0'/>
                     <span>Distributor</span>
                 </div>
                 <div>
-                    <input type="radio" name='askopt'/>
+                    <input type="radio" onChange={handleChange} name='1'/>
                     <span>Manufacturer</span>
                 </div>
             </div>
             <div onClick={handleContinue} className={styles.continue}>CONTINUE</div>
         </div>
+        </React.Fragment>
     );
 };
 
 export const DistributorFrom=()=>{
+    const [isSubmitted,setSubmitted]=useState(false);
+    const handleFormSubmit=(e)=>{
+        e.preventDefault();
+        setSubmitted(true);
+        window.scrollTo(0,0);
+    }
+
     return(
-        <div className={styles.distriCont}>
+        <div className={styles.distriCont} style={{backgroundColor:isSubmitted?"#e6e6e673":"#FFFFFF"}}>
+            { isSubmitted && <FormSubmitPopup setSubmitted={setSubmitted}/> }
             <div className={styles.distriTop}>
-                <i class="bi bi-arrow-left-short"></i>
-                <span>Back</span>
+                <NavLink to='/'>
+                    <i className="bi bi-arrow-left-short"></i>
+                    <span>Back</span>
+                </NavLink>
             </div>
             <h3>DISTRIBUTOR FORM</h3>
 
-            <form className={styles.distForm}>
+            <form className={styles.distForm} onSubmit={handleFormSubmit}>
                 <div className={styles.distRow}>
                     <div>
                         <b>Brands or Product you deal in</b>
@@ -88,13 +119,104 @@ export const DistributorFrom=()=>{
                     <div>
                         <b>Equipment Category</b>
                         <input type='text' />
+                        {/* <AdvtCategoriesDorpDown  data={[]} /> */}
+
                     </div>
                 </div>
-                <p>Note : Recheck all the details before final submission of the form.</p>
-                <input type='submit' value="Submit Response"/>
+                <p className={styles.recheck} >Note : Recheck all the details before final submission of the form.</p>
+                <div style={{textAlign:"center"}}>
+                    <input  className={styles.submitBtn} type='submit' value="Submit Response"/>
+                </div>
 
             </form>
 
+        </div>
+    );
+};
+
+export const MANUFACTURERForm=()=>{
+    const [isSubmitted,setSubmitted]=useState(false);
+    const handleFormSubmit=(e)=>{
+        e.preventDefault();
+        setSubmitted(true);
+        window.scrollTo(0,0);
+    }
+    return(
+        <div className={styles.distriCont} style={{backgroundColor:isSubmitted?"#e6e6e673":"#FFFFFF"}}>
+            { isSubmitted && <FormSubmitPopup setSubmitted={setSubmitted}/> }
+            <div className={styles.distriTop}>
+                <NavLink to='/'>
+                    <i className="bi bi-arrow-left-short"></i>
+                    <span>Back</span>
+                </NavLink>
+            </div>
+            <h3>MANUFACTURER FORM</h3>
+
+            <form className={styles.distForm} onSubmit={handleFormSubmit}>
+                <div className={styles.distRow}>
+                    <div>
+                        <b>Product you deal in</b>
+                        <input type='text' />
+                    </div>
+                    <div>
+                        <b>Buisness/Firm Name</b>
+                        <input type='text' />
+                    </div>
+                </div>
+                <div className={styles.distRow}>
+                    <div>
+                        <b>Phone Number</b>
+                        <input type='number' />
+                    </div>
+                    <div>
+                        <b>Email Id</b>
+                        <input type='email' />
+                    </div>
+                </div>
+
+                <div className={styles.distRow}>
+                    <div>
+                        <b>Responsible Person</b>
+                        <input type='text' />
+                    </div>
+                    <div>
+                        <b>Office Location</b>
+                        <input type='text' />
+                    </div>
+                </div>
+                <div className={styles.distRow}>
+                    <div>
+                        <b>Equipment Category</b>
+                        <input type='text' />
+                        {/* <AdvtCategoriesDorpDown  data={[]} /> */}
+
+                    </div>
+                    <div>
+                        <b>Equipment Category</b>
+                        <input type='text' />
+                        {/* <AdvtCategoriesDorpDown  data={[]} /> */}
+
+                    </div>
+                </div>
+                <p className={styles.recheck} >Note : Recheck all the details before final submission of the form.</p>
+                <div style={{textAlign:"center"}}>
+                    <input  className={styles.submitBtn} type='submit' value="Submit Response"/>
+                </div>
+
+            </form>
+
+        </div>
+    );
+};
+
+const FormSubmitPopup=(props)=>{
+    return(
+        <div className={styles.submitPopupCont}>
+            <div className={styles.crossBtn}><i onClick={()=>props.setSubmitted(false)} style={{fontSize:"30px",cursor:"pointer"}} className="bi bi-x"></i></div>
+            <img src={meetSuccess} alt='meetSucees'/>
+            <h4>Form Submitted</h4>
+            <p>Thanks for reaching out, we will get in touch soon.</p>
+            <span>Continue</span>
         </div>
     );
 }

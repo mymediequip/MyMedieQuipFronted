@@ -18,6 +18,7 @@ export const Hero=(props)=>{
     const  [isAsk,setIsAsk]=useState(false);
     const handleClick=()=>{
         setIsAsk(!isAsk);
+        window.scrollTo(0,0);
     }
     const heroStyle={
         backgroundImage:`url(${hero})`,

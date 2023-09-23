@@ -441,7 +441,7 @@ useEffect(() => {
   );
 };
 
-const AdvtCategoriesDorpDown = (props) => {
+export const AdvtCategoriesDorpDown = (props) => {
   const dispatch  = useDispatch()
   const navigate = useNavigate()
   const selectedPostType = useSelector(
