@@ -13,6 +13,7 @@ import {
 import { fetchCategories } from '../app/Slices/ProdAddSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { postData } from '../services';
+import useClickOutside from '../customHooks/useClickOutside';
 
 export const Hero=(props)=>{
    
@@ -117,7 +118,9 @@ export const MobileHero=()=>{
         </div>
     );
 };
-export const MobileSearch=({toggle ,setToggle})=>{
+export const MobileSearch=(props)=>{
+    const {toggle ,setToggle , click} =  props
+const [togg ,setTogg] =  useState(toggle)
 const navigate =  useNavigate()
 const [searchEqip ,setSearchEquip] =  useState("")
 const data = ["Ultrasound Machines","CT Scanners", "IPL Machines","MRI machines","X-ray machines","Alexandrite Lasers","Optical coherence tomography" , "Shock wave therapy machines", "Dialysis Machine"]
@@ -133,13 +136,12 @@ const fill =  data?.filter((el)=>{
     }
 })
 const ref =  useRef(null)
-useEffect(()=>{
-    document.addEventListener("click",(e)=>{
-    if(ref.current && !ref.current.contains(e.target)){
-        setToggle(false)
-    }
-  });
-},[toggle])
+
+const clickOutSide = () =>{
+    setTogg(false)
+}
+useClickOutside(ref , clickOutSide)
+
 useEffect(()=>{
 handleEquipSearch()
 },[searchEqip])
@@ -150,11 +152,11 @@ const handleSearchItems = (item) =>{
 
     return(
         <>
-         <form ref={ref}  className={toggle ? styles.mobileSearch1 : styles.mobileSearch}>
-            <input type='text' onClick={()=>setToggle(true)}  onChange={(e)=>{setSearchEquip(e.target.value); setToggle(true)}} placeholder='Find medical instrument..'/>
-           { toggle ? <button className={styles.searchBtn}>Search</button> : <img src={m_search} alt='...'/>}
-               {toggle ?  <hr/> : ""}
-               <div className={toggle ?  styles.searchCont1 :  ""}>
+         <form ref={ref}  className={togg ? styles.mobileSearch1 : styles.mobileSearch}>
+            <input ref={click}  type='text' onClick={()=>{setTogg(true);setToggle(true)}}  onChange={(e)=>{setSearchEquip(e.target.value); setTogg(true);}} placeholder='Find medical instrument..'/>
+           { togg ? <button className={styles.searchBtn}>Search</button> : <img src={m_search} alt='...'/>}
+               {togg ?  <hr/> : ""}
+               <div className={togg ?  styles.searchCont1 :  ""}>
                {
                 searchEqip ? fill?.map((el)=>{
                     return(<>
@@ -166,7 +168,7 @@ const handleSearchItems = (item) =>{
                    :
                 <div className={styles.grid_container}>
                 {
-                  toggle? data.map((item, index) => (
+                  togg? data.map((item, index) => (
                  <div key={index} className={styles.grid_item}>
                     {item}
                  </div>
