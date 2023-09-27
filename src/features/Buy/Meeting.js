@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from '../../assets/css/buy/meeting.module.css';
 import { BackgroundBlur } from "../../utils/Popups";
 import { Calander } from "../../utils/Calanders";
-import { setCurrBuyStatus } from "../../app/Slices/UserData";
+import { setCurrBuyStatus, setDiscountPriceStatus, setInspectionStatus } from "../../app/Slices/UserData";
 import {
     meetingImg,
     scheduleBtn,
@@ -24,6 +24,8 @@ export const ScheduleMeeting=(props)=>{
     const [isBuyIssue,setBuyIssue]=useState(false);
     const [isBuyOption,setBuyOption]=useState(false);
     const [isBuyClick,setBuyClick]=useState(props.isBuyClick);
+    const item =  props?.data
+    const profileDetails = props?.profile
     const dispatch=useDispatch();
     const meetRef=useRef();
     const handleSechedule=(e)=>{
@@ -94,10 +96,10 @@ export const ScheduleMeeting=(props)=>{
                     <img alt="..." src={inspectionBtn} onClick={handleInspection} height="55px"/>
                     <img alt="..." src={buyBtn} onClick={handleBuyIssue} height="55px"/>
                 </div>
-                {isInspected && <InspectionReport handleInspection={handleInspection}/>}
+                {isInspected && <InspectionReport handleInspection={handleInspection} item={item} profileDetails={profileDetails}/>}
                 {isMeetIssue && <MeetingIssue handleInspection={handleInspection} setInpection={setInpection} setMeetIssue={setMeetIssue}/>}
                 {isBuyIssue && <BuyIssue setBuyIssue={setBuyIssue} handleBuyIssue={handleBuyIssue} setBuyOption={setBuyOption}/>}
-                {isBuyOption && <SelectServices handleBuyIssue={handleBuyIssue}/>}
+                {isBuyOption && <SelectServices handleBuyIssue={handleBuyIssue} item={item} profileDetails={profileDetails}/>}
                 {isBuyClick && <AskInspection setBuyOption={setBuyOption}setInpection={setInpection} setBuyClick={setBuyClick}/>}
             </div>
             { 
@@ -139,9 +141,13 @@ const MeetingSuccess=(props)=>{
 };
 
 const InspectionReport=(props)=>{
+    let dicount = (10*Number(props?.item?.asking_price))/100
+    const dispatch =  useDispatch()
     const navigate=useNavigate();
     const handlePayment=(e)=>{
-        navigate("/products/xyz-machine/checkout/");
+        dispatch(setDiscountPriceStatus(dicount))
+        dispatch(setInspectionStatus(true))
+        navigate(`/products/${props?.item?.equip_name}/checkout/` , {state : {details : props?.item , profileDetails : props?.profileDetails}});
         window.scrollTo(0,0);
     }
     return(
@@ -193,7 +199,7 @@ const BuyIssue=(props)=>{
 const SelectServices=(props)=>{
     const navigate=useNavigate();
     const handlePayment=(e)=>{
-        navigate("/products/xyz-machine/checkout/");
+        navigate(`/products/${props?.item?.equip_name}/checkout/` , {state : {details : props?.item , profileDetails : props?.profileDetails}});
         window.scrollTo(0,0);
     }
     return(
@@ -223,6 +229,7 @@ const AskInspection=(props)=>{
     const handleConfirm=(e)=>{
         props.setBuyClick(false);
         props.setInpection(true);
+        
     }
     const handleSkip=(e)=>{
         props.setBuyClick(false);

@@ -6,7 +6,7 @@ import { testimage2 } from '../../../assets/images';
 import { useFormik } from 'formik';
 import * as yup from "yup"
 import { emailSchema, fnameSchema, gstinSchema, lnameSchema, nationalitySchema, pancardSchema, pnumberSchema } from '../../../utils/validation';
-import {postData, postDataFIle } from '../../../services';
+import {postData } from '../../../services';
 import { toast } from 'react-toastify';
 import { Toaster } from '../../../utils/Toaster';
 import { useDispatch } from 'react-redux';

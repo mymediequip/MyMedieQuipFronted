@@ -1,28 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import {pngwing ,currency,ImageUpload} from "../../../assets/images/index";
+import React, { useEffect, useRef, useState } from 'react';
+import {pngwing ,currency,ImageUpload, postDropdown} from "../../../assets/images/index";
 import styles from "../../../assets/css/user/buyer_seller/ads.module.css";
 import {postData} from "../../../services/index";
-import { NavLink } from 'react-router-dom';
+import { useFormik } from 'formik';
+import axios from 'axios';
+import * as yup from "yup" 
+import { prodYearSchema } from '../../../utils/validation';
 
 
 const MyAds = () => {
   const userId = localStorage.getItem("uid");
   const [ads, setads] = useState([]);
   const [editForm,setEditForm]=useState(false);
+  const [uid,setuid]=useState("");
 
-  const handleEditForm=()=>{
+
+  const handleEditForm=(id)=>{
     setEditForm(!editForm);
+    setuid(id)
   };
 
   useEffect(() => {
     handleAdsDetails();
-  }, []);
+  }, [editForm]);
 
   const handleAdsDetails = async () => {
     const formData = new FormData();
-    formData.append("user", userId);
+    if(editForm){
+     formData.append("uid", uid);
+    }else{
+      formData.append("user", userId);
+    }
     const res = await postData("product/lists/", formData, true);
-    console.log(res?.data, "res");
     if (res?.status) {
       setads(res?.data);
     }
@@ -30,7 +39,7 @@ const MyAds = () => {
   return (
     <div className={styles.main_content}>
       {
-        editForm?<EditAds setEditForm={setEditForm} />:
+        editForm?<EditAds setEditForm={setEditForm} item={ads[0]}  />:
         (ads?.length > 0 ? (
           ads?.map((item) => {
             return <MyAdsCard item={item} handleEditForm={handleEditForm}/>;
@@ -83,7 +92,7 @@ const MyAdsCard=({item,handleEditForm})=>{
       <div className={styles.select_type}>
         {is3dot && (
           <span>
-            <p onClick={() => handleEditForm()}>Edit</p>
+            <p onClick={() => handleEditForm(item?.uid)}>Edit</p>
             <p>Delete</p>
             <p>Deactivate</p>
           </span>
@@ -97,6 +106,50 @@ const MyAdsCard=({item,handleEditForm})=>{
 const EditAds=(props)=>{
   const [images,setImages]=useState([]);
   const [videos,setVideos]=useState([]);
+  const [equipDetails ,setequipDetails] =  useState(props?.item)
+  const [address ,setAddress] =  useState("")
+  let prodYear = new Date(equipDetails?.created_date).getFullYear()
+ 
+  const formik =  useFormik({
+    initialValues : {
+      equip_name : equipDetails?.equip_name  ? equipDetails?.equip_name :   "",
+      equip_location : address ? address :  "",
+      equip_category : "",
+      equip_specality : "",
+      prod_des : equipDetails?.description ?  equipDetails?.description : "",
+      prod_brand : equipDetails?.brand ?  equipDetails?.brand : "",
+      prod_model : equipDetails?.model ?  equipDetails?.model : "",
+      prod_negotation : equipDetails?.negotiable_type ?  equipDetails?.negotiable_type : "",
+      prod_condition : equipDetails?.equip_condition ?  equipDetails?.equip_condition : "",
+      prod_price : equipDetails?.asking_price ?  equipDetails?.asking_price : "",
+      prod_other_details : equipDetails?.other_details ?  equipDetails?.other_details : "",
+      purchase_year : equipDetails?.year ? equipDetails?.year :  "",
+      prod_warranty : equipDetails?.warranty ? equipDetails?.warranty :  "",
+      prod_amc : equipDetails?.existing_amc ?  String(equipDetails?.existing_amc) :  ""
+    },
+    validationSchema : yup.object().shape({
+     purchase_year : prodYearSchema,
+    }),
+    onSubmit : function (values){
+      console.log(values)
+    }
+  })
+useEffect(()=>{
+  const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
+  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${equipDetails?.latitude}&lon=${equipDetails?.longitude}&format=json&apiKey=${API_KEY}`;
+  axios
+  .get(API_URL)
+  .then(response => {
+          setAddress(response?.data?.display_name)
+      })
+      .catch(error => {
+          console.error('Error fetching address:', error);
+        });
+},[equipDetails])
+
+  console.log(formik.values)
+
+
 
   const handleImges=(event)=>{
     const current = event.target;
@@ -121,6 +174,18 @@ const EditAds=(props)=>{
     videos.splice(index,1);
     setVideos([...videos]);
   };
+  const dropsp = {
+    title : "Speciality",
+    description : "Select the equipment Specialities",
+    dataList: ["Lorem ipsum dolor sit amet", "Lorem ipsum dolor sit amet"],
+  }
+
+  const dropCat = {
+    title : "Category",
+    description : "Select the equipment Categories",
+    dataList: ["Lorem ipsum dolor sit amet", "Lorem ipsum dolor sit amet"],
+  }
+
   return(
     <div className={styles.editAddCont}>
       <div onClick={()=>props.setEditForm(false)} className={styles.backTab}><i class="bi bi-arrow-left-short"></i><span>Back</span></div>
@@ -130,13 +195,179 @@ const EditAds=(props)=>{
           <MediaComp media={images} dtype="image" setMedia={handleImges} removeMedia={removeImges}/>
           <MediaComp media={videos} dtype="video" setMedia={handlesetVideos} removeMedia={removeVideo}/>
         </div>
-        <div className={styles.formData}>
-          
-        </div>
+         <div className={styles.eqip_container}>
+          <div className={styles.equip_innerContainer}>
+           <label htmlFor="equip_name">Equipment Name</label>
+            <input className={styles.text_input} value={formik?.values?.equip_name} onChange={formik.handleChange}  type='text' placeholder='Equip Name' name="equip_name"/>
+          </div>
+            <AdvCategories data={dropCat}/>
+         </div>
+         <div className={styles.eqip_container}>
+          <div className={styles.equip_innerContainer}>
+            <label htmlFor="equip_location">Location/City</label>
+            <input value={formik?.values?.equip_location} onChange={formik.handleChange} className={styles.text_input} type='text' placeholder='Current Location/City' name="equip_location"/>  
+          </div>
+             <AdvCategories data={dropsp}/>
+         </div>
+         <div className={styles.eqip_container}>
+          <div className={styles.equip_innerContainer}>
+            <h3 className={styles.title}>Equipment Condition</h3>
+          <div>
+            <div className={styles.radios}>
+            <div>
+            <input type="radio" value={1} name="prod_condition" checked={formik.values.prod_condition === 1} onChange={formik.handleChange}  />
+            <label className={styles.rdt}>Good</label>
+          </div>
+          <div>
+            <input className={styles.rd} type="radio" value={2} name="prod_condition" checked={formik.values.prod_condition === 2} onChange={formik.handleChange}   />
+            <label className={styles.rdt}>Excellent</label>
+          </div>
+          <div>
+            <input className={styles.rd} type="radio" value={3} name="prod_condition" checked={formik.values.prod_condition === 3} onChange={formik.handleChange}  />
+            <label className={styles.rdt}>As Good as New</label>
+          </div>
+           </div>
+            </div>
+          </div>
+         <div className={styles.equip_innerContainer}>
+            <label htmlFor="prod_price">Product Price</label>
+            <input className={styles.text_input} value={formik.values.prod_price} type='text' onChange={formik.handleChange} placeholder='Product price' name="prod_price"/>  
+          </div>
+         </div>
+         <div className={styles.eqip_container}>
+          <div className={styles.equip_innerContainer}>
+            <h3 className={styles.title}>Negotiable</h3>
+          <div>
+            <div className={styles.radio}>
+            <div>
+            <input type="radio" value={1} name="prod_negotation" checked={formik.values.prod_negotation === 1} onChange={formik.handleChange}  />
+            <label className={styles.rdt}>Negotiable</label>
+            </div>
+          <div>
+            <input className={styles.rd} type="radio" value={2} name="prod_negotation"  checked={formik.values.prod_negotation === 2} onChange={formik.handleChange} />
+            <label className={styles.rdt}>Slightly Negotiable</label>
+          </div>
+          <div>
+            <input className={styles.rd} type="radio" value={3} name="prod_negotation"  checked={formik.values.prod_negotation === 3} onChange={formik.handleChange} />
+            <label className={styles.rdt}>Non-Negotiable</label>
+          </div>
+           </div>
+            </div>
+          </div>
+          <div className={styles.equip_innerContainer}>
+            <label htmlFor="prod_des">Product Description</label>
+            <textarea value={formik.values.prod_des} onChange={formik.handleChange} className={styles.textarea_sty} type='text' placeholder='Enter Product desc' name="prod_des"/>  
+          </div>
+         </div>
+         <div>
+         <div className={styles.eqip_container}>
+           <div className={styles.equip_innerContainer}>
+            <label htmlFor="purchase_year">Manufacturing/ Purchase Year</label>
+             <input className={styles.text_input} type="text" name="purchase_year" placeholder="Select the year" value={formik?.values?.purchase_year}
+                  onChange={formik.handleChange}  onBlur={formik.handleBlur}/>
+                {
+            formik.touched.purchase_year && formik.errors.purchase_year ? 
+            <div style={{color : 'red'}}>{formik.errors.purchase_year}</div> : null
+          }
+          </div>
+        
+         </div>
+          <h3 className={styles.title1}>Product Specifications :</h3>
+         </div>
+         <div className={styles.eqip_container}>
+           <div className={styles.equip_innerContainer}>
+            <label htmlFor="equip_brand">Brand/Company : </label>
+             <input value={formik.values.prod_brand} onChange={formik.handleChange} className={styles.text_input} type='text' placeholder='Brand/company name' name="prod_brand"/>
+          </div>
+          <div className={styles.equip_innerContainer}>
+            <label htmlFor="equip_Model">Model number :</label>
+             <input value={formik.values.prod_model} onChange={formik.handleChange} className={styles.text_input} type='number' placeholder='equip_Model' name="equip_Model"/>
+          </div>
+         </div>
+         <div className={styles.eqip_container}>
+          <div className={styles.equip_innerContainer}>
+            <h3 className={styles.title}>Under Warranty : </h3>
+          <div>
+            <div className={styles.radio_type}>
+             <div>
+             <input type="radio" value={1} name="prod_warranty" checked={formik.values.prod_warranty === 1} onChange={formik.handleChange}  />
+              <label className={styles.rdt}>YES</label>
+          </div>
+          <div>
+            <input className={styles.rd} type="radio" value={0} name="prod_warranty" checked={formik.values.prod_warranty === 0} onChange={formik.handleChange}   />
+            <label className={styles.rdt}>NO</label>
+          </div>
+           </div>
+            </div>
+          </div>
+          <div className={styles.equip_innerContainer}>
+            <h3 className={styles.title}>Existing AMC/CME :</h3>
+          <div>
+            <div className={styles.radio_type}>
+             <div>
+              <input type="radio" value={1} name="prod_amc" checked={formik.values.prod_amc === 1} onChange={formik.handleChange}  />
+              <label className={styles.rdt}>YES</label>
+            </div>
+          <div>
+            <input className={styles.rd} type="radio" value={0} name="prod_amc" checked={formik.values.prod_amc === 0} onChange={formik.handleChange}   />
+            <label className={styles.rdt}>NO</label>
+          </div>
+           </div>
+            </div>
+          </div>
+         </div>
+         <div className={styles.eqip_container}>
+           <div className={styles.equip_innerContainer}>
+            <label htmlFor="prod_other_details">Other Description :</label>
+             <textarea value={formik.values.prod_other_details} onChange={formik.handleChange} className={styles.textarea_sty} type='text' placeholder='other_des' name="prod_other_details"/>
+          </div>
+         </div>
+         <p style={{marginTop : "3rem"}}> 
+         Please Note : Once Seller Added the details, it will go for the admin approval, after admin approved them only this will be visible on home page
+         </p>
+         <input type="submit" className={styles.bttn} value="Submit Response" />
       </form>
     </div>
   );
 };
+
+const AdvCategories = (props) =>{
+  const [show, setShow] = useState(false);
+
+  const ref=useRef();
+  useEffect(()=>{
+      document.addEventListener("click",(e)=>{
+      if(ref.current && !ref.current.contains(e.target)){
+        setShow(false)
+      }
+    });
+  },[])
+  return(
+    <div className={styles.equip_innerContainer} ref={ref}>
+      <div className={styles.specTag}>
+        <p>{props.data.title}</p>
+      </div>
+      <div className={styles.selectEquipDiv} onClick={() => setShow(!show)}>
+        <p>{props.data.description}</p>
+        <img className={styles.dropDownImage} src={postDropdown} alt="..." />
+      </div>
+
+      {show && (
+        <div className={styles.checkBox}>
+          {props.data.dataList.map((value, index) => {
+            return (
+              <div className={styles.checkboxCont} >
+                <input type="checkbox" id="category" value={value}  name="category"   />
+                <label for="checkbox1">{value}</label>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  )
+
+}
 
 const MediaComp=({media,setMedia,dtype,removeMedia})=>{
   

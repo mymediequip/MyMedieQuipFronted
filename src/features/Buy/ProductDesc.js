@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { DashboardAdvt } from '../../components/Advt';
-import { NavLink, Outlet, useNavigate,useLocation} from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate} from 'react-router-dom';
 import styles from '../../assets/css/buy/prod_desc.module.css';
 import { RelatedProdCard } from '../../components/Cards';
 import { GetStarted,BackgroundBlur } from '../../utils/Popups';
@@ -39,10 +39,11 @@ import { useFormik } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { ScheduleMeeting } from './Meeting';
-import Map from '../../components/GoogleMap';
 import axios from 'axios';
 import { postData } from '../../services';
 import MapView from '../../components/GoogleMap';
+
+const profileImg =  process.env.REACT_APP_IMAGE_PREVIEW
 
 export const ProductDescription=()=>{
     return(
@@ -67,18 +68,17 @@ const ProductData=()=>{
     const [getStart,setGetStart]=useState(false);
     const [isBlur,setBlur]=useState(false);
     const [address,setaddress]=useState("");
-    const [click,setClick]=useState("");
+    const [click,setClick]=useState("photo");
     const [currentIndex,setCurrentIndex]=useState(0);
     const [displayedData, setDisplayedData] = useState({});
     const [profile, setProfle] = useState({});
     const [category, setcategory] = useState([]);
     const [openSocial,setOpenSocial]=useState(false);
-    const [apiKey,setapikey]=useState("");
+ 
 
 
     useEffect(() => {
         const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
-        setapikey(API_KEY)
         const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${item?.latitude}&lon=${item?.longitude}&format=json&apiKey=${API_KEY}`;
         axios
         .get(API_URL)
@@ -190,7 +190,7 @@ const ProductData=()=>{
                     <div className={styles.imgSlider}>
                     <img src={swipetestleft} onClick={handleLeft} alt='...' style={{width:"25px",height:"25px"}}/>
                     {
-                 item?.product_images.length > 0 ?  item?.product_images?.slice(0,4)?.map((image)=>{
+                      item?.product_images.length > 0 ?  item?.product_images?.slice(0,4)?.map((image)=>{
                         return(
                             <img src={image?.product_images} alt='...' />
                         )
@@ -210,12 +210,12 @@ const ProductData=()=>{
                     <div className={styles.p_head}>
                         <div>
                             <div className={styles.newProd}>
-                              <h3 style={{marginBottom:"0px"}}>XYZ MACHINE</h3>
+                              <h3 style={{marginBottom:"0px"}}>{item?.equip_name}</h3>
                               <span >NEW</span>
                             </div>
                             <h3>{item?.equip_name}</h3>
                             <div>
-                                <span className={styles.prodId}>XM-101011QR</span>
+                              <span className={styles.prodId}>XM-101011QR</span>
                                 <img src={star} alt='...'/>
                                 <img src={star} alt='...'/>
                                 <img src={star} alt='...'/>
@@ -234,26 +234,7 @@ const ProductData=()=>{
                         </div>
                     </div>
                     
-                    {openMeeting?<ScheduleMeeting isBuyClick={buyClick} setMeeting={setMeeting} sellarClick={sellarClick}/>:<ProductMeta/>}
-                    {/* <div>
-                        <div className={styles.pd_links}>
-                            <div className={styles.sellerName}>
-                                <img src={profile?.profile_image ? profile?.profile_image  : testimage2} alt='...'/>
-                                <p>{`${profile?.first_name} ${profile?.last_name}`}</p>
-                            </div>
-                            <span>{item?.date}</span>
-                        </div>
-                    </div> */}
-
-                    {/* <div>
-                        <p style={{color:"#019C89"}}>Product Details</p>
-                        <p>{item?.description}</p>
-                    </div>
-
-                    <div>
-                        <h3>₹ {item?.asking_price}</h3>
-                        <p>(Plus Shipping and VAT tax included)</p>
-                    </div> */}
+                    {openMeeting?<ScheduleMeeting isBuyClick={buyClick} setMeeting={setMeeting} sellarClick={sellarClick} data={item} profile={profile} />:<ProductMeta info={item} data={profile}/>}
                     
                     <div className={styles.prodActLinks}>
                         <NavLink className={styles.contactSellar} onClick={(e)=>{sellarClick(e,false)}}>
@@ -323,14 +304,14 @@ const ProductData=()=>{
     );
 };
 
-export const ProductMeta = () => {
+export const ProductMeta = ({info , data}) => {
   return (
     <React.Fragment>
       <div>
         <div className={styles.pd_links}>
           <div className={styles.sellerName}>
-            <img src={testimage2} alt="..." />
-            <p>Mr Daniel</p>
+            <img src={data?.image ? `${profileImg}${data?.image}` :  testimage2} alt="..." />
+            <p>{`${data?.first_name} ${data?.last_name}`}</p>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:"5px"}}>
             <img src={location}  alt="..." />
@@ -342,30 +323,12 @@ export const ProductMeta = () => {
       <div>
         <p style={{ color: "#019C89" }}>Product Details</p>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut
-          libero odio. Nam elementum orci ut enim rutrum fringilla. Integer
-          pellentesque semper erat id vestibulum. Vestibulum ultrices sapien
-          orci, ut auctor ipsum maximus in. Aenean eu est tempor, blandit ipsum
-          non, eleifend odio. Aenean erat purus, pulvinar quis rhoncus a,
-          ultricies quis nulla. Aliquam erat volutpat. Pellentesque luctus
-          lectus lorem, eleifend rutrum tellus auctor at. In purus massa,
-          feugiat semper malesuada sed, vehicula id ex.Phasellus vitae ex vitae
-          justo efficitur aliquet. Suspendisse metus augue, tincidunt a dui
-          aliquam, congue rhoncus leo. Nunc eleifend elementum odio viverra
-          volutpat. Morbi pulvinar nisl nec diam scelerisque, et volutpat libero
-          aliquam. Donec dapibus lorem nec faucibus bibendum. Mauris quis diam
-          eget nibh convallis consectetur ac vel velit.dapibus. Mauris
-          convallis, orci in condimentum lobortis, dolor est lobortis tortor,
-          nec hendrerit augue ipsum at ligula. Maecenas sollicitudin, ante quis
-          euismod pellentesque, sapien turpis elementum dolor, tempus dignissim
-          turpis ex auctor nibh. Pellentesque euismod vitae ante viverra
-          pulvinar. Phasellus porttitor arcu a justo dictum condimentum. Nam
-          sollicitudin nunc urna, sit amet consectetur nisl accumsan sed.
+          {info?.description}
         </p>
       </div>
 
       <div>
-        <h3>₹ 50000</h3>
+        <h3>₹ {info?.asking_price}</h3>
         <p>(Plus Shipping and VAT tax included)</p>
       </div>
     </React.Fragment>

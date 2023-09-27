@@ -60,6 +60,7 @@ import whatsApp2 from './whatsapp2.png';
 import dummyMap from './mapDumy.png';
 import twitter2 from './twitter2.png';
 import email2 from './mail2.png';
+import currency from "./indian-currency.jpg"
 import meetingImg from './meeting.png';
 import scheduleBtn from './schedulBtnImg.png';
 import inspectionBtn from './inspection_btn.png';

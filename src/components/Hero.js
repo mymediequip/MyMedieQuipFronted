@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { hero } from "../assets/images/index";
 import { Search } from './Navigation'
 import styles from '../assets/css/hero.module.css';
-import { NavLink } from 'react-router-dom';
+
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
     plus_symbol,
     minus,
@@ -11,6 +12,8 @@ import {
 } from '../assets/images/index';
 import { fetchCategories } from '../app/Slices/ProdAddSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { postData } from '../services';
+import useClickOutside from '../customHooks/useClickOutside';
 
 export const Hero=(props)=>{
     
@@ -116,12 +119,70 @@ export const MobileHero=()=>{
         </div>
     );
 };
-export const MobileSearch=()=>{
+export const MobileSearch=(props)=>{
+    const {toggle ,setToggle , click} =  props
+const [togg ,setTogg] =  useState(toggle)
+const navigate =  useNavigate()
+const [searchEqip ,setSearchEquip] =  useState("")
+const data = ["Ultrasound Machines","CT Scanners", "IPL Machines","MRI machines","X-ray machines","Alexandrite Lasers","Optical coherence tomography" , "Shock wave therapy machines", "Dialysis Machine"]
+const handleEquipSearch = async() =>{
+    const formData = new FormData()
+    formData.append("q" , searchEqip)
+    const res = await postData("product/lists/" , formData )
+    console.log(res)
+}
+const fill =  data?.filter((el)=>{
+    if(el.toLowerCase().includes(searchEqip.toLowerCase())){
+        return el
+    }
+})
+const ref =  useRef(null)
+
+const clickOutSide = () =>{
+    setTogg(false)
+}
+useClickOutside(ref , clickOutSide)
+
+useEffect(()=>{
+handleEquipSearch()
+},[searchEqip])
+
+const handleSearchItems = (item) =>{
+    navigate(`/search/search-items/${item}/`)
+}
+
     return(
-        <form className={styles.mobileSearch}>
-            <input type='text' placeholder='Find medical instrument..'/>
-            <img src={m_search} alt='...'/>
+        <>
+         <form ref={ref}  className={togg ? styles.mobileSearch1 : styles.mobileSearch}>
+            <input ref={click}  type='text' onClick={()=>{setTogg(true);setToggle(true)}}  onChange={(e)=>{setSearchEquip(e.target.value); setTogg(true);}} placeholder='Find medical instrument..'/>
+           { togg ? <button className={styles.searchBtn}>Search</button> : <img src={m_search} alt='...'/>}
+               {togg ?  <hr/> : ""}
+               <div className={togg ?  styles.searchCont1 :  ""}>
+               {
+                searchEqip ? fill?.map((el)=>{
+                    return(<>
+                     <div className={fill.length > 1 ? styles.searchItem1 :  ""}>
+                        <p onClick={()=>handleSearchItems(el)} className={styles.searchText}>{searchEqip} in {el}</p>
+                    </div> 
+                    </>)
+                    })
+                   :
+                <div className={styles.grid_container}>
+                {
+                  togg? data.map((item, index) => (
+                 <div key={index} className={styles.grid_item}>
+                    {item}
+                 </div>
+                  )) :  ""
+               }
+                </div>
+               }
+               </div>
+           
         </form>
+
+        </>
+        
     );
 };
 
@@ -134,12 +195,13 @@ export const MobileCatogories=()=>{
     useEffect(() => {
         dispatch(fetchCategories(""));
     }, []);
+    const data = ["Ultrasound Machines","CT Scanners", "IPL Machines","MRI machines","X-ray machines","Alexandrite Lasers","Optical coherence tomography" , "Shock wave therapy machines", "Dialysis Machine"]
 
     console.log(categories.reverse());
     return(
         <div className={styles.mobileCatContainer}>
             {
-                categories.map((values,index)=>{
+                data.map((values,index)=>{
                     return <CatgoriesDropDown key={index} data={values}/>
                 })
             }
@@ -152,14 +214,14 @@ const CatgoriesDropDown=(props)=>{
     return(
         <div className={styles.catDrop} onMouseOver={()=>setIsOpen(true)} onMouseLeave={()=>setIsOpen(false)}>
             <div className={styles.catTitle} >
-                <span>{props.data?.name}</span>
+                <span>{props.data}</span>
                 <img src={downIcon} alt='...'/>
             </div>
             {
                 isOpen?<div className={styles.subCatogories}>
                     {
-                        subcat.map((value,index)=>{
-                            return <NavLink to="/" key={index}>{value?.name}</NavLink>
+                        subcat?.map((value,index)=>{
+                            return <NavLink to={`/search/search-items/${value?.name}/`} key={index}>{value?.name}</NavLink>
                         })
                     }
                 </div>:""

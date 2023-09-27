@@ -4,7 +4,6 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../../assets/css/postAdvt.module.css";
 import { addImg, addVideos, removeImg, setType ,removeVideo, setEquipmentName, setEquipSpecification, setManufacturingYear ,setProdPrice ,setCompatibleModels, clearProdAddData, setEquipCondition, setEquip_Location, fetchCategories, fetchCategoriesName, setCategories, fetchSpecialityName, setSpecality, setLatLong } from "../../app/Slices/ProdAddSlice";
-import GeoCode from "react-geocode"
 
 import {
   ImageUpload,
@@ -17,10 +16,8 @@ import {
 import {toast,ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRef } from "react";
-// toast.configure();
-import { equipmentName } from "../../utils/validation";
 import axios from "axios";
-import { postData, postDataFIle } from "../../services";
+import { postData } from "../../services";
 
 export const PostAdvt = () => {
   return (
@@ -317,7 +314,7 @@ const handleLocation = () =>{
 
 useEffect(() => {
   // const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
-  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${getLatLang?.lat}&lon=${getLatLang?.lang}&format=json`;;
+  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${getLatLang?.lat}&lon=${getLatLang?.lang}&format=json`;
 
   axios
     .get(API_URL)
@@ -477,12 +474,12 @@ export const AdvtCategoriesDorpDown = (props) => {
         <p>
           {(()=>{
             let keys=Object.keys(selectedCat);
-            if(keys.length===0){
+            if(keys?.length===0){
               return props.data.placeholder;
             }
             else{
               let temp="";
-              for(let i=0;i<keys.length;i++){
+              for(let i=0;i<keys?.length;i++){
                 if(selectedCat[keys[i]]){
                   temp+=keys[i]+";";
                 }
@@ -497,7 +494,7 @@ export const AdvtCategoriesDorpDown = (props) => {
       </div>
 
       {show && (
-        <div className={props?.data?.dataList.length > 1 ?  styles.checkBox : styles.checkBox1}>
+        <div className={props?.data?.dataList?.length > 4 ?  styles.checkBox : styles.checkBox1}>
           {props?.data?.dataList?.map((value, index) => {
             return (
               <div className={styles.checkboxCont} key={value.id}>
@@ -549,12 +546,12 @@ const AdvtSpecialityDorpDown = (props) => {
         <p>
         {(()=>{
             let keys=Object.keys(selectedCat);
-            if(keys.length===0){
+            if(keys?.length===0){
               return props.data.placeholder;
             }
             else{
               let temp="";
-              for(let i=0;i<keys.length;i++){
+              for(let i=0;i<keys?.length;i++){
                 if(selectedCat[keys[i]]){
                   temp+=keys[i]+";";
                 }
@@ -569,7 +566,7 @@ const AdvtSpecialityDorpDown = (props) => {
       </div>
 
       {show && (
-        <div className={props?.data?.dataList.length > 4 ?  styles.checkBox : styles.checkBox1}>
+        <div className={props?.data?.dataList?.length > 4 ?  styles.checkBox : styles.checkBox1}>
           {props?.data?.dataList?.map((value, index) => {
             return (
               <div className={styles.checkboxCont} key={value.id}>
@@ -748,7 +745,6 @@ export const AdvtProdData = () => {
   formData.append("user" ,userId)
   formData.append("Compatible_Models" ,allData?.Compatible_Models)
   formData.append("Prod_price" ,allData?.Prod_price)
-
     const res =  await postData("product/add/" , formData , true)
     console.log(res,"res")
     if(res.status){

@@ -2,9 +2,8 @@ import React, { useEffect } from 'react';
 import { NavLink,useNavigate,Outlet, useLocation} from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeLocation, changeLoginStatus ,clearLocation} from '../../app/Slices/AuthSlice';
+import { changeLocation, changeLoginStatus, clearLocation } from '../../app/Slices/AuthSlice';
 import styles from '../../assets/css/loginregister.module.css';
-
 import PhoneInput from 'react-phone-input-2';
 import OtpInput from 'react-otp-input';
 import { Loader } from '../../components/Loader';
@@ -182,6 +181,7 @@ export const Login=(props)=>{
 export const OtpVervicatonForm=({getOtp,number,setotp , setGetStart ,setBlur})=>{
      const reLoadPage = useSelector((state)=>state.auth.onReload)
      const location  =  useLocation()
+     console.log(location,"loc")
      let  preOtp = location?.state?.otp;
      let  preNumber = location?.state?.number;
      const [otp, setOtp] = useState("");

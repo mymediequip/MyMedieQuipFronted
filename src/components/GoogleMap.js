@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 const MapView = ({lat ,long}) => {
     const [currentLocation, setCurrentLocation] = useState(null);
 
@@ -12,15 +11,16 @@ const MapView = ({lat ,long}) => {
     return <div>Loading...</div>;
   }
   return (
-       <LoadScript googleMapsApiKey="AIzaSyADGoHCfvvOG_3Ym3WxRD-yg4-3-KvR8xA">
-       <GoogleMap
-         center={currentLocation}
-         zoom={13}
-         mapContainerStyle={{ width: '100%', height: '400px' }}
-       >
-         {currentLocation && <Marker position={currentLocation} />}
-       </GoogleMap>
-     </LoadScript>
+    //    <LoadScript googleMapsApiKey="AIzaSyADGoHCfvvOG_3Ym3WxRD-yg4-3-KvR8xA">
+    //    <GoogleMap
+    //      center={currentLocation}
+    //      zoom={13}
+    //      mapContainerStyle={{ width: '100%', height: '400px' }}
+    //    >
+    //      {currentLocation && <Marker position={currentLocation} />}
+    //    </GoogleMap>
+    //  </LoadScript>
+    <div>Google Map</div>
   )
 }
 
