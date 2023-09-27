@@ -80,7 +80,6 @@ import closeDeal from './process/closeDeal.png';
 import shipped from './process/shipping.png';
 import handling from './process/install.png';
 import amc from './process/amc.png';
-import currency from './indian-currency.jpg';
 import manuSearch from './menuSeach.png';
 import searchDrop from './searDrop.png';
 import brand1 from './manufacture/div.v-image__image.png';
