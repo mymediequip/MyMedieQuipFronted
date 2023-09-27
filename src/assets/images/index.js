@@ -86,7 +86,11 @@ import brand1 from './manufacture/div.v-image__image.png';
 import philips from './manufacture/philips.png';
 import bussWithUs from './bussWithus.png';
 import manIcon from './manIcon.png';
+import filterMF from './filter.png';
+import sortMf from './sortBy.png';
 export {
+    filterMF,
+    sortMf,
     manIcon,
     bussWithUs,
     brand1,

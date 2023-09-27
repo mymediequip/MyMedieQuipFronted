@@ -8,6 +8,13 @@ import { OurClients } from './OurClients';
 import { Advt2 } from './Advt';
 // import { ClientBanner } from './OurClients';
 import { postData } from '../services';
+import styles from '../assets/css/hero.module.css';
+import {
+    
+    bussWithUs
+} from '../assets/images/index';
+import { AskType } from '../features/Distributor_manufacture/forms';
+
 
 export const ContentConatiner=(props)=>{
 const [product , setProduct] =  useState({
@@ -29,7 +36,11 @@ const [product , setProduct] =  useState({
         })
         
     }
-
+    const  [isAsk,setIsAsk]=useState(false);
+    const handleClick=()=>{
+        setIsAsk(!isAsk);
+        window.scrollTo(0,0);
+    }
     return(
         <React.Fragment>
             {/* <MobileCatogories/> */}
@@ -42,6 +53,10 @@ const [product , setProduct] =  useState({
             <OurClients/>
             <Advt2/>
             {/* <ClientBanner/> */}
+            <img onClick={handleClick} className={styles.bussWithUs} src={bussWithUs} alt='business wih us'/>
+            {
+               isAsk &&  <AskType handleClick={handleClick}/>
+            }
         </React.Fragment>
     );
 }

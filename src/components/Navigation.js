@@ -354,15 +354,17 @@ const CreatBtn=()=>{
 
 const Humberger=()=>{
     const [isMobile,setIsMobile]=useState(true);
+    const navigate=useNavigate();
     const handleHumberg=()=>{
         setIsMobile(!isMobile);
     };
+    console.log(isMobile)
     const links=[
         {name:"USED EQUIPMENTS",path:"/"},
         {name:"NEW EQUIPMENTS",path:"/"},
         {name:"SERVICES",path:"/"},
         {name:"SPARE & ACCESSORIES",path:"/"},
-        {name:"Manufactures & Distribution",path:"/manufacturers/"},
+        {name:"MANUFACTURES & DISTRIBUTION",path:"/manufacturers/"},
         {name:"CONTACT US",path:"/"},
         {name:"POST ADVERT",path:"/"}
     ];
@@ -378,9 +380,19 @@ const Humberger=()=>{
                 {
                     links.map((value,index)=>{
                         if(index===0){
-                            return <NavLink to={value.path} style={{color:"#019C89"}} className={styles.topMobileMenu} key={index}>{value.name}</NavLink>
+                            return <NavLink onClick={(e)=>{
+                                e.preventDefault();
+                                setIsMobile(true);
+                                navigate(value.path)
+
+                            }}  style={{color:"#019C89"}} className={styles.topMobileMenu} key={index}>{value.name}</NavLink>
                         }
-                        return <NavLink to={value.path} key={index}>{value.name}</NavLink>
+                        return <NavLink onClick={(e)=>{
+                            e.preventDefault();
+                            setIsMobile(true);
+                            navigate(value.path);
+
+                        }}  key={index}>{value.name}</NavLink>
                     })
                 }
                 </div>

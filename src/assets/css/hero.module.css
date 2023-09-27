@@ -162,6 +162,10 @@
 /* Mobile Responsive */
 
 @media(max-width:1200px){
+    .bussWithUs{
+        top:unset;
+        bottom: 70px;
+    }
     .MobileHero{
         display: flex;
         flex-direction: column;

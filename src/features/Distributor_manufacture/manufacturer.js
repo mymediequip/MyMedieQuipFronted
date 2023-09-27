@@ -7,7 +7,9 @@ import {
     searchDrop,
     brand1,
     philips,
-    relatedImg
+    relatedImg,
+    filterMF,
+    sortMf
 } from '../../assets/images/index';
 import { useDispatch, useSelector } from "react-redux";
 
@@ -20,10 +22,23 @@ export const Manufacturer=()=>{
     let manufacture={title:"MANUFACTURE",sub:["PHILIPS","Siemens","Mindray","Hitachi","Pentex","Lecia","Zimmer"]};
     let Category={title:"Equipment CATEGORY",sub:["Anesthesia Equipment/ICU","Cardiology Equipment","Cosmetic Equipment","Dental Equipment","Dental Lab Equipment","ENT Equipment","Emt training"]};
     let adds={title:"AD NAME", sub:[]}
+
+    const [ismobile,setMobile]=useState(false);
+    const handleMobileSearch=()=>{
+        setMobile(!ismobile);
+    }
     return(
         <section className={styles.manuFactureCont}>
             <div className={styles.manuSubCont}>
-                <div className={styles.manureSearch}>
+                <div className={ ismobile?styles.mobileSearch:styles.manureSearch}>
+                     {/* mobile back */}
+                   {
+                    ismobile && ( <div className={styles.mobileBack} onClick={handleMobileSearch}> 
+                        <i class="bi bi-arrow-left-short"></i>
+                        <spna>FILTER</spna>
+                    </div>)
+                   }
+
                     <div className={styles.manuPath}>
                         <NavLink><i className="bi bi-house-door" style={{fontSize:"18px",color:"black"}}></i></NavLink>
                         <i style={{fontSize:"12px",color:"black"}} className="bi bi-chevron-right"></i>
@@ -34,6 +49,20 @@ export const Manufacturer=()=>{
                     <ManuSearch data={adds} ads={true} searchFor={3}/>
                 </div>
                 <div className={styles.manuContent}>
+                    {/* mobile view */}
+                    <div className={styles.mobileContTop}>
+                        <div className={styles.manuPath}>
+                            <NavLink><i className="bi bi-house-door" style={{fontSize:"18px",color:"black"}}></i></NavLink>
+                            <i style={{fontSize:"12px",color:"black"}} className="bi bi-chevron-right"></i>
+                            <NavLink>Manufacture & Distribution</NavLink>
+                        </div>
+                        <div className={styles.filters}>
+                            <img src={filterMF} onClick={handleMobileSearch} width="120px" alt="filter"/>
+                            <img src={sortMf} width="120px" alt="sortby"/>
+                        </div>
+
+                    </div>
+
                     <h1>Medical Equipment Manufacturers</h1>
                     <p style={{fontSize:"15px",marginTop:"8px"}}>Found 1175 manufacturers</p>
                     {
@@ -144,7 +173,7 @@ const DropCard = () => {
 const MFProdCard=()=>{
     return(
         <div className={styles.mfProdCard}>
-            <img src={relatedImg} style={{width:"200px",height:"200px"}} alt="..."/>
+            <img src={relatedImg} className={styles.prodImg}  alt="..."/>
             <div className={styles.mfProdData}>
                 <div className={styles.mfTitile}>
                     <h4>XYR Machine</h4>
@@ -163,7 +192,7 @@ const MFProdCard=()=>{
                         <h2>₹ 50000</h2>
                         <p style={{fontSize:"12px",marginBottom:"0px"}}>(Plus Shipping and GST tax included)</p>
                     </div>
-                    <div>
+                    <div className={styles.cardBtns}>
                         <span className={styles.demo}>ARRANGE DEMO</span>
                         <span className={styles.gotoEquip}>GO TO EQUIPMENT</span>
                     </div>

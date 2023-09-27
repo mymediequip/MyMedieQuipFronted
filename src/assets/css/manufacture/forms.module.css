@@ -7,6 +7,7 @@
     transform: translate(-50%, -50%);
     background-color: #FFFFFF;
     padding: 10px 20px 10px 20px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
 }
 .crossBtn{
     text-align: right;
@@ -81,7 +82,9 @@
 .distRow{
     display: flex;
     gap: 50px;
-    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 0px auto 20px auto;
 }
 .distForm input{
     height: 20px;
@@ -146,4 +149,27 @@
     padding: 8px 10px 8px 10px;
     border-radius: 3px;
     margin-bottom: 20px;
+}
+@media(max-width:1200px){
+    .askTypeCont{
+        top: 210px;
+    }
+}
+@media(max-width:830px){
+    .distForm{
+        width: 95vw;
+        margin-top: 20px;
+    }
+    .distForm input{
+        width: 85vw;
+    }
+}
+@media(max-width:500px){
+    .askTypeCont{
+        width: 80vw;
+    }
+    .submitPopupCont{
+        width: 87vw;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+    }
 }
