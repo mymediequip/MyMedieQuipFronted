@@ -2,10 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {pngwing ,currency,ImageUpload, postDropdown} from "../../../assets/images/index";
 import styles from "../../../assets/css/user/buyer_seller/ads.module.css";
 import {postData} from "../../../services/index";
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { GoogleMap } from '@react-google-maps/api';
 import axios from 'axios';
 import * as yup from "yup" 
 import { prodYearSchema } from '../../../utils/validation';
