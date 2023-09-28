@@ -91,15 +91,15 @@ export const MyProfile=()=>{
       if(selectedFile){
         formData.append('image', selectedFile);
        }
-
-        const res = await postData("users/add_profile/" , formData , true)
-        if(res.status){
-          setSelectedFile(null)
-          toast.success("Profile Updated SuccessFully !")
-          handleUserDetails()
-        }else{
-          toast.error(res.msg)
-        }
+        console.log(selectedFile)
+        // const res = await postData("users/add_profile/" , formData , true)
+        // if(res.status){
+        //   setSelectedFile(null)
+        //   toast.success("Profile Updated SuccessFully !")
+        //   handleUserDetails()
+        // }else{
+        //   toast.error(res.msg)
+        // }
   }
 
   const handleFileChange = (event) =>{

@@ -10,9 +10,9 @@ import {
     m_search,
     downIcon,
 } from '../assets/images/index';
-import { fetchCategories } from '../app/Slices/ProdAddSlice';
+import { fetchCategories, fetchSpecialityName } from '../app/Slices/ProdAddSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { postData } from '../services';
+import { postData, postData1 } from '../services';
 import useClickOutside from '../customHooks/useClickOutside';
 
 export const Hero=(props)=>{
@@ -86,6 +86,7 @@ const Catogories = () => {
 };
 
 const CatItem=({equipment , onItemClick , pic})=>{
+ const navigate =  useNavigate()   
  const [isExpanded, setIsExpanded] = useState(false);
   const handleNodeClick = () => {
     if (equipment?.children?.length > 0) {
@@ -99,10 +100,10 @@ const CatItem=({equipment , onItemClick , pic})=>{
             <div >
             <div className={styles.cat_inner}>
                 <img src={equipment?.children.length > 0 ? pic : minus} alt='...' onClick={handleNodeClick} className={styles.in_img}/>
-                <span>{equipment.name}</span>
+                <span onClick={()=>navigate(`/search/search-items/${equipment.name}/` , {state : {cat : equipment?.name}})}>{equipment.name}</span>
             </div>
             {
-                isExpanded && equipment?.children?.map((child,index)=>{
+                isExpanded && equipment?.children?.map((child)=>{
                     return <CatItem key={child.id} pic={child?.children?.length > 0 ? pic : minus} equipment={child} onItemClick={onItemClick}/> 
                 })
             }
@@ -120,23 +121,21 @@ export const MobileHero=()=>{
     );
 };
 export const MobileSearch=(props)=>{
-    const {toggle ,setToggle , click} =  props
+const specialityName =  useSelector((state)=>state.addProd.prodAddData.specialtiey_name)
+const dispatch =  useDispatch()
+const ref =  useRef(null)
+const {toggle ,setToggle , click} =  props
 const [togg ,setTogg] =  useState(toggle)
 const navigate =  useNavigate()
 const [searchEqip ,setSearchEquip] =  useState("")
 const data = ["Ultrasound Machines","CT Scanners", "IPL Machines","MRI machines","X-ray machines","Alexandrite Lasers","Optical coherence tomography" , "Shock wave therapy machines", "Dialysis Machine"]
-const handleEquipSearch = async() =>{
-    const formData = new FormData()
-    formData.append("q" , searchEqip)
-    const res = await postData("product/lists/" , formData )
-    console.log(res)
-}
-const fill =  data?.filter((el)=>{
-    if(el.toLowerCase().includes(searchEqip.toLowerCase())){
+
+const fill =  specialityName?.filter((el)=>{
+     const {name} = el
+    if(name?.toLowerCase().includes(searchEqip.toLowerCase())){
         return el
     }
 })
-const ref =  useRef(null)
 
 const clickOutSide = () =>{
     setTogg(false)
@@ -144,11 +143,13 @@ const clickOutSide = () =>{
 useClickOutside(ref , clickOutSide)
 
 useEffect(()=>{
-handleEquipSearch()
-},[searchEqip])
+dispatch(fetchSpecialityName())
+},[dispatch])
+
+
 
 const handleSearchItems = (item) =>{
-    navigate(`/search/search-items/${item}/`)
+    navigate(`/search/search-items/${item}/` , {state : {cat : item }})
 }
 
     return(
@@ -162,16 +163,16 @@ const handleSearchItems = (item) =>{
                 searchEqip ? fill?.map((el)=>{
                     return(<>
                      <div className={fill.length > 1 ? styles.searchItem1 :  ""}>
-                        <p onClick={()=>handleSearchItems(el)} className={styles.searchText}>{searchEqip} in {el}</p>
+                        <p onClick={()=>handleSearchItems(el?.name)} className={styles.searchText}>{searchEqip} in {el?.name}</p>
                     </div> 
                     </>)
                     })
                    :
                 <div className={styles.grid_container}>
                 {
-                  togg? data.map((item, index) => (
+                  togg? specialityName.map((item, index) => (
                  <div key={index} className={styles.grid_item}>
-                    {item}
+                    {item?.name}
                  </div>
                   )) :  ""
                }
@@ -197,11 +198,11 @@ export const MobileCatogories=()=>{
     }, []);
     const data = ["Ultrasound Machines","CT Scanners", "IPL Machines","MRI machines","X-ray machines","Alexandrite Lasers","Optical coherence tomography" , "Shock wave therapy machines", "Dialysis Machine"]
 
-    console.log(categories.reverse());
+    // console.log(categories,"cat");
     return(
         <div className={styles.mobileCatContainer}>
             {
-                data.map((values,index)=>{
+                categories?.map((values,index)=>{
                     return <CatgoriesDropDown key={index} data={values}/>
                 })
             }
@@ -210,18 +211,18 @@ export const MobileCatogories=()=>{
 };
 const CatgoriesDropDown=(props)=>{
     const [isOpen,setIsOpen]=useState(false);
-    const subcat=props.data?.children;
+    const subcat=props?.data?.children;
     return(
         <div className={styles.catDrop} onMouseOver={()=>setIsOpen(true)} onMouseLeave={()=>setIsOpen(false)}>
             <div className={styles.catTitle} >
-                <span>{props.data}</span>
+                <span>{props?.data?.name}</span>
                 <img src={downIcon} alt='...'/>
             </div>
             {
                 isOpen?<div className={styles.subCatogories}>
                     {
                         subcat?.map((value,index)=>{
-                            return <NavLink to={`/search/search-items/${value?.name}/`} key={index}>{value?.name}</NavLink>
+                            return <NavLink to={`/search/search-items/${value?.name}/`} state={{cat : value?.name}} key={index}>{value?.name}</NavLink>
                         })
                     }
                 </div>:""

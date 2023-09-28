@@ -31,11 +31,13 @@ const MyAds = () => {
     }else{
       formData.append("user", userId);
     }
-    const res = await postData("product/lists/", formData, true);
+    const res = await postData("product/plists/", formData);
     if (res?.status) {
       setads(res?.data);
     }
   };
+
+  console.log(ads,"ads")
   return (
     <div className={styles.main_content}>
       {
@@ -61,7 +63,7 @@ const MyAdsCard=({item,handleEditForm})=>{
   return (
     <div className={styles.sub_content} onMouseLeave={() => set3dot(false)}>
       <div className={styles.sub_content1}>
-        <img src={pngwing} alt="" className={styles.content_img} />
+        <img src={item?.product_images[0]?.product_images ? item?.product_images[0]?.product_images : pngwing} alt="" className={styles.content_img} />
         <div className={styles.sub_content_text}>
           <span className={styles.content_text}>
             <h3>{item?.equip_name}</h3>

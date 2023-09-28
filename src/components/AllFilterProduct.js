@@ -1,7 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from "../assets/css/productdetails.module.css"
 import {pngwing ,currency ,rightMove} from "../assets/images/index"
+import { useLocation } from 'react-router-dom'
+import { postData } from '../services'
 const AllFilterProduct = () => {
+  const location =  useLocation()
+  const item =  location.state.cat
+  const [plists ,setPlist] =  useState([])
+
+  const handleSearchItem = async() =>{
+    const formData =  new FormData()
+    formData.append("q" , item)
+    const res =  await postData("product/plists/" , formData)
+    setPlist(res?.data)
+  }
+
+  console.log(plists,"list")
+  useEffect(()=>{
+    handleSearchItem()
+  },[])
 
     
   return (
@@ -9,7 +26,12 @@ const AllFilterProduct = () => {
        <div className={styles.sub_container}>
        </div>
        <div className={styles.sub_container1}>
-        <div className={styles.sub_content}>
+      
+      {
+        plists?.length > 0 ? 
+        plists?.map((item)=>{
+          return(
+            <div className={styles.sub_content}>
             <img src={pngwing} className={styles.img_preview} alt='no img' />
            <div className={styles.text_containter}>
               <h3 className={styles.text_view}>Medical Equipment</h3>
@@ -23,6 +45,11 @@ const AllFilterProduct = () => {
               <p>(Plus Shipping and GST tax includes )</p>
            </div>
         </div>
+          )
+        }) : 
+        <div>NO Data Found</div>
+      }
+       
        </div>
     </div>
   )
