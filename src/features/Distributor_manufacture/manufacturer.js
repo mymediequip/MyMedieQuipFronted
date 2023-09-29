@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import styles from '../../assets/css/manufacture/manufacture.module.css';
 import { setSelectedMF,removeSelectedMF,setSelectedCat,removeSelectCat } from "../../app/Slices/ManufacturerSlice";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
     manuSearch,
     searchDrop,
@@ -170,7 +170,8 @@ const DropCard = () => {
   );
 };
 
-const MFProdCard=()=>{
+export const MFProdCard=()=>{
+    const navigate=useNavigate();
     return(
         <div className={styles.mfProdCard}>
             <img src={relatedImg} className={styles.prodImg}  alt="..."/>
@@ -194,7 +195,7 @@ const MFProdCard=()=>{
                     </div>
                     <div className={styles.cardBtns}>
                         <span className={styles.demo}>ARRANGE DEMO</span>
-                        <span className={styles.gotoEquip}>GO TO EQUIPMENT</span>
+                        <span onClick={()=>navigate("/products/demo/")} className={styles.gotoEquip}>GO TO EQUIPMENT</span>
                     </div>
                 </div>
             </div>

@@ -87,19 +87,25 @@ const Catogories = () => {
 
 const CatItem=({equipment , onItemClick , pic})=>{
  const [isExpanded, setIsExpanded] = useState(false);
+ const navigate=useNavigate();
   const handleNodeClick = () => {
     if (equipment?.children?.length > 0) {
       setIsExpanded(!isExpanded);
     }
     onItemClick(equipment);
   };
+
+  console.log(equipment);
+  const handleProdNameClick=()=>{
+    navigate("/search/search-items/prodlistDemo/");
+  };
   
     return(
         <div className={styles.cat_item} >
             <div >
-            <div className={styles.cat_inner}>
+            <div className={styles.cat_inner} >
                 <img src={equipment?.children.length > 0 ? pic : minus} alt='...' onClick={handleNodeClick} className={styles.in_img}/>
-                <span>{equipment.name}</span>
+                <span onClick={handleProdNameClick}>{equipment.name}</span>
             </div>
             {
                 isExpanded && equipment?.children?.map((child,index)=>{
@@ -154,7 +160,7 @@ const handleSearchItems = (item) =>{
     return(
         <>
          <form ref={ref}  className={togg ? styles.mobileSearch1 : styles.mobileSearch}>
-            <input ref={click}  type='text' onClick={()=>{setTogg(true);setToggle(true)}}  onChange={(e)=>{setSearchEquip(e.target.value); setTogg(true);}} placeholder='Find medical instrument..'/>
+            <input ref={click}  type='text' onClick={()=>{setTogg(true);setToggle(true)}}  onChange={(e)=>{setSearchEquip(e.target.value); setTogg(true);}} placeholder='I’m looking for.....'/>
            { togg ? <button className={styles.searchBtn}>Search</button> : <img src={m_search} alt='...'/>}
                {togg ?  <hr/> : ""}
                <div className={togg ?  styles.searchCont1 :  ""}>
@@ -182,7 +188,7 @@ const handleSearchItems = (item) =>{
         </form>
 
         </>
-        
+
     );
 };
 

@@ -165,6 +165,7 @@
     color:#FFFFFF;
     cursor: pointer;
 }
+
 .filters{
     display: flex;
     gap: 20px;

@@ -49,6 +49,7 @@ export const Routers=()=>{
            
            {/* search  */}
            <Route path='search' element={<BuySearch/>}/>
+           <Route path='speciality-search' element={<BuySearch/>}/>
 
           {/* Authentication */}
           <Route path="/user" element={<LoginRegister/>}>
