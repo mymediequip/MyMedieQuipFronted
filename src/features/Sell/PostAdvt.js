@@ -268,22 +268,22 @@ const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondit
 const prodLocation =  useSelector((state)=>state.addProd.prodAddData.Equip_location)
 
 let data = []
- categories?.forEach((el)=>{
-    data.push(el?.parent)
+categories?.forEach((el)=>{
+  data.push(el?.parent)
 })
 
 
 useEffect(()=>{
-dispatch(fetchCategories(searchName))
-dispatch(fetchCategoriesName(data))
-},[searchName ,equipName])
+  dispatch(fetchCategories(equipName))
+  dispatch(fetchCategoriesName(data))
+},[equipName])
 
 
 useEffect(()=>{
   dispatch(fetchSpecialityName())
 },[dispatch])
-  
- const handleProdCondition = (event) =>{
+
+const handleProdCondition = (event) =>{
   const {name,value} = event.target
   dispatch(setEquipCondition({...prodCondition  ,name,value}))
 }
@@ -294,6 +294,7 @@ const handleChange = (event) =>{
   setSearchName(newName)
   dispatch(setEquipmentName(newName));
 }
+
 
 
 const handleLocation = () =>{
@@ -337,7 +338,7 @@ useEffect(() => {
   const dropCat = {
     title: "Category",
     placeholder: "Select the equipment Categories",
-    dataList: parentName,
+    dataList: parentName.length > 0 ? parentName : [{name : "other" , id  : 1}],
   };
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -375,7 +376,16 @@ useEffect(() => {
   }
   },[selectedPostType])
 
+  const handleCatSearch = (name) =>{
+    if(searchName.length>2){
+      dispatch(setEquipmentName(name)); setSearchName("")
+    }else{
+      toast.error("Please Enter minimum 3 words")
+    }
+  }
+
   return (
+   <>
     <React.Fragment>
       <NavLink to="/post/media/"  className={styles.postBack}>
         <img src={arrLeft} alt="..." />
@@ -401,7 +411,7 @@ useEffect(() => {
                {categories?.map((el)=>{
                  return(
                      <>
-                     <p onClick={()=>{dispatch(setEquipmentName(el?.name)); setSearchName("")}} className={styles.equipnameDropDown}>{el?.name}</p>
+                     <p onClick={()=>{handleCatSearch(el?.name)}} className={styles.equipnameDropDown}>{el?.name}</p>
                      </>
                      )
                    })}
@@ -437,6 +447,7 @@ useEffect(() => {
         </form>
       </div>
     </React.Fragment>
+   </>
   );
 };
 
@@ -707,7 +718,6 @@ export const AdvtProdData = () => {
   const userId = localStorage.getItem("uid")
   const prodPrice =  useSelector((state)=>state.addProd.prodAddData.Prod_price)
   const allData =  useSelector((state)=>state.addProd.prodAddData)
-
 
   useEffect(()=>{
     if(!selectedPostType){

@@ -176,7 +176,7 @@ const LocationDropDown=(props)=>{
 export const Search=({handleChange })=>{
     const handleKeyPress = (e) =>{
         const  {key, keyCode} = e;
-        if(keyCode ===13){
+        if(keyCode===13){
             e.preventDefault()
         }
     }
@@ -268,9 +268,9 @@ const Explore=()=>{
 
 const Speciality=()=>{
     return(
-        <NavLink className={styles.Speciality} to="/">
+        <NavLink className={styles.Speciality} to="/speciality-search/">
             <img src={searchIcon} alt='search'/>
-            <input placeholder='Speciality' type='text'/>
+            <input placeholder='Speciality' readOnly type='text'/>
         </NavLink>
     )
 };

@@ -84,6 +84,9 @@
 .cat_inner span{
     margin-left: 7px;
 }
+.cat_inner span:hover{
+    color: #019C89;
+}
 .cat_inner{
     display: flex;
     align-items: center;

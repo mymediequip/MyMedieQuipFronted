@@ -91,6 +91,7 @@ a{
     border: none;
     color: white;
     background-color: var(--common-color);
+    cursor: pointer;
 }
 .Speciality input::placeholder{
     color: white;

@@ -79,7 +79,7 @@ const ProductData=()=>{
 
     useEffect(() => {
         const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
-        const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${item?.latitude}&lon=${item?.longitude}&format=json&apiKey=${API_KEY}`;
+        const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${item?.latitude ? item?.latitude  : 28.6883631}&lon=${item?.longitude ? item?.longitude :77.297967 }&format=json&apiKey=${API_KEY}`;
         axios
         .get(API_URL)
         .then(response => {
@@ -463,7 +463,7 @@ const RelatedProd=()=>{
       }, []);
 
      const  fetchRelatedProducts =  async() =>{
-        const res = await postData("product/filter_list/", "", true);
+        const res = await postData("product/filter_list/", "");
         setRelatedProducts(res?.data?.featured_products);
      }
 
