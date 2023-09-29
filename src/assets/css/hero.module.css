@@ -106,7 +106,7 @@
 
 .mobileSearch1{
     border: 10px solid #019C89;
-    height: 22vh;
+    min-height: 22vh;
     width: 50vw;
     border-radius: 33px;
     margin: auto;

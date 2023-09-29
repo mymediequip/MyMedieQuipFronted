@@ -27,7 +27,7 @@ const [product , setProduct] =  useState({
     },[])
 
     const handleFilterProduct = async()=>{
-        const res  =  await postData("product/filter_list/", "" ,true)
+        const res  =  await postData("product/filter_list/", "" )
         setProduct({
             new : res?.data?.new_products,
             feature : res?.data?.featured_products,

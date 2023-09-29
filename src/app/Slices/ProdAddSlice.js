@@ -48,7 +48,7 @@ export const prodAddSlice = createSlice({
     },
     removeImg : (state,action)=>{
       state.prodAddData.prodImgs = state.prodAddData.prodImgs.filter(
-        image => image.id !==action.payload
+        image => image.imageId !==action.payload
       );
     },
     addVideos : (state,action) =>{
@@ -56,7 +56,7 @@ export const prodAddSlice = createSlice({
     },
     removeVideo : (state,action)=>{
       state.prodAddData.prodVideos = state.prodAddData.prodVideos.filter(
-        video => video.id !== action.payload
+        video => video.imageId !== action.payload
       );
     },
     setEquipmentName : (state,action)=>{

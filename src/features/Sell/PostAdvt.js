@@ -122,11 +122,12 @@ export const AdvtMedia = () => {
     const current = event.target;
     const imageId = generateUniqueId()
     const imageUrl = URL.createObjectURL(current.files[0])
+    const file = current.files[0]
     if (current.name === "image") {
-      dispatch(addImg({id : imageId , imageUrl}))
+      dispatch(addImg({imageId , imageUrl , file}))
     }
     if (current.name === "video") {
-      dispatch(addVideos({id : imageId , imageUrl}))
+      dispatch(addVideos({imageId ,imageUrl ,file}))
 
     }
   };
@@ -169,7 +170,7 @@ export const AdvtMedia = () => {
           <img src={arrLeft} alt="..." />
           <span>Back</span>
         </NavLink>
-        <form className={styles.advtMediaCont} onSubmit={handleSubmit}>
+        <form className={styles.advtMediaCont} onSubmit={handleSubmit} action="upload_endpoint" method="POST" encType="multipart/form-data">
           <div className={styles.advtAllMedie}>
             <div>
               <h4>Upload Product Image</h4>
@@ -185,7 +186,7 @@ export const AdvtMedia = () => {
                     />
                     <img src={ImageUpload} alt="Upload" />
                   </label>
-                  {selectedImages?.map((value, index) => {
+                  {selectedImages?.map((value) => {
                     return (
                       <div style={{ margin: "10px", display: "flex" }}>
                         <img src={value?.imageUrl} key={value?.id} />
@@ -221,7 +222,7 @@ export const AdvtMedia = () => {
                 {selectedVideos?.map((value, index) => {
                   return (
                     <div style={{ margin: "10px" }}>
-                      <video key={value?.id}>
+                      <video key={value?.imageId}>
                         <source src={value?.imageUrl} type="video/mp4" />
                       </video>
                       <span
@@ -312,6 +313,7 @@ const handleLocation = () =>{
 }
 
 
+
 useEffect(() => {
   // const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
   const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${getLatLang?.lat}&lon=${getLatLang?.lang}&format=json`;
@@ -324,7 +326,7 @@ useEffect(() => {
     .catch(error => {
       console.error('Error fetching address:', error);
     });
-}, [getLatLang]);
+}, [getLatLang.lat ,getLatLang.lang]);
 
 
   const dropSpec = {
@@ -384,7 +386,7 @@ useEffect(() => {
         <form action="/action_page.php" onSubmit={handleSubmit}>
           <div className={styles.formFiledCont}>
             <div className={styles.labelCol}>
-              <label htmlFor="Equip_name">Equipment name</label>
+              <label htmlFor="Equip_name">Equipment Name</label>
               <input
                 className={searchName ?  styles.forBotMarg : styles.forBotMarg1}
                 type="text"
@@ -395,7 +397,7 @@ useEffect(() => {
                 autoComplete="off"
               />
               {searchName && 
-               <div className={categories.length > 5 ?  styles.equipNameDrop : styles.equipNameDrop1}>
+               <div className={categories.length > 5 ?  styles.equipNameDrop : categories.length < 1 ? "" : styles.equipNameDrop1}>
                {categories?.map((el)=>{
                  return(
                      <>
@@ -430,7 +432,7 @@ useEffect(() => {
             </div>
           </div>
           <div style={{ textAlign: "center" }}>
-            <input className={styles.contButt} type="submit" value="Continue" />
+            <input className={styles.contButt} type="submit" value="continue" />
           </div>
         </form>
       </div>
@@ -722,13 +724,20 @@ export const AdvtProdData = () => {
 
   const handleSubmit=async(event)=>{  
     event.preventDefault();
+   let images =  allData?.prodImgs?.map((el)=>el?.file)
+   let videos =  allData?.prodVideos?.map((el)=>el?.file)
+
   const formData = new FormData()
   formData.append("post_type" , selectedPostType == "PRE-OWNED" ? 1 : selectedPostType == "NEW"  ? 2 : selectedPostType == "SPARE & ACCESSORIES" ? 3 : selectedPostType == "SERVICES" ? 4 : ""  )
-  formData.append("images" , allData?.prodImgs)
-  formData.append("videos" , allData?.prodVideos)
+  images.forEach((image) => {
+    formData.append("images", image);
+  });
+  videos.forEach((video) => {
+    formData.append("videos", video);
+  });
   formData.append("equip_name" , allData?.Equip_name)
   formData.append("address" , allData?.Equip_location)
-  formData.append("category" , allData?.categories)
+  formData.append("category_list" , allData?.categories)
   formData.append("speciality_name" , allData?.specility)
   formData.append("equip_condition" , allData?.prodCondition?.condition ? allData?.prodCondition?.condition : "")
   formData.append("negotiable_type" ,allData?.prodCondition?.negotiable ? allData?.prodCondition?.negotiable : "")
@@ -746,12 +755,11 @@ export const AdvtProdData = () => {
   formData.append("Compatible_Models" ,allData?.Compatible_Models)
   formData.append("Prod_price" ,allData?.Prod_price)
     const res =  await postData("product/add/" , formData , true)
-    console.log(res,"res")
     if(res.status){
       toast.success("Product Added SuccessFully !")
       dispatch(clearProdAddData());
       setTimeout(()=>{
-        navigate("/dashboard/")
+        navigate("/dashboard/ads/")
       },2000)
     }else{
       toast.error(res?.msg)
@@ -783,7 +791,7 @@ export const AdvtProdData = () => {
           </div>
           <div>
             <span>Model Number : </span>
-            <input type="number" placeholder="Enter the model number" name="model" value={specifications.model} onChange={handleChange}  />
+            <input type="text" placeholder="Enter the model number" name="model" value={specifications.model} onChange={handleChange}  />
           </div>
 
           {selectedPostType === "SPARE & ACCESSORIES" ? (
