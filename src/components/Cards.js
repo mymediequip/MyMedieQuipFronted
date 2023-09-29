@@ -44,6 +44,7 @@ export const ExpertCard=({expertise})=>{
 
 export const NewProductsCard = (props) => {
   const [getStart,setGetStart]=useState(false);
+  // const isLogin=useSelector((state)=>state.auth.isLogin);
   const [isBlur,setBlur]=useState(false);
   const navigate=useNavigate();
   const dispatch =useDispatch();
