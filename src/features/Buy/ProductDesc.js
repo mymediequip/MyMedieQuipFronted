@@ -62,6 +62,7 @@ export const ProductDescription=()=>{
 const ProductData=()=>{
     const  location  =  useLocation()
     const item =  location?.state?.prodDetails
+    const c_seller = location?.state?.c_seller;
     // console.log(item,"item")
     const navigate  =  useNavigate()
     let isLogin = localStorage.getItem("token")
@@ -94,7 +95,7 @@ const ProductData=()=>{
     const phoneNumber = '+919716924981'; // Replace with the actual phone number
     const encodedPhoneNumber = encodeURIComponent(phoneNumber);
 
-    const [openMeeting,setMeeting]=useState(false);
+    const [openMeeting,setMeeting]=useState(c_seller);
     const [buyClick,setbuyClick]=useState(false);
     const contRef=useRef(null);
 

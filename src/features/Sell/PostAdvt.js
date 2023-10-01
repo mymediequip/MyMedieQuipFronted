@@ -242,7 +242,7 @@ export const AdvtMedia = () => {
           <input
             type="submit"
             className={styles.advtContinue}
-            value="continue"
+            value="Continue"
           />
         </form>
       </React.Fragment>
@@ -432,7 +432,7 @@ useEffect(() => {
             </div>
           </div>
           <div style={{ textAlign: "center" }}>
-            <input className={styles.contButt} type="submit" value="continue" />
+            <input className={styles.contButt} type="submit" value="Continue" />
           </div>
         </form>
       </div>
@@ -868,7 +868,7 @@ const getAddProdScreen2 = (selectedType , handleLocation  ,dispatch ,CompatibleM
     return (
       <React.Fragment>
         <label for="lname">Compatible Models</label>
-        <input type="text" id="Compatible_Models" name="Compatible_Models"  value={CompatibleModel}  onChange={(e)=>dispatch(setCompatibleModels(e.target.value))}/>
+        <input style={{marginBottom:"20px"}} type="text" id="Compatible_Models" name="Compatible_Models"  value={CompatibleModel}  onChange={(e)=>dispatch(setCompatibleModels(e.target.value))}/>
       </React.Fragment>
     );
   }

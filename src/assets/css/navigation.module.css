@@ -12,7 +12,8 @@ a{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 90vw;
+    /* width: 90vw; */
+    width: 90%;
     margin: auto;
 }
 .location{
@@ -106,7 +107,7 @@ a{
     align-items: center;
     /* border-bottom: 1px solid #cdcdcd; */
     height: 65px;
-    width: 90vw;
+    width: 90%;
     margin: auto;
 }
 .nav_line{

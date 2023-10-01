@@ -84,7 +84,7 @@ export const ScheduleMeeting=(props)=>{
     },[props.isBuyClick]);
     return(
         <React.Fragment>
-            <div className={styles.meetingCont} ref={meetRef}>
+            <div className={styles.meetingCont} ref={meetRef} id="scheduleMeeting">
                 <p style={{textAlign:"right",cursor:"pointer"}}><i class="bi bi-x" onClick={()=>props.setMeeting(false)} ></i></p>
                 <div className={styles.meetSchedule}>
                     <img src={meetingImg} alt="..."/>

@@ -2,7 +2,7 @@
     position: absolute;
     width: 340px;
     left: 50%;
-    top: 50%;
+    top: 50vh;
     border-radius: 10px;
     transform: translate(-50%, -50%);
     background-color: #FFFFFF;
@@ -126,7 +126,7 @@
 .submitPopupCont{
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 50vh;
     transform: translate(-50%, -50%);
     background-color: #FFFFFF;
     width: 330px;

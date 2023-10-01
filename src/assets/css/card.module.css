@@ -4,7 +4,7 @@
 }
 .new_prod_container{
     margin: 50px auto 55px auto;
-    width: 90vw;
+    width: 90%;
 }
 .product_container{
     display: flex;
@@ -52,7 +52,7 @@
 }
 .arrowImgPrev{
     position: absolute;
-    left: 0vw;
+    left: 0%;
     height: 60px;
     cursor: pointer;
 }
@@ -273,11 +273,12 @@
 /* SWIPE REVIEW CONTAINER */
 .reviewCont{
     display: flex;
-    width: 90vw;
+    width: 90%;
     justify-content: space-between;
     align-items: center;
     padding: 20px 0px;
     overflow-y: auto;
+    margin: auto;
 }
 .swipeArrow img{
     width: 7vh;

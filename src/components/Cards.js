@@ -44,7 +44,7 @@ export const ExpertCard=({expertise})=>{
 
 export const NewProductsCard = (props) => {
   const [getStart,setGetStart]=useState(false);
-  // const isLogin=useSelector((state)=>state.auth.isLogin);
+  const isLogin=localStorage.getItem("token");
   const [isBlur,setBlur]=useState(false);
   const navigate=useNavigate();
   const dispatch =useDispatch();
@@ -54,11 +54,18 @@ export const NewProductsCard = (props) => {
       window.scrollTo(0,0);
   };
 
-  const sellarClick=(event)=>{
+  const sellarClick=(event,item)=>{
     event.stopPropagation();
-    setBlur(true); 
-    window.scrollTo(0,0);
-    setGetStart(!getStart);
+    event.preventDefault();
+    if(isLogin){
+      navigate(`/products/${item?.equip_name}/` , {state : {prodDetails : item,c_seller:true}});
+    }
+    else{
+      setBlur(true); 
+      window.scrollTo(0,0);
+      setGetStart(!getStart);
+    }
+    
   };
 
   const handleATC=(e)=>{
@@ -113,7 +120,7 @@ export const NewProductsCard = (props) => {
               <p>₹{props?.data?.asking_price}</p>
             </div>
             <div>
-              <NavLink className={styles.PriceBtn} onClick={sellarClick}>
+              <NavLink className={styles.PriceBtn} onClick={(e)=>sellarClick(e,props?.data)}>
                 Contact Seller
               </NavLink>
             </div>

@@ -199,13 +199,15 @@ const BuyBtn=()=>{
 };
 
 const SellBtn=()=>{
-    const token =  localStorage.getItem("token")
+    const token =  localStorage.getItem("token");
+    const [isToast,setToast]=useState(false);
     const navigate=useNavigate();
     const handlClick=(e)=>{
         e.preventDefault();
         if(!token){
             navigate("/user/login/" ,{state:{navigateTo:"/post/"}});
             toast.info("Please login to procced",{autoClose:2000});
+            setToast(true);
         }
         else{
             navigate("/post/");
@@ -218,8 +220,10 @@ const SellBtn=()=>{
             className={styles.SellBtn} 
             to=''>
                 Sell
-            </NavLink>
             <ToastContainer/>
+            </NavLink>
+            
+            {/* { isToast && <ToastContainer/> } */}
         </React.Fragment>
     )
 };
