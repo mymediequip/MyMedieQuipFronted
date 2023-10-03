@@ -10,6 +10,7 @@ import { Manufacturer } from './features/Distributor_manufacture/manufacturer';
 import { Checkout } from './features/Buy/Checkout';
 import { BuySearch } from './features/Buy/Search';
 import { DistributorFrom , MANUFACTURERForm} from './features/Distributor_manufacture/forms';
+import { Service } from './features/Services/Service';
 import { 
   LoginRegister,
   OtpVervicatonForm,
@@ -86,6 +87,10 @@ export const Routers=()=>{
           <Route path='manufacturers' element={<Manufacturer/>}/>
           <Route path="distributor-form" element={<DistributorFrom/>}/>
           <Route path="manufacturer-form" element={<MANUFACTURERForm/>}/>
+
+          {/* Service */}
+
+          <Route path='services' element={<Service/>}/>
 
         </Route>
       </Routes>

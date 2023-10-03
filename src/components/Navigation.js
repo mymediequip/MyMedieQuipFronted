@@ -25,7 +25,7 @@ export const Navigation=()=>{
         {name:"Equipment Category",path:"/specialization"},
         {name:"Pre-owned Equipment",path:"/"},
         {name:"New Equipment",path:"/"},
-        {name:"Service",path:"/"},
+        {name:"Services",path:"/services/"},
         {name:"Spare & Accessories",path:"/"},
         {name:"Manufactures & Distribution",path:"/manufacturers/"},
         {name:"Contact Us",path:"/"}
@@ -366,7 +366,7 @@ const Humberger=()=>{
     const links=[
         {name:"USED EQUIPMENTS",path:"/"},
         {name:"NEW EQUIPMENTS",path:"/"},
-        {name:"SERVICES",path:"/"},
+        {name:"SERVICES",path:"/services/"},
         {name:"SPARE & ACCESSORIES",path:"/"},
         {name:"MANUFACTURES & DISTRIBUTION",path:"/manufacturers/"},
         {name:"CONTACT US",path:"/"},
