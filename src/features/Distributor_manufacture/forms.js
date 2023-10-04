@@ -9,7 +9,6 @@ import { AdvtCategoriesDorpDown } from '../Sell/PostAdvt';
 import { useFormik } from 'formik';
 import * as yup from "yup";
 import { ToastContainer,toast } from 'react-toastify';
-import ErrorMessage from '../../components/ErrorMessage';
 import { pnumberSchema } from '../../utils/validation';
 
 export const AskType=(props)=>{
@@ -63,11 +62,6 @@ export const AskType=(props)=>{
 
 export const DistributorFrom=()=>{
     const [isSubmitted,setSubmitted]=useState(false);
-    const handleFormSubmit=(e)=>{
-        e.preventDefault();
-        setSubmitted(true);
-        window.scrollTo(0,0);
-    }
 
     const formik =  useFormik({
         initialValues : {
@@ -85,11 +79,19 @@ export const DistributorFrom=()=>{
 
         }),
         onSubmit : function(values){
-            console.log(values)
+            // console.log(values)
+            handleFormSubmit(values)
         }
     })
 
-    console.log(formik.values ,"formik")
+
+    const handleFormSubmit = (event) =>{
+        // event.preventDefault()
+        // setSubmitted(true);
+        // window.scrollTo(0,0);
+    }
+
+    // console.log(formik.values ,"formik")
 
     return(
         <div className={styles.distriCont} style={{backgroundColor:isSubmitted?"#e6e6e673":"#FFFFFF"}}>
@@ -102,7 +104,7 @@ export const DistributorFrom=()=>{
             </div>
             <h3>DISTRIBUTOR FORM</h3>
 
-            <form className={styles.distForm} onSubmit={handleFormSubmit}>
+            <form className={styles.distForm} onSubmit={formik.handleSubmit}>
                 <div className={styles.distRow}>
                     <div>
                         <b>Brands or Product you deal in</b>
@@ -129,10 +131,7 @@ export const DistributorFrom=()=>{
                     <div>
                         <b>Phone Number</b>
                         <input type='number' id='ph_number' name='ph_number' value={formik.values.ph_number} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
-                        {
-                            formik.touched.ph_number && formik.errors.ph_number ? 
-                            <ErrorMessage component={formik.values.ph_number}  /> : null
-                        }
+                      
                     </div>
                     <div>
                         <b>Email Id</b>
@@ -154,7 +153,7 @@ export const DistributorFrom=()=>{
                 </div>
                 <p className={styles.recheck} >Note : Recheck all the details before final submission of the form.</p>
                 <div style={{textAlign:"center"}}>
-                    <input  className={styles.submitBtn} type='submit' value="Submit Response"/>
+                    <input  className={styles.submitBtn} type="submit" value="Submit Response"/>
                 </div>
 
             </form>
@@ -165,6 +164,7 @@ export const DistributorFrom=()=>{
 
 export const MANUFACTURERForm=()=>{
     const [isSubmitted,setSubmitted]=useState(false);
+
     const handleFormSubmit=(e)=>{
         e.preventDefault();
         setSubmitted(true);

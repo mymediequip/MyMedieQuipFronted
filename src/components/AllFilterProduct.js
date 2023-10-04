@@ -4,7 +4,8 @@ import { useLocation } from 'react-router-dom'
 import { MFProdCard } from '../features/Distributor_manufacture/manufacturer';
 const AllFilterProduct = () => {
   const location =  useLocation()
-  const item =  location.state.cat
+  const item =  location?.state?.cat
+  console.log(item,"cate")
  return (
     <div className={styles.main_container}>
        <div className={styles.prodFilterse}>

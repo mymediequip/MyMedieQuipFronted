@@ -92,7 +92,6 @@ const CatItem=({equipment , onItemClick , pic})=>{
     }
     onItemClick(equipment);
   };
-console.log(equipment,"eq")
   const handleProdNameClick=(name)=>{
     navigate(`/search/search-items/${name}/` , {state : {cat : name}});
   };
@@ -127,8 +126,9 @@ const navigate =  useNavigate()
 const [searchEqip ,setSearchEquip] =  useState("")
 
 
-const handleSearchItems = () =>{
-        navigate(`/search/search-items/${searchEqip}/` , {state : {cat : searchEqip }})
+const handleSearchItems = (event) =>{
+      event.preventDefault()
+    navigate(`/search/search-items/${searchEqip}/` , {state : {cat : searchEqip }})
 }
 
 
@@ -139,8 +139,8 @@ const handleSearchItems = () =>{
             <input type='text' 
             onChange={(e)=>setSearchEquip(e.target.value)}
              onKeyPress={(event)=>{
-                if(event.key === "Enter"){
-                    handleSearchItems()
+                if(event?.key === "Enter"){
+                    handleSearchItems(event)
                 }
              }}  
              placeholder='I’m looking for.....'/>

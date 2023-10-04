@@ -16,6 +16,7 @@ import { addressSchema, addressTypeSchema, citySchema, fnameSchema, nationalityS
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setEquipPriceStatus } from "../../app/Slices/UserData";
+const API_KEY =  process.env.REACT_APP_ADDRESS_KEY
 
 export const Checkout=()=>{
   const price =  useSelector((state)=>state.profileData.eqip_price_update)
@@ -113,11 +114,10 @@ const DelieveryAddress=({lat,lng , inspection})=>{
 
   useEffect(()=>{
     if(usecurrentLocation){
-      const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
+      const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&apiKey=${API_KEY}`;
       axios
       .get(API_URL)
       .then(response=>{
-        // console.log(response?.data?.address,"res")
         formik.setValues({
           user_pincode : response?.data?.address?.postcode,
           user_country : response?.data?.address?.country,
@@ -161,7 +161,6 @@ const DelieveryAddress=({lat,lng , inspection})=>{
       }
     })
 
-    // console.log(formik?.values)
 
     const handleSubmit = (val) =>{
          console.log(val)

@@ -11,6 +11,7 @@ export const UserSlice = createSlice({
     eqip_price_update:0,
     eqip_discount:0,
     inspection_status : false,
+    meeting_details : {},
     cart:[],
   },
   reducers: {
@@ -26,6 +27,9 @@ export const UserSlice = createSlice({
     setCurrBuyStatus:(state,action)=>{
       state.currBuyStatus=action.payload.curr;
     },
+    setSheduleMeetingStatus:(state,action)=>{
+      state.meeting_details=action.payload;
+    },
     setEquipPriceStatus:(state,action)=>{
       state.eqip_price_update=action.payload
     },
@@ -37,12 +41,15 @@ export const UserSlice = createSlice({
     },
     addToCart:(state,action)=>{
       state.cart.push(action.payload);
+    },
+    clearMeetingData : (state)=>{
+      state.meeting_details = null
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { getUserData ,getProfileImage,setCurrBuyStatus , setEquipPriceStatus , setInspectionStatus , setDiscountPriceStatus ,addToCart ,getUserLists} = UserSlice.actions
+export const { getUserData ,getProfileImage,setCurrBuyStatus , setEquipPriceStatus , setInspectionStatus , setDiscountPriceStatus ,addToCart ,getUserLists ,setSheduleMeetingStatus , clearMeetingData} = UserSlice.actions
 // export const { addToCart,getUserData ,getProfileImage,setCurrBuyStatus} = UserSlice.actions
 
 export const fetchUserDetails = (uid)=>async(dispatch) => {

@@ -18,7 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRef } from "react";
 import axios from "axios";
 import { postData } from "../../services";
-
+const API_KEY =  process.env.REACT_APP_ADDRESS_KEY
 export const PostAdvt = () => {
   return (
     <div className={styles.postContainer}>
@@ -266,7 +266,7 @@ const getLatLang =  useSelector((state)=>state.addProd.prodAddData.location)
 const CompatibleModel =  useSelector((state)=>state.addProd.prodAddData.Compatible_Models)
 const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
 const prodLocation =  useSelector((state)=>state.addProd.prodAddData.Equip_location)
-
+const [toggle ,setToggle] =  useState(false)
 let data = []
 categories?.forEach((el)=>{
   data.push(el?.parent)
@@ -296,6 +296,12 @@ const handleChange = (event) =>{
 }
 
 
+console.log(prodLocation,"prodLocation")
+// useEffect(()=>{
+//   if(prodCondition == undefined){
+//      setToggle(false)
+//   }
+// },[prodCondition])
 
 const handleLocation = () =>{
   if("geolocation" in navigator){
@@ -315,9 +321,9 @@ const handleLocation = () =>{
 
 
 
+
 useEffect(() => {
-  // const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
-  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${getLatLang?.lat}&lon=${getLatLang?.lang}&format=json`;
+  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${getLatLang?.lat}&lon=${getLatLang?.lang}&format=json&key=${API_KEY}`;
 
   axios
     .get(API_URL)
@@ -868,9 +874,9 @@ const getAddProdScreen2 = (selectedType , handleLocation  ,dispatch ,CompatibleM
       <React.Fragment>
         <label for="lname">Where is the Equipment</label>
         <input type="text" id="Equip_location"  name="Equip_location" value={prodLocation} onChange={(e)=>dispatch(setEquip_Location(e.target.value))} />
-        <div  className={styles.locSelect}>
-          <img onClick={handleLocation}  className={styles.locationPng} src={location} alt="..." />
-          <p onClick={handleLocation}  className={styles.forAlign}>Find the current location</p>
+        <div  onClick={handleLocation}  className={styles.locSelect}>
+          <img className={styles.locationPng} src={location} alt="..." />
+          <p  className={styles.forAlign}>Find the current location</p>
         </div>
       </React.Fragment>
     );

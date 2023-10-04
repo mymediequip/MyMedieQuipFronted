@@ -173,16 +173,15 @@ const DropCard = () => {
 };
 
 export const MFProdCard=(props)=>{
- const dispatch =  useDispatch()   
- const userProfile =  useSelector((state)=>state)   
- console.log(userProfile,"user")
+//  const dispatch =  useDispatch()   
+//  const userProfile =  useSelector((state)=>state)   
  const navigate=useNavigate();
  const item =  props.searchItem
+ console.log(item,"item")
  const [plists ,setPlist] =  useState([])
  const [preload ,setPreload] =  useState(true)
  let uid = plists.filter((el)=>el)
 
- console.log(uid ,"el")
 
 
   const handleSearchItem = async() =>{
@@ -198,11 +197,11 @@ export const MFProdCard=(props)=>{
 
   useEffect(()=>{
     handleSearchItem()
-  },[])
+  },[item])
 
-  useEffect(()=>{
-    dispatch(getUserLists())
-  },[dispatch])
+//   useEffect(()=>{
+//     dispatch(getUserLists())
+//   },[dispatch])
 
     return(
       <>

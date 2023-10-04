@@ -175,7 +175,6 @@ export const fetchCategories = (Equip_name , id)=>async(dispatch)=>{
   }
   try {
     const res = await postData("product/category/menulist/" , formData  )
-    console.log(res,"resssssssssss")
     dispatch(fetchEuipCategories(res?.data))
   } catch (error) {
     console.log(error,"error")
