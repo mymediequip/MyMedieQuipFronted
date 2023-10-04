@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import * as yup from "yup" 
 import { prodYearSchema } from '../../../utils/validation';
+const API_KEY =  process.env.REACT_APP_ADDRESS_KEY
 
 
 const MyAds = () => {
@@ -137,8 +138,7 @@ const EditAds=(props)=>{
     }
   })
 useEffect(()=>{
-  const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
-  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${equipDetails?.latitude}&lon=${equipDetails?.longitude}&format=json&apiKey=${API_KEY}`;
+  const API_URL = `http://nominatim.openstreetmap.org/reverse?lat=${equipDetails?.latitude}&lon=${equipDetails?.longitude}&format=json&apiKey=${API_KEY}`;
   axios
   .get(API_URL)
   .then(response => {

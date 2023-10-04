@@ -323,7 +323,7 @@ const handleLocation = () =>{
 
 
 useEffect(() => {
-  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${getLatLang?.lat}&lon=${getLatLang?.lang}&format=json&key=${API_KEY}`;
+  const API_URL = `http://nominatim.openstreetmap.org/reverse?lat=${getLatLang?.lat}&lon=${getLatLang?.lang}&format=json&apiKey=${API_KEY}`;
 
   axios
     .get(API_URL)

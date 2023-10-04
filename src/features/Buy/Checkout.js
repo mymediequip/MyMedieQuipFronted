@@ -114,7 +114,7 @@ const DelieveryAddress=({lat,lng , inspection})=>{
 
   useEffect(()=>{
     if(usecurrentLocation){
-      const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&apiKey=${API_KEY}`;
+      const API_URL = `http://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&apiKey=${API_KEY}`;
       axios
       .get(API_URL)
       .then(response=>{
