@@ -84,9 +84,13 @@ export const Routers=()=>{
 
           {/* Distributor & Manufacturer */}
 
-          <Route path='manufacturers' element={<Manufacturer/>}/>
+          <Route path='manufacturers' element={<Manufacturer mf={true}/>}/>
           <Route path="distributor-form" element={<DistributorFrom/>}/>
           <Route path="manufacturer-form" element={<MANUFACTURERForm/>}/>
+
+          {/* Equpments */}
+          <Route path='preowned-equip' element={<Manufacturer used={true}/>}/>
+          <Route path='new-equip' element={<Manufacturer new={true}/>}/>
 
           {/* Service */}
 

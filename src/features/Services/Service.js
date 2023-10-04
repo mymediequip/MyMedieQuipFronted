@@ -8,7 +8,7 @@ import {
 } from '../../assets/images/index';
 
 export const Service=()=>{
-    const sfilters=["Removal and Installation","Installation","Delivery","Repair","All services","RF Shielding /Shields MRI","Rental","Questions","MRI Storing","Software"];
+    const sfilters=["AMC","CMC","Delivery","Repairing","Consumable","Parts","Shiiping and Installation","Software Update","Rental Services"];
     return(
         <section className={styles.serviceCont}>
             <div className={styles.serviceSubCont}>
