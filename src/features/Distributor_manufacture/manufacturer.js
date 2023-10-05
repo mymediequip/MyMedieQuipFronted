@@ -18,7 +18,11 @@ import {
 export const Manufacturer=(props)=>{
     const selectedMF=useSelector((state)=>state.mfSlice.selectedMF);
     const selectedCat=useSelector((state)=>state.mfSlice.selectedCat);
-    const isOptionSelectd=selectedMF.length>0 || selectedCat.length>0?true:false;
+    let isOptionSelectd=selectedMF.length>0 || selectedCat.length>0?true:false;
+    
+    if(!props?.mf){
+        isOptionSelectd=true;
+    }
 
     let manufacture=[
         {name:"PHILIPS",children:[]},
@@ -30,9 +34,6 @@ export const Manufacturer=(props)=>{
         {name:"Zimmer",children:[]},
     ];
     
-    let Category={title:"Equipment CATEGORY",sub:["Anesthesia Equipment/ICU","Cardiology Equipment","Cosmetic Equipment","Dental Equipment","Dental Lab Equipment","ENT Equipment","Emt training"]};
-    let adds={title:"AD NAME", sub:[]}
-
     const [ismobile,setMobile]=useState(false);
     const handleMobileSearch=()=>{
         setMobile(!ismobile);
@@ -62,9 +63,9 @@ export const Manufacturer=(props)=>{
                         <i style={{fontSize:"12px",color:"black"}} className="bi bi-chevron-right"></i>
                         <NavLink>{props?.mf?"Manufactures & Distribution":title}</NavLink>
                     </div>
-                    {/* {props?.mf && <ManuSearch data={manufacture} searchFor={1} />} */}
-                    <ManuSearch data={Category} searchFor={2} />
-                    {/* {props?.mf && <ManuSearch data={adds} ads={true} searchFor={3}/>} */}
+                    {props?.mf && <ManuSearch data={manufacture} searchFor={1} title="MANUFACTURE"/>}
+                    <ManuSearch data={[]} searchFor={2} title="EQUIPMENT CATEGORY"/>
+                    {props?.mf && <ManuSearch data={[]} title="AD NAME" ads={true} searchFor={3}/>}
                 </div>
                 <div className={styles.manuContent}>
                     {/* mobile view */}
@@ -113,8 +114,8 @@ export const Manufacturer=(props)=>{
 const ManuSearch=(props)=>{
     const Equip_categories=useSelector((state)=>state.addProd.prodAddData.Equip_categories);
     const dispatch=useDispatch();
-    const [datalist,setDataList]=useState(props.data.sub);
-    console.log(props.data)
+    const [datalist,setDataList]=useState(props.data);
+    
     
     const [filter,setFilter]=useState("");
 
@@ -137,7 +138,7 @@ const ManuSearch=(props)=>{
     return(
         <React.Fragment>
             <div className={styles.msearchCont}>
-                <h4>{props.data.title}</h4>
+                <h4>{props.title}</h4>
                 <div className={styles.msearch}>
                     <input type="text" onChange={handleFilter} value={filter} placeholder="Search"/>
                     <img src={manuSearch} alt="menufacture search"/>
@@ -148,7 +149,6 @@ const ManuSearch=(props)=>{
 
                     })
                 }
-                
             </div>
             {
                 props.ads?"":<div className={styles.maniLine} ></div>
