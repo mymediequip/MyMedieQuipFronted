@@ -623,7 +623,7 @@ const PaymentOptions = ({ inspection, discount }) => {
       {payOption && (
         <div className={styles.payOptions}>
           {
-            paymentType.sort().map((type)=>{
+            paymentType?.reverse().map((type)=>{
                   return(
                     <PaymentOptCard 
                     data={{ 

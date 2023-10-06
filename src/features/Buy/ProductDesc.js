@@ -60,6 +60,8 @@ export const ProductDescription=()=>{
 }; 
 
 const ProductData=()=>{
+  const prodTypes = useSelector((state)=>state.profileData.prodType)
+  console.log(prodTypes,"rpod")
     const  location  =  useLocation()
     const item =  location?.state?.prodDetails
     // console.log(item,"item")
