@@ -1,11 +1,10 @@
-import React, {useRef, useState } from 'react';
+import React, {useState } from 'react';
 import styles from '../../assets/css/buy/buy_search.module.css';
 import { MobileSearch,MobileCatogories } from '../../components/Hero';
 import { 
     arrLeft,
   } from "../../assets/images/index";
 import { NavLink, useLocation } from 'react-router-dom';
-import useClickOutside from '../../customHooks/useClickOutside';
 
 export const BuySearch=()=>{
     const {pathname}=useLocation();
@@ -15,12 +14,6 @@ export const BuySearch=()=>{
         currSearch="WHAT SPECIALITY ARE YOUR LOOKING FOR?";
     }
 
-    const click = useRef()
-    const [toggle ,setToggle] =  useState(false)
-    const handleClick = () =>{
-        setToggle(false)
-    }
-    useClickOutside(click ,handleClick)
     
     return(
         <div className={styles.buySearcCont}>
@@ -28,9 +21,9 @@ export const BuySearch=()=>{
                 <img src={arrLeft} height="24px"/>
                 <span>Back</span>
             </NavLink>
-            <div className={toggle ? styles.bSeach1   : styles.bSeach}>
+            <div className={styles.bSeach}>
                 <span className={styles.textMid}>{currSearch}</span>
-                <MobileSearch click={click} toggle={toggle} setToggle={setToggle}/>
+                <MobileSearch/>
             </div>
             <MobileCatogories/>
         </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from '../../assets/css/buy/meeting.module.css';
 import { BackgroundBlur } from "../../utils/Popups";
 import { Calander } from "../../utils/Calanders";
-import { setCurrBuyStatus, setDiscountPriceStatus, setInspectionStatus } from "../../app/Slices/UserData";
+import { clearMeetingData, setCurrBuyStatus, setDiscountPriceStatus, setInspectionStatus } from "../../app/Slices/UserData";
 import {
     meetingImg,
     scheduleBtn,
@@ -13,7 +13,9 @@ import {
     meetIssued
 } from '../../assets/images/index';
 import { NavLink, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { postData1 } from "../../services";
+import { toast } from "react-toastify";
 
 export const ScheduleMeeting=(props)=>{
     const [isBlur,setBlur]=useState(false);
@@ -26,7 +28,6 @@ export const ScheduleMeeting=(props)=>{
     const [isBuyClick,setBuyClick]=useState(props.isBuyClick);
     const item =  props?.data
     const profileDetails = props?.profile
-    const dispatch=useDispatch();
     const meetRef=useRef();
     const handleSechedule=(e)=>{
         let name=e.currentTarget.name;
@@ -36,12 +37,12 @@ export const ScheduleMeeting=(props)=>{
         setBlur(!isBlur);
         window.scrollTo(0,0);
     }
-    const handleMeetSuccess=(e)=>{
-        setSuccess(!isSuccess);
-        setMetScheduled(true);
-        console.log("meeting scheduled successfuly");
-        dispatch(setCurrBuyStatus({curr:1}));
-    };
+    // const handleMeetSuccess=(e)=>{
+    //     setSuccess(!isSuccess);
+    //     setMetScheduled(true);
+    //     console.log("meeting scheduled successfuly");
+    //     dispatch(setCurrBuyStatus({curr:1}));
+    // };
     const handleInspection=(e)=>{
         if(isMetScheduled){
             setInpection(!isInspected);
@@ -106,7 +107,7 @@ export const ScheduleMeeting=(props)=>{
                 isBlur && 
                 <React.Fragment>
                     <BackgroundBlur/>
-                    { isSuccess?<MeetingSuccess isMetScheduled={isMetScheduled} handleSechedule={handleSechedule}/>:<Calander handleMeetSuccess={handleMeetSuccess}/> }
+                    { isSuccess?<MeetingSuccess isMetScheduled={isMetScheduled} handleSechedule={handleSechedule} details={item} />:<Calander  setSuccess={setSuccess} success={isSuccess} setMetScheduled={setMetScheduled}  /> }
                 </React.Fragment>  
             }
         </React.Fragment>
@@ -114,9 +115,42 @@ export const ScheduleMeeting=(props)=>{
 };
 
 const MeetingSuccess=(props)=>{
+    const navigate = useNavigate()
+    const dispatch =  useDispatch()
+    const meetingDetails =  useSelector((state)=>state.profileData.meeting_details)
+    const buyer_id =  localStorage.getItem("uid")
+    const items =  props?.details
     const [terms,setTerms]=useState(false);
     const handleTermCond=()=>{
         setTerms(!terms);
+    }
+    const handleSheduleMeeting = async() =>{
+        if(items?.user !== buyer_id){
+            const data = {
+                buyer: buyer_id,
+                seller:items?.user,
+                product:items?.uid,
+                title: "Meeting confirmation",
+                date: meetingDetails.date,
+                start_time: meetingDetails.start_time,
+                end_time: meetingDetails.end_time,
+                duration: meetingDetails.duration,
+                remind_me: meetingDetails.remind_me,
+                status  : items?.status
+            }
+            const res = await postData1("product/schedule_meeting/" , data , true)
+            if(res.status){
+                dispatch(clearMeetingData())
+                toast.success("Meeting scheduled successfuly !")
+                setTimeout(()=>{
+                 navigate("/")
+                },2000)
+            }
+        }else{
+            toast.error("You can't shedule meeting")
+        }
+        
+        
     }
     return(
         <div className={styles.meetSuccessCont}>
@@ -133,7 +167,7 @@ const MeetingSuccess=(props)=>{
             }
             
             {
-                terms?<span className={styles.submitBtn} name="meetCNF" onClick={props.handleSechedule}>CONTINUE</span>:
+                terms?<span className={styles.submitBtn} name="meetCNF" onClick={handleSheduleMeeting}>CONTINUE</span>:
                 <span className={styles.submitBtn} style={{backgroundColor:"#019c8938"}} >CONTINUE</span>
             }
         </div>
@@ -197,8 +231,10 @@ const BuyIssue=(props)=>{
 };
 
 const SelectServices=(props)=>{
+    const dispatch =  useDispatch()
     const navigate=useNavigate();
     const handlePayment=(e)=>{
+        dispatch(setInspectionStatus(false))
         navigate(`/products/${props?.item?.equip_name}/checkout/` , {state : {details : props?.item , profileDetails : props?.profileDetails}});
         window.scrollTo(0,0);
     }

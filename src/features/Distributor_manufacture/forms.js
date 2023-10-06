@@ -6,8 +6,10 @@ import {
 } from '../../assets/images/index';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AdvtCategoriesDorpDown } from '../Sell/PostAdvt';
-
+import { useFormik } from 'formik';
+import * as yup from "yup";
 import { ToastContainer,toast } from 'react-toastify';
+import { pnumberSchema } from '../../utils/validation';
 
 export const AskType=(props)=>{
     const navigate=useNavigate();
@@ -60,11 +62,36 @@ export const AskType=(props)=>{
 
 export const DistributorFrom=()=>{
     const [isSubmitted,setSubmitted]=useState(false);
-    const handleFormSubmit=(e)=>{
-        e.preventDefault();
-        setSubmitted(true);
-        window.scrollTo(0,0);
+
+    const formik =  useFormik({
+        initialValues : {
+         brand : "",
+         busi_firm : "",
+         website_name : "",
+         res_person : "",
+         ph_number : "",
+         email_id : "",
+         city : "",
+         equip_cat : ""
+        },
+        validationSchema : yup.object().shape({
+         ph_number : pnumberSchema,
+
+        }),
+        onSubmit : function(values){
+            // console.log(values)
+            handleFormSubmit(values)
+        }
+    })
+
+
+    const handleFormSubmit = (event) =>{
+        // event.preventDefault()
+        // setSubmitted(true);
+        // window.scrollTo(0,0);
     }
+
+    // console.log(formik.values ,"formik")
 
     return(
         <div className={styles.distriCont} style={{backgroundColor:isSubmitted?"#e6e6e673":"#FFFFFF"}}>
@@ -77,55 +104,56 @@ export const DistributorFrom=()=>{
             </div>
             <h3>DISTRIBUTOR FORM</h3>
 
-            <form className={styles.distForm} onSubmit={handleFormSubmit}>
+            <form className={styles.distForm} onSubmit={formik.handleSubmit}>
                 <div className={styles.distRow}>
                     <div>
                         <b>Brands or Product you deal in</b>
-                        <input type='text' placeholder='write the brands you deal in '/>
+                        <input id='brand' name='brand' type='text' placeholder='write the brands you deal in ' value={formik.values.brand} onChange={formik.handleChange} onBlur={formik.handleBlur}  />
                     </div>
                     <div>
-                        <b>Buisness/Firm Name</b>
-                        <input type='text' />
+                        <b>Business/Firm Name</b>
+                        <input type='text' id='busi_firm' name='busi_firm' value={formik.values.busi_firm} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
                     </div>
                 </div>
 
                 <div className={styles.distRow}>
                     <div>
                         <b>Website Name</b>
-                        <input type='text' />
+                        <input type='text' id='website_name' name='website_name' value={formik.values.website_name} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
                     </div>
                     <div>
                         <b>Responsible Person</b>
-                        <input type='text' />
+                        <input type='text' id='res_person' name='res_person' value={formik.values.res_person} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
                     </div>
                 </div>
 
                 <div className={styles.distRow}>
                     <div>
                         <b>Phone Number</b>
-                        <input type='number' />
+                        <input type='number' id='ph_number' name='ph_number' value={formik.values.ph_number} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
+                      
                     </div>
                     <div>
                         <b>Email Id</b>
-                        <input type='email' />
+                        <input type='email' id='email_id' name='email_id' value={formik.values.email_id} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
                     </div>
                 </div>
 
                 <div className={styles.distRow}>
                     <div>
                         <b>Location /City</b>
-                        <input type='text' />
+                        <input type='text' id='city' name='city' value={formik.values.city} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
                     </div>
                     <div>
                         <b>Equipment Category</b>
-                        <input type='text' />
+                        <input type='text' id='equip_cat' name='equip_cat' value={formik.values.equip_cat} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
                         {/* <AdvtCategoriesDorpDown  data={[]} /> */}
 
                     </div>
                 </div>
                 <p className={styles.recheck} >Note : Recheck all the details before final submission of the form.</p>
                 <div style={{textAlign:"center"}}>
-                    <input  className={styles.submitBtn} type='submit' value="Submit Response"/>
+                    <input  className={styles.submitBtn} type="submit" value="Submit Response"/>
                 </div>
 
             </form>
@@ -136,6 +164,7 @@ export const DistributorFrom=()=>{
 
 export const MANUFACTURERForm=()=>{
     const [isSubmitted,setSubmitted]=useState(false);
+
     const handleFormSubmit=(e)=>{
         e.preventDefault();
         setSubmitted(true);

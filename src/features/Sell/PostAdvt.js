@@ -18,7 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRef } from "react";
 import axios from "axios";
 import { postData } from "../../services";
-
+const API_KEY =  process.env.REACT_APP_ADDRESS_KEY
 export const PostAdvt = () => {
   return (
     <div className={styles.postContainer}>
@@ -266,24 +266,24 @@ const getLatLang =  useSelector((state)=>state.addProd.prodAddData.location)
 const CompatibleModel =  useSelector((state)=>state.addProd.prodAddData.Compatible_Models)
 const prodCondition =  useSelector((state)=>state.addProd.prodAddData.prodCondition)
 const prodLocation =  useSelector((state)=>state.addProd.prodAddData.Equip_location)
-
+const [toggle ,setToggle] =  useState(false)
 let data = []
- categories?.forEach((el)=>{
-    data.push(el?.parent)
+categories?.forEach((el)=>{
+  data.push(el?.parent)
 })
 
 
 useEffect(()=>{
-dispatch(fetchCategories(searchName))
-dispatch(fetchCategoriesName(data))
-},[searchName ,equipName])
+  dispatch(fetchCategories(equipName))
+  dispatch(fetchCategoriesName(data))
+},[equipName])
 
 
 useEffect(()=>{
   dispatch(fetchSpecialityName())
 },[dispatch])
-  
- const handleProdCondition = (event) =>{
+
+const handleProdCondition = (event) =>{
   const {name,value} = event.target
   dispatch(setEquipCondition({...prodCondition  ,name,value}))
 }
@@ -295,6 +295,13 @@ const handleChange = (event) =>{
   dispatch(setEquipmentName(newName));
 }
 
+
+console.log(prodLocation,"prodLocation")
+// useEffect(()=>{
+//   if(prodCondition == undefined){
+//      setToggle(false)
+//   }
+// },[prodCondition])
 
 const handleLocation = () =>{
   if("geolocation" in navigator){
@@ -314,9 +321,9 @@ const handleLocation = () =>{
 
 
 
+
 useEffect(() => {
-  // const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
-  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${getLatLang?.lat}&lon=${getLatLang?.lang}&format=json`;
+  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${getLatLang?.lat}&lon=${getLatLang?.lang}&format=json&apiKey=${API_KEY}`;
 
   axios
     .get(API_URL)
@@ -337,7 +344,7 @@ useEffect(() => {
   const dropCat = {
     title: "Category",
     placeholder: "Select the equipment Categories",
-    dataList: parentName,
+    dataList: parentName.length > 0 ? parentName : [{name : "other" , id  : 1}],
   };
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -375,7 +382,16 @@ useEffect(() => {
   }
   },[selectedPostType])
 
+  const handleCatSearch = (name) =>{
+    if(searchName.length>2){
+      dispatch(setEquipmentName(name)); setSearchName("")
+    }else{
+      toast.error("Please Enter minimum 3 words")
+    }
+  }
+
   return (
+   <>
     <React.Fragment>
       <NavLink to="/post/media/"  className={styles.postBack}>
         <img src={arrLeft} alt="..." />
@@ -401,7 +417,7 @@ useEffect(() => {
                {categories?.map((el)=>{
                  return(
                      <>
-                     <p onClick={()=>{dispatch(setEquipmentName(el?.name)); setSearchName("")}} className={styles.equipnameDropDown}>{el?.name}</p>
+                     <p onClick={()=>{handleCatSearch(el?.name)}} className={styles.equipnameDropDown}>{el?.name}</p>
                      </>
                      )
                    })}
@@ -437,6 +453,7 @@ useEffect(() => {
         </form>
       </div>
     </React.Fragment>
+   </>
   );
 };
 
@@ -708,7 +725,6 @@ export const AdvtProdData = () => {
   const prodPrice =  useSelector((state)=>state.addProd.prodAddData.Prod_price)
   const allData =  useSelector((state)=>state.addProd.prodAddData)
 
-
   useEffect(()=>{
     if(!selectedPostType){
       navigate("/post/")
@@ -858,9 +874,9 @@ const getAddProdScreen2 = (selectedType , handleLocation  ,dispatch ,CompatibleM
       <React.Fragment>
         <label for="lname">Where is the Equipment</label>
         <input type="text" id="Equip_location"  name="Equip_location" value={prodLocation} onChange={(e)=>dispatch(setEquip_Location(e.target.value))} />
-        <div  className={styles.locSelect}>
-          <img onClick={handleLocation}  className={styles.locationPng} src={location} alt="..." />
-          <p onClick={handleLocation}  className={styles.forAlign}>Find the current location</p>
+        <div  onClick={handleLocation}  className={styles.locSelect}>
+          <img className={styles.locationPng} src={location} alt="..." />
+          <p  className={styles.forAlign}>Find the current location</p>
         </div>
       </React.Fragment>
     );

@@ -14,6 +14,9 @@ import {
     sortMf
 } from '../../assets/images/index';
 
+import { postData } from "../../services";
+import {  getUserLists } from "../../app/Slices/UserData";
+
 
 export const Manufacturer=(props)=>{
     const selectedMF=useSelector((state)=>state.mfSlice.selectedMF);
@@ -211,36 +214,82 @@ const DropCard = (props) => {
   );
 };
 
-export const MFProdCard=()=>{
-    const navigate=useNavigate();
+export const MFProdCard=(props)=>{
+//  const dispatch =  useDispatch()   
+//  const userProfile =  useSelector((state)=>state)   
+ const navigate=useNavigate();
+ const item =  props.searchItem
+ console.log(item,"item")
+ const [plists ,setPlist] =  useState([])
+ const [preload ,setPreload] =  useState(true)
+ let uid = plists.filter((el)=>el)
+
+
+
+  const handleSearchItem = async() =>{
+    setPreload(true)
+    const formData =  new FormData()
+    formData.append("q" , item)
+    const res =  await postData("product/plists/" , formData)
+    setPreload(false)
+    if(res.status){
+    setPlist(res?.data)
+}
+  }
+
+  useEffect(()=>{
+    handleSearchItem()
+  },[item])
+
+//   useEffect(()=>{
+//     dispatch(getUserLists())
+//   },[dispatch])
+
     return(
-        <div className={styles.mfProdCard}>
-            <img src={relatedImg} className={styles.prodImg}  alt="..."/>
-            <div className={styles.mfProdData}>
-                <div className={styles.mfTitile}>
-                    <h4>XYR Machine</h4>
-                    <span>NEW</span>
-                    <img src={philips} alt="..."/>
-                </div>
-                <div className={styles.mfType}>
-                    <span>Video laryngoscopes</span>
-                    <span>Lithotripters</span>
-                    <span>Video ureteroscopes</span>
-                </div>
-                <h3>Seller : XYZ</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut libero odio.ante quis aliquet adipiscing elit. Phasell lobortis,  Read more</p>
-                <div className={styles.priceCont}>
-                    <div className={styles.pricing}>
-                        <h2>₹ 50000</h2>
-                        <p style={{fontSize:"12px",marginBottom:"0px"}}>(Plus Shipping and GST tax included)</p>
+      <>
+      {
+        plists.length > 0 ? 
+         plists?.map((list)=>{
+            return (
+                <div className={styles.mfProdCard} key={list?.ld}>
+                <img src={list?.product_images[0]?.product_images ? list?.product_images[0]?.product_images: relatedImg} className={styles.prodImg}  alt="..."/>
+                <div className={styles.mfProdData}>
+                    <div className={styles.mfTitile}>
+                        <h4>{list?.equip_name}</h4>
+                        <span>
+                        {list?.post_type == 1
+                         ? "PRE-OWNED"
+                          : list?.post_type == 2
+                           ? "NEW"
+                        : list?.post_type == 3
+                         ? "SPARE & ACCESSORIES"
+                        : "SERVICES"}
+                        </span>
+                        <p className={styles.mfBrand}>{list?.brand}</p>
                     </div>
-                    <div className={styles.cardBtns}>
-                        <span className={styles.demo}>ARRANGE DEMO</span>
-                        <span onClick={()=>navigate("/products/demo/")} className={styles.gotoEquip}>GO TO EQUIPMENT</span>
+                    <div className={styles.mfType}>
+                        <span>Video laryngoscopes</span>
+                        <span>Lithotripters</span>
+                        <span>Video ureteroscopes</span>
+                    </div>
+                    <h3>Seller : XYZ</h3>
+                    <p>{list?.description}</p>
+                    <div className={styles.priceCont}>
+                        <div className={styles.pricing}>
+                            <h2>₹ {Number(list?.asking_price).toFixed(2)}</h2>
+                            <p style={{fontSize:"12px",marginBottom:"0px"}}>(Plus Shipping and GST tax included)</p>
+                        </div>
+                        <div className={styles.cardBtns}>
+                            <span className={styles.demo}>ARRANGE DEMO</span>
+                            <span onClick={()=>navigate(`/products/${list?.equip_name}/` , {state : {prodDetails : list}})} className={styles.gotoEquip}>GO TO EQUIPMENT</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            )
+         })  : preload ?   <div>Loading...</div> : <div className={styles.mfEmpty}>No Data Found</div> 
+      }
+      </>
     );
 };
 

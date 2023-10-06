@@ -9,7 +9,7 @@ import * as yup from "yup";
 import { SocialShare } from '../../utils/Popups';
 import {emailSchema, fnameSchema} from '../../utils/validation';
 import { useRef, useState ,useEffect} from 'react';
-
+import videoLanding from "../../assets/images/video/dummy.webm"
 import {
     findE,
     inspection,
@@ -42,7 +42,7 @@ import { ScheduleMeeting } from './Meeting';
 import axios from 'axios';
 import { postData } from '../../services';
 import MapView from '../../components/GoogleMap';
-
+const API_KEY =  process.env.REACT_APP_ADDRESS_KEY
 const profileImg =  process.env.REACT_APP_IMAGE_PREVIEW
 
 export const ProductDescription=()=>{
@@ -79,12 +79,10 @@ const ProductData=()=>{
 
 
     useEffect(() => {
-        const API_KEY = 'pk.9432c2fb2d8b14ffa18cbb6050de3944';
-        const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${item?.latitude}&lon=${item?.longitude}&format=json&apiKey=${API_KEY}`;
+        const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${item?.latitude ? item?.latitude  : 28.6883631}&lon=${item?.longitude ? item?.longitude :77.297967 }&format=json&apiKey=${API_KEY}`;
         axios
         .get(API_URL)
         .then(response => {
-                // console.log(response)
                 setaddress(response?.data?.display_name)
             })
             .catch(error => {
@@ -214,7 +212,7 @@ const ProductData=()=>{
                               <h3 style={{marginBottom:"0px"}}>{item?.equip_name}</h3>
                               <span >NEW</span>
                             </div>
-                            <h3>{item?.equip_name}</h3>
+                            {/* <h3>{item?.equip_name}</h3> */}
                             <div>
                               <span className={styles.prodId}>XM-101011QR</span>
                                 <img src={star} alt='...'/>
@@ -354,7 +352,7 @@ export const ProductImgVideo=({info})=>{
     return(
         <div className={styles.prodAsset}>
             {/* <img src={video_Advt} alt='...' style={{width:"100%",height:"400px"}}/> */}
-            <video src={"http://13.53.198.145:8000/mmq_apps/static/upload/product/video/Screenshot_from_2023-08-25_01-53-00_03092023062327719030.png"} controls width={"100%"} height={"400px"}>
+            <video src={videoLanding} controls width={"100%"} height={"400px"}>
                 {/* <source src={src} type='video/webm'/> */}
             </video>
             <div className={styles.prodsImg}>
@@ -464,7 +462,7 @@ const RelatedProd=()=>{
       }, []);
 
      const  fetchRelatedProducts =  async() =>{
-        const res = await postData("product/filter_list/", "", true);
+        const res = await postData("product/filter_list/", "");
         setRelatedProducts(res?.data?.featured_products);
      }
 

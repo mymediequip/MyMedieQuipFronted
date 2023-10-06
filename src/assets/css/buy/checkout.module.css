@@ -146,6 +146,32 @@
     gap: 100px;
     /* justify-content: space-between; */
 }
+.orderProd{
+    display: flex;
+}
+.orderProdSub{
+    /* width: 500px; */
+    max-width: 500px;
+    padding: 10px;
+}
+.orderText{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.orderAmt{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.orderAmt1{
+    margin-right: 50px;
+}
+.orderLoc{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .prodData{
     display: flex;
     flex-wrap: wrap;
@@ -283,6 +309,12 @@
 @media(max-width:840px){
     .checkoutData{
         width:auto;
+    }
+    .orderProd{
+        flex-direction: column;
+    }
+    .orderAmt{
+        flex-direction: column;
     }
 }
 @media(max-width:700px){

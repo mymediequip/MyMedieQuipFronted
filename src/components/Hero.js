@@ -10,10 +10,8 @@ import {
     m_search,
     downIcon,
 } from '../assets/images/index';
-import { fetchCategories, fetchSpecialityName } from '../app/Slices/ProdAddSlice';
+import { fetchCategories } from '../app/Slices/ProdAddSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { postData, postData1 } from '../services';
-import useClickOutside from '../customHooks/useClickOutside';
 
 export const Hero=(props)=>{
     
@@ -95,10 +93,8 @@ const CatItem=({equipment , onItemClick , pic})=>{
     }
     onItemClick(equipment);
   };
-
-  console.log(equipment);
-  const handleProdNameClick=()=>{
-    navigate("/search/search-items/prodlistDemo/");
+  const handleProdNameClick=(name)=>{
+    navigate(`/search/search-items/${name}/` , {state : {cat : name}});
   };
   
     return(
@@ -106,7 +102,7 @@ const CatItem=({equipment , onItemClick , pic})=>{
             <div >
             <div className={styles.cat_inner} >
                 <img src={equipment?.children.length > 0 ? pic : minus} alt='...' onClick={handleNodeClick} className={styles.in_img}/>
-                <span onClick={()=>navigate(`/search/search-items/${equipment.name}/` , {state : {cat : equipment?.name}})}>{equipment.name}</span>
+                <span onClick={()=>handleProdNameClick(equipment.name)}>{equipment.name}</span>
             </div>
             {
                 isExpanded && equipment?.children?.map((child)=>{
@@ -126,66 +122,29 @@ export const MobileHero=()=>{
         </div>
     );
 };
-export const MobileSearch=(props)=>{
-const specialityName =  useSelector((state)=>state.addProd.prodAddData.specialtiey_name)
-const dispatch =  useDispatch()
-const ref =  useRef(null)
-const {toggle ,setToggle , click} =  props
-const [togg ,setTogg] =  useState(toggle)
+export const MobileSearch=()=>{
 const navigate =  useNavigate()
 const [searchEqip ,setSearchEquip] =  useState("")
-const data = ["Ultrasound Machines","CT Scanners", "IPL Machines","MRI machines","X-ray machines","Alexandrite Lasers","Optical coherence tomography" , "Shock wave therapy machines", "Dialysis Machine"]
 
-const fill =  specialityName?.filter((el)=>{
-     const {name} = el
-    if(name?.toLowerCase().includes(searchEqip.toLowerCase())){
-        return el
-    }
-})
 
-const clickOutSide = () =>{
-    setTogg(false)
+const handleSearchItems = (event) =>{
+      event.preventDefault()
+    navigate(`/search/search-items/${searchEqip}/` , {state : {cat : searchEqip }})
 }
-useClickOutside(ref , clickOutSide)
-
-useEffect(()=>{
-dispatch(fetchSpecialityName())
-},[dispatch])
 
 
-
-const handleSearchItems = (item) =>{
-    navigate(`/search/search-items/${item}/` , {state : {cat : item }})
-}
 
     return(
         <>
-         <form ref={ref}  className={togg ? styles.mobileSearch1 : styles.mobileSearch}>
-            <input ref={click}  type='text' onClick={()=>{setTogg(true);setToggle(true)}}  onChange={(e)=>{setSearchEquip(e.target.value); setTogg(true);}} placeholder='I’m looking for.....'/>
-           { togg ? <button className={styles.searchBtn}>Search</button> : <img src={m_search} alt='...'/>}
-               {togg ?  <hr/> : ""}
-               <div className={togg ?  styles.searchCont1 :  ""}>
-               {
-                searchEqip ? fill?.map((el)=>{
-                    return(<>
-                     <div className={fill.length > 1 ? styles.searchItem1 :  ""}>
-                        <p onClick={()=>handleSearchItems(el?.name)} className={styles.searchText}>{searchEqip} in {el?.name}</p>
-                    </div> 
-                    </>)
-                    })
-                   :
-                <div className={styles.grid_container}>
-                {
-                  togg? specialityName.map((item, index) => (
-                 <div key={index} className={styles.grid_item}>
-                    {item?.name}
-                 </div>
-                  )) :  ""
-               }
-                </div>
-               }
-               </div>
-           
+         <form  className={styles.mobileSearch}>
+            <input type='text' 
+            onChange={(e)=>setSearchEquip(e.target.value)}
+             onKeyPress={(event)=>{
+                if(event?.key === "Enter"){
+                    handleSearchItems(event)
+                }
+             }}  
+             placeholder='I’m looking for.....'/>
         </form>
 
         </>
@@ -202,9 +161,7 @@ export const MobileCatogories=()=>{
     useEffect(() => {
         dispatch(fetchCategories(""));
     }, []);
-    const data = ["Ultrasound Machines","CT Scanners", "IPL Machines","MRI machines","X-ray machines","Alexandrite Lasers","Optical coherence tomography" , "Shock wave therapy machines", "Dialysis Machine"]
 
-    // console.log(categories,"cat");
     return(
         <div className={styles.mobileCatContainer}>
             {
