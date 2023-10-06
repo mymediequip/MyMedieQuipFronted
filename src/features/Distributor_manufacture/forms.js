@@ -42,7 +42,7 @@ export const AskType=(props)=>{
                 </div>
                 <div className={styles.crossBtn}><i onClick={props.handleClick} style={{fontSize:"30px",cursor:"pointer"}} className="bi bi-x"></i></div>
             </div>
-            <p>Select one category from the following to help us identify which title suites u better.</p>
+            <p>Select one category from the following to help us identify which title suites you better.</p>
             <b>You are*</b>
             <div className={styles.askOptions}>
                 <div>

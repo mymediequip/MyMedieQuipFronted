@@ -10,6 +10,7 @@ import { Manufacturer } from './features/Distributor_manufacture/manufacturer';
 import { Checkout } from './features/Buy/Checkout';
 import { BuySearch } from './features/Buy/Search';
 import { DistributorFrom , MANUFACTURERForm} from './features/Distributor_manufacture/forms';
+import { Service } from './features/Services/Service';
 import { 
   LoginRegister,
   OtpVervicatonForm,
@@ -83,9 +84,17 @@ export const Routers=()=>{
 
           {/* Distributor & Manufacturer */}
 
-          <Route path='manufacturers' element={<Manufacturer/>}/>
+          <Route path='manufacturers' element={<Manufacturer mf={true}/>}/>
           <Route path="distributor-form" element={<DistributorFrom/>}/>
           <Route path="manufacturer-form" element={<MANUFACTURERForm/>}/>
+
+          {/* Equpments */}
+          <Route path='preowned-equip' element={<Manufacturer used={true}/>}/>
+          <Route path='new-equip' element={<Manufacturer new={true}/>}/>
+
+          {/* Service */}
+
+          <Route path='services' element={<Service/>}/>
 
         </Route>
       </Routes>

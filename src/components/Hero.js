@@ -37,7 +37,7 @@ export const Hero=(props)=>{
     );
 };
 
-const Catogories = () => {
+export const Catogories = () => {
   const dispatch = useDispatch();
   const categories = useSelector(
     (state) => state.addProd.prodAddData.Equip_categories
@@ -86,6 +86,7 @@ const Catogories = () => {
 const CatItem=({equipment , onItemClick , pic})=>{
  const navigate =  useNavigate()   
  const [isExpanded, setIsExpanded] = useState(false);
+
   const handleNodeClick = () => {
     if (equipment?.children?.length > 0) {
       setIsExpanded(!isExpanded);

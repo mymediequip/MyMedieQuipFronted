@@ -50,24 +50,32 @@ export const OurClients=()=>{
   }, [currentIndex , clientList]);
  
 
-    return(
-        <div className={styles.testMaincCont}>
+    return (
+      <div className={styles.testMaincCont}>
         <div className={styles.testHeading}>
           <p>What Our Clients says!</p>
-          <img className={styles.headingLine1} src={line} alt='...'/>
+          <img className={styles.headingLine1} src={line} alt="..." />
         </div>
         <div className={styles.reviewCont}>
-          <div className={styles.swipeArrow} >
-          <img onClick={handleScrollLeft} alt='' className={styles.headingLine}  src={swipetestleft}/>
-          </div>
-          {
-            displayedData?.map((client)=>{
-               return   <ClientCard clientList={client} key={client?.id} />
-            })
-          }
-        
           <div className={styles.swipeArrow}>
-          <img onClick={handleScrollRight} alt='' className={styles.headingLine}  src={nextArow}/>
+            <img
+              onClick={handleScrollLeft}
+              alt=""
+              className={styles.headingLine}
+              src={swipetestleft}
+            />
+          </div>
+          {displayedData?.map((client) => {
+            return <ClientCard clientList={client} key={client?.id} />;
+          })}
+
+          <div className={styles.swipeArrow}>
+            <img
+              onClick={handleScrollRight}
+              alt=""
+              className={styles.headingLine}
+              src={nextArow}
+            />
           </div>
         </div>
       </div>

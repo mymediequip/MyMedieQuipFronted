@@ -43,10 +43,10 @@
 }
 /* calander */
 .calanderCont{
-    width: 70vw;
+    width: 70%;
     /* height: 470px; */
     position: absolute;
-    top: 50%;
+    top: 50vh;
     left: 50%;
     transform: translate(-50%, -50%);
     /* background-color: #FFFFFF; */

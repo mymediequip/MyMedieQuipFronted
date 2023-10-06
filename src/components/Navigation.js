@@ -23,9 +23,9 @@ export const Navigation=()=>{
     const token=localStorage.getItem("token");
     const links=[
         {name:"Equipment Category",path:"/specialization"},
-        {name:"Pre-owned Equipment",path:"/"},
-        {name:"New Equipment",path:"/"},
-        {name:"Service",path:"/"},
+        {name:"Pre-owned Equipment",path:"/preowned-equip/"},
+        {name:"New Equipment",path:"/new-equip/"},
+        {name:"Services",path:"/services/"},
         {name:"Spare & Accessories",path:"/"},
         {name:"Manufactures & Distribution",path:"/manufacturers/"},
         {name:"Contact Us",path:"/"}
@@ -199,13 +199,15 @@ const BuyBtn=()=>{
 };
 
 const SellBtn=()=>{
-    const token =  localStorage.getItem("token")
+    const token =  localStorage.getItem("token");
+    const [isToast,setToast]=useState(false);
     const navigate=useNavigate();
     const handlClick=(e)=>{
         e.preventDefault();
         if(!token){
             navigate("/user/login/" ,{state:{navigateTo:"/post/"}});
             toast.info("Please login to procced",{autoClose:2000});
+            setToast(true);
         }
         else{
             navigate("/post/");
@@ -218,8 +220,10 @@ const SellBtn=()=>{
             className={styles.SellBtn} 
             to=''>
                 Sell
-            </NavLink>
             <ToastContainer/>
+            </NavLink>
+            
+            {/* { isToast && <ToastContainer/> } */}
         </React.Fragment>
     )
 };
@@ -360,9 +364,9 @@ const Humberger=()=>{
     };
     console.log(isMobile)
     const links=[
-        {name:"USED EQUIPMENTS",path:"/"},
-        {name:"NEW EQUIPMENTS",path:"/"},
-        {name:"SERVICES",path:"/"},
+        {name:"PRE-OWNED EQUIPMENT",path:"/preowned-equip/"},
+        {name:"NEW EQUIPMENT",path:"/new-equip/"},
+        {name:"SERVICES",path:"/services/"},
         {name:"SPARE & ACCESSORIES",path:"/"},
         {name:"MANUFACTURES & DISTRIBUTION",path:"/manufacturers/"},
         {name:"CONTACT US",path:"/"},

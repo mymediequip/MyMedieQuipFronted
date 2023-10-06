@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from '../../assets/css/manufacture/manufacture.module.css';
 import { setSelectedMF,removeSelectedMF,setSelectedCat,removeSelectCat } from "../../app/Slices/ManufacturerSlice";
 import { NavLink, useNavigate } from "react-router-dom";
+import { fetchCategories } from "../../app/Slices/ProdAddSlice";
+import { useSelector,useDispatch } from "react-redux";
 import {
     manuSearch,
     searchDrop,
@@ -11,23 +13,41 @@ import {
     filterMF,
     sortMf
 } from '../../assets/images/index';
-import { useDispatch, useSelector } from "react-redux";
+
 import { postData } from "../../services";
 import {  getUserLists } from "../../app/Slices/UserData";
 
-export const Manufacturer=()=>{
+
+export const Manufacturer=(props)=>{
     const selectedMF=useSelector((state)=>state.mfSlice.selectedMF);
     const selectedCat=useSelector((state)=>state.mfSlice.selectedCat);
-    console.log(selectedMF,selectedCat);
-    const isOptionSelectd=selectedMF.length>0 || selectedCat.length>0?true:false;
+    let isOptionSelectd=selectedMF.length>0 || selectedCat.length>0?true:false;
+    
+    if(!props?.mf){
+        isOptionSelectd=true;
+    }
 
-    let manufacture={title:"MANUFACTURE",sub:["PHILIPS","Siemens","Mindray","Hitachi","Pentex","Lecia","Zimmer"]};
-    let Category={title:"Equipment CATEGORY",sub:["Anesthesia Equipment/ICU","Cardiology Equipment","Cosmetic Equipment","Dental Equipment","Dental Lab Equipment","ENT Equipment","Emt training"]};
-    let adds={title:"AD NAME", sub:[]}
-
+    let manufacture=[
+        {name:"PHILIPS",children:[]},
+        {name:"Siemens",children:[]},
+        {name:"Mindray",children:[]},
+        {name:"Hitachi",children:[]},
+        {name:"Pentex",children:[]},
+        {name:"Lecia",children:[]},
+        {name:"Zimmer",children:[]},
+    ];
+    
     const [ismobile,setMobile]=useState(false);
     const handleMobileSearch=()=>{
         setMobile(!ismobile);
+    }
+
+    let title="Medical Equipment Manufacturers";
+    if(props?.new){
+        title="New Equipment"
+    }
+    else if(props?.used){
+        title="Pre-Owned Equipment"
     }
     return(
         <section className={styles.manuFactureCont}>
@@ -44,11 +64,11 @@ export const Manufacturer=()=>{
                     <div className={styles.manuPath}>
                         <NavLink><i className="bi bi-house-door" style={{fontSize:"18px",color:"black"}}></i></NavLink>
                         <i style={{fontSize:"12px",color:"black"}} className="bi bi-chevron-right"></i>
-                        <NavLink>Manufacture & Distribution</NavLink>
+                        <NavLink>{props?.mf?"Manufactures & Distribution":title}</NavLink>
                     </div>
-                    <ManuSearch data={manufacture} searchFor={1} />
-                    <ManuSearch data={Category} searchFor={2} />
-                    <ManuSearch data={adds} ads={true} searchFor={3}/>
+                    {props?.mf && <ManuSearch data={manufacture} searchFor={1} title="MANUFACTURE"/>}
+                    <ManuSearch data={[]} searchFor={2} title="EQUIPMENT CATEGORY"/>
+                    {props?.mf && <ManuSearch data={[]} title="AD NAME" ads={true} searchFor={3}/>}
                 </div>
                 <div className={styles.manuContent}>
                     {/* mobile view */}
@@ -65,8 +85,8 @@ export const Manufacturer=()=>{
 
                     </div>
 
-                    <h1>Medical Equipment Manufacturers</h1>
-                    <p style={{fontSize:"15px",marginTop:"8px"}}>Found 1175 manufacturers</p>
+                    <h1>{title}</h1>
+                    <p style={{fontSize:"15px",marginTop:"8px"}}>Found 1175 {title}</p>
                     {
                         isOptionSelectd?(
                         <div className={styles.mfContent}>
@@ -95,21 +115,43 @@ export const Manufacturer=()=>{
 };
 
 const ManuSearch=(props)=>{
+    const Equip_categories=useSelector((state)=>state.addProd.prodAddData.Equip_categories);
+    const dispatch=useDispatch();
+    const [datalist,setDataList]=useState(props.data);
+    
+    
+    const [filter,setFilter]=useState("");
+
+    const handleFilter=(e)=>{
+        setFilter(e.currentTarget.value);
+        console.log(e.target.value)
+
+    }
+    useEffect(()=>{
+        if(props.searchFor===2){
+            dispatch(fetchCategories(filter));
+            setDataList(Equip_categories?.slice()?.sort((a,b)=>a.name.localeCompare(b.name)));
+        }
+        
+    },[filter]);
+
+    // console.log(datalist)
+
+    
     return(
         <React.Fragment>
             <div className={styles.msearchCont}>
-                <h4>{props.data.title}</h4>
+                <h4>{props.title}</h4>
                 <div className={styles.msearch}>
-                    <input type="text" placeholder="Search"/>
+                    <input type="text" onChange={handleFilter} value={filter} placeholder="Search"/>
                     <img src={manuSearch} alt="menufacture search"/>
                 </div>
                 {
-                    props.data.sub.map((data,index)=>{
+                    datalist.map((data,index)=>{
                         return <SearchDropDown searchFor={props.searchFor} data={data} key={index}/>
 
                     })
                 }
-                
             </div>
             {
                 props.ads?"":<div className={styles.maniLine} ></div>
@@ -138,35 +180,35 @@ const SearchDropDown=(props)=>{
                 <div className={styles.subSearchT}>
                     <img src={searchDrop} alt="search drop" onClick={handleDrop}/>
                     <input type="checkbox" onChange={handleChange}/>
-                    <span>{props.data}</span>
+                    <span>{props.data?.name}</span>
                 </div>
-                <span>(4)</span>
+                <span>({props.data?.children?.length})</span>
             </div>
-            {/* {
+            {
                 isDropOpen && (
                     <div style={{marginLeft:"20px"}}>
-                        <DropCard/>
-                        <DropCard/>
-                        <DropCard/>
-                        <DropCard/>
-                        <DropCard/>
+                        {
+                            props.data?.children?.slice()?.sort((a,b)=>a.name.localeCompare(b.name)).map((data,index)=>{
+                                return <DropCard childData={data} key={index}/>
+                            })
+                        }
                     </div>
                 )
-            } */}
+            }
 
         </div>
     );
 };
 
-const DropCard = () => {
+const DropCard = (props) => {
     
   return (
       <div className={styles.searchTitle}>
         <div className={styles.subSearchT}>
           <input type="checkbox" />
-          <span>PHILIPS</span>
+          <span>{props?.childData?.name}</span>
         </div>
-        <span>(4)</span>
+        <span>({props?.childData?.children?.length})</span>
       </div>
     
   );

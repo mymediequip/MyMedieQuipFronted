@@ -88,7 +88,11 @@ import bussWithUs from './bussWithus.png';
 import manIcon from './manIcon.png';
 import filterMF from './filter.png';
 import sortMf from './sortBy.png';
+import serviceImg from './serviceImg.png';
+import serviceMail from './Servic_mail.png';
 export {
+    serviceMail,
+    serviceImg,
     filterMF,
     sortMf,
     manIcon,

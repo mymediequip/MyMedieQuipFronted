@@ -1,0 +1,136 @@
+.serviceCont{
+    background-color: #FAFAFA;
+    padding: 50px 0px 50px 0px;
+}
+.serviceSubCont{
+    width: 85%;
+    margin: auto;
+}
+.serviceFilters,.serviceCard{
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    background-color: #FFFFFF;
+}
+.servCat>div{
+    height: 700px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+.serviceFilters{
+    padding: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.sFilter,.sFilterApply{
+    margin: 5px;
+    font-size: 14px;
+    padding: 5px;
+    display: inline-block;
+    flex-grow: 1;
+    flex-basis: 170px;
+    text-align: center;
+    /* width: 170px; */
+    height: fit-content;
+    cursor: pointer;
+    color: #888888;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+.sFilterApply,.sFilter:hover{
+    background-color: #019C89;
+    color: #FFFFFF;
+    box-shadow: none;
+}
+.serviceRow2{
+    display: flex;
+    gap: 30px;
+}
+.serviceRow1>i{
+    color: #019C89;
+    font-size: 17px;
+}
+.serviceRow1{
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.serviceRow1>span{
+    font-size: 15px;
+    color: #505050;
+}
+
+/* service card design */
+.serviceCard{
+    margin-top: 20px;
+    display: flex;
+    /* flex-wrap: wrap; */
+}
+.serviceData{
+    font-size: 15px;
+    color: #505050;
+    width:100%;
+    background-color: #FFFBF0;
+    /* background-color: yellow; */
+}
+
+.sOffer{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 5px;
+    gap: 5px;
+    align-items: center;
+    margin-left: 10px;
+}
+.sOffer>span{
+    border: 1px solid #505050;
+    padding: 2px 3px 2px 3px;
+}
+.location{
+    margin-top: 15px;
+    margin-left: 10px;
+}
+.servCont{
+    display: flex;
+    align-items: flex-end;
+    margin: 20px 10px 20px 0px;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.serviceCard>img{
+    width: 180px;
+}
+.servCont img{
+    width: 18px;
+}
+.servWhat,.servMail{
+    padding: 5px;
+    width: 180px;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    background-color: #2EB943;
+    cursor: pointer;
+    border-radius: 2px;
+}
+@media(max-width:864px){
+    .serviceRow2{
+        flex-wrap: wrap;
+    }
+    .servCat{
+        display: none;
+    }
+}
+@media(max-width:440px){
+    .serviceCard{
+        flex-wrap: wrap;
+
+    }
+    .serviceCard>img{
+        width: 90%;
+        margin: auto;
+    }
+
+}
+

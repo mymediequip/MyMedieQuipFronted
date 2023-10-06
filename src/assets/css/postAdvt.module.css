@@ -61,7 +61,7 @@
 
 /*  Advertisement Media */
 .advtMediaCont{
-    margin: auto;
+    margin: auto auto 30px auto;
     /* text-align: center; */
     min-height: 500px;
     display: flex;
@@ -72,7 +72,7 @@
 .advtAllMedie{
     display: flex;
     justify-content: space-around;
-    width: 80vw;
+    width: 80%;
     flex-wrap: wrap;
     margin: auto;
 }
@@ -501,7 +501,7 @@
 }
 .advtPostSeCont img{
     /* height: 560px; */
-    width: 50vw
+    width: 50%;
 }
 
 /* Mobile Responsiveness */
