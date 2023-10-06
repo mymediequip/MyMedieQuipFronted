@@ -138,7 +138,7 @@ const EditAds=(props)=>{
     }
   })
 useEffect(()=>{
-  const API_URL = `http://nominatim.openstreetmap.org/reverse?lat=${equipDetails?.latitude}&lon=${equipDetails?.longitude}&format=json&apiKey=${API_KEY}`;
+  const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${equipDetails?.latitude}&lon=${equipDetails?.longitude}&format=json&apiKey=${API_KEY}`;
   axios
   .get(API_URL)
   .then(response => {

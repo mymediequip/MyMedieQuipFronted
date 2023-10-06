@@ -36,8 +36,8 @@ export const UserSlice = createSlice({
     setDiscountPriceStatus:(state,action)=>{
       state.eqip_discount=action.payload
     },
-    setInspectionStatus:(state)=>{
-      state.inspection_status= !state.inspection_status
+    setInspectionStatus:(state ,action)=>{
+      state.inspection_status= action.payload
     },
     addToCart:(state,action)=>{
       state.cart.push(action.payload);

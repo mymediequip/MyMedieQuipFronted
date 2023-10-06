@@ -78,7 +78,7 @@ const ProductData=()=>{
 
 
     useEffect(() => {
-        const API_URL = `http://nominatim.openstreetmap.org/reverse?lat=${item?.latitude ? item?.latitude  : 28.6883631}&lon=${item?.longitude ? item?.longitude :77.297967 }&format=json&apiKey=${API_KEY}`;
+        const API_URL = `https://nominatim.openstreetmap.org/reverse?lat=${item?.latitude ? item?.latitude  : 28.6883631}&lon=${item?.longitude ? item?.longitude :77.297967 }&format=json&apiKey=${API_KEY}`;
         axios
         .get(API_URL)
         .then(response => {

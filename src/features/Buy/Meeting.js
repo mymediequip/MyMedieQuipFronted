@@ -231,8 +231,10 @@ const BuyIssue=(props)=>{
 };
 
 const SelectServices=(props)=>{
+    const dispatch =  useDispatch()
     const navigate=useNavigate();
     const handlePayment=(e)=>{
+        dispatch(setInspectionStatus(false))
         navigate(`/products/${props?.item?.equip_name}/checkout/` , {state : {details : props?.item , profileDetails : props?.profileDetails}});
         window.scrollTo(0,0);
     }
