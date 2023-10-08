@@ -46,8 +46,7 @@
 .cardContainer{
     border: 1px solid #9E9F9C;
     border-radius: 8px;
-    /* width: 254px; */
-    width: 318px;
+    width: 254px;
     padding: 12px;
     font-weight: 100;
     cursor: pointer;
@@ -78,7 +77,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* width: 317px; */
 }
 .title_desk h5{
     margin: 0px;
