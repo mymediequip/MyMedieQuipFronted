@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from '../../assets/css/buy/meeting.module.css';
-import { BackgroundBlur } from "../../utils/Popups";
+import { BackgroundBlur, TextModel } from "../../utils/Popups";
 import { Calander } from "../../utils/Calanders";
 import { clearMeetingData, setCurrBuyStatus, setDiscountPriceStatus, setInspectionStatus } from "../../app/Slices/UserData";
 import {
@@ -20,16 +20,20 @@ import { toast } from "react-toastify";
 export const ScheduleMeeting=(props)=>{
     const [isBlur,setBlur]=useState(false);
     const [isSuccess,setSuccess]=useState(false);
+    console.log(isSuccess,"success")
     const [isMetScheduled,setMetScheduled]=useState(false);
     const [isInspected,setInpection]=useState(false);
     const [isMeetIssue,setMeetIssue]=useState(false);
     const [isBuyIssue,setBuyIssue]=useState(false);
     const [isBuyOption,setBuyOption]=useState(false);
+    const [sheduleLis,setSheduleLis]=useState();
+    const [popup,setPopUp]=useState(false);
     const [isBuyClick,setBuyClick]=useState(props.isBuyClick);
     const item =  props?.data
     const profileDetails = props?.profile
     const meetRef=useRef();
     const handleSechedule=(e)=>{
+        setPopUp(true)
         let name=e.currentTarget.name;
         if(name=="meetSC"){
             setSuccess(false);
@@ -37,12 +41,26 @@ export const ScheduleMeeting=(props)=>{
         setBlur(!isBlur);
         window.scrollTo(0,0);
     }
-    // const handleMeetSuccess=(e)=>{
-    //     setSuccess(!isSuccess);
-    //     setMetScheduled(true);
-    //     console.log("meeting scheduled successfuly");
-    //     dispatch(setCurrBuyStatus({curr:1}));
-    // };
+
+    useEffect(()=>{
+        handleGetMeetingList()
+    },[popup])
+    const handleGetMeetingList=async()=>{
+        if(popup){
+            const data = {
+                buyer_id:"6307fc0f-a908-4bed-b97a-ff5d624be1ac",
+                product_id:"9a86020b-bda1-4bd1-a5e1-3ef2dbc3a20a"
+            }
+            const res =  await postData1("product/get_schedule_meeting/" , data  ,true)
+            if(res?.status){
+                setSheduleLis(res?.data[0])
+           }
+        }
+       
+    };
+
+    console.log(popup,"pop" ,sheduleLis)
+    
     const handleInspection=(e)=>{
         if(isMetScheduled){
             setInpection(!isInspected);
@@ -91,7 +109,7 @@ export const ScheduleMeeting=(props)=>{
                     <img src={meetingImg} alt="..."/>
                     <b>Meeting Scheduling</b>
                     <p>Schedule a online meeting with the seller to get equipment Information.</p>
-                    <img alt="..." src={scheduleBtn} height="55px" name="meetSC" onClick={handleSechedule}/>
+                    <img alt="..." src={scheduleBtn} height="55px" name="meetSC" onClick={handleSechedule}/>    
                 </div>
                 <div className={styles.meetButons}>
                     <img alt="..." src={inspectionBtn} onClick={handleInspection} height="55px"/>
@@ -107,7 +125,7 @@ export const ScheduleMeeting=(props)=>{
                 isBlur && 
                 <React.Fragment>
                     <BackgroundBlur/>
-                    { isSuccess?<MeetingSuccess isMetScheduled={isMetScheduled} handleSechedule={handleSechedule} details={item} />:<Calander  setSuccess={setSuccess} success={isSuccess} setMetScheduled={setMetScheduled}  /> }
+                    { isSuccess?<MeetingSuccess isMetScheduled={isMetScheduled} handleSechedule={handleSechedule} details={item} />: popup ? <TextModel setPopUp={setPopUp} setMeeting={props.setMeeting}   /> :  <Calander  setSuccess={setSuccess} success={isSuccess} setMetScheduled={setMetScheduled}  /> }
                 </React.Fragment>  
             }
         </React.Fragment>
@@ -176,13 +194,24 @@ const MeetingSuccess=(props)=>{
 
 const InspectionReport=(props)=>{
     let dicount = (10*Number(props?.item?.asking_price))/100
+    const prodDetails = props?.item
+    console.log(prodDetails,"props")
     const dispatch =  useDispatch()
     const navigate=useNavigate();
-    const handlePayment=(e)=>{
-        dispatch(setDiscountPriceStatus(dicount))
+    const handlePayment=async(e)=>{
+        // const data = {
+        //     product_id:prodDetails?.uid,
+        //     order_type : "2"
+        // }
+        // const res = await postData1("product/order_review/", data , true)
+        // console.log(res,"res")
+        // if(res.status){
+         dispatch(setDiscountPriceStatus(dicount))
         dispatch(setInspectionStatus(true))
         navigate(`/products/${props?.item?.equip_name}/checkout/` , {state : {details : props?.item , profileDetails : props?.profileDetails}});
         window.scrollTo(0,0);
+        // }
+       
     }
     return(
         <div className={styles.inspectCont}>

@@ -84,7 +84,6 @@ export const NewProductsCard = (props) => {
 
   return (
     <React.Fragment>
-      <ToastContainer/>
       <div className={styles.cardContainer} onClick={()=>productClick(props?.data)}>
         <div className={styles.cardContent}>
           <div className={styles.equipImage}>

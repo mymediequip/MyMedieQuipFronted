@@ -219,10 +219,9 @@ export const MFProdCard=(props)=>{
 //  const userProfile =  useSelector((state)=>state)   
  const navigate=useNavigate();
  const item =  props.searchItem
- console.log(item,"item")
  const [plists ,setPlist] =  useState([])
  const [preload ,setPreload] =  useState(true)
- let uid = plists.filter((el)=>el)
+ console.log(plists)
 
 
 
@@ -241,9 +240,7 @@ export const MFProdCard=(props)=>{
     handleSearchItem()
   },[item])
 
-//   useEffect(()=>{
-//     dispatch(getUserLists())
-//   },[dispatch])
+
 
     return(
       <>
@@ -272,7 +269,7 @@ export const MFProdCard=(props)=>{
                         <span>Lithotripters</span>
                         <span>Video ureteroscopes</span>
                     </div>
-                    <h3>Seller : XYZ</h3>
+                    <h3>Seller : {list?.seller_name ? list?.seller_name : "Yusuf"}</h3>
                     <p>{list?.description}</p>
                     <div className={styles.priceCont}>
                         <div className={styles.pricing}>

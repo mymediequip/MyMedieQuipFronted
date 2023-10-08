@@ -15,6 +15,7 @@ import {
     Jaipur,
     location
 } from '../assets/images/index';
+import useClickOutside from '../customHooks/useClickOutside';
 const profileImg = process.env.REACT_APP_IMAGE_PREVIEW
 export const Navigation=()=>{
     const isLogin=useSelector((state)=>state.auth.isLogin);
@@ -358,11 +359,17 @@ const CreatBtn=()=>{
 
 const Humberger=()=>{
     const [isMobile,setIsMobile]=useState(true);
+    console.log(isMobile ,"u")
+    const ref =  useRef(null)
     const navigate=useNavigate();
     const handleHumberg=()=>{
         setIsMobile(!isMobile);
     };
     console.log(isMobile)
+    const handleClickOutSide = () =>{
+        setIsMobile(true);
+    }
+    useClickOutside(ref , handleClickOutSide)
     const links=[
         {name:"PRE-OWNED EQUIPMENT",path:"/preowned-equip/"},
         {name:"NEW EQUIPMENT",path:"/new-equip/"},
@@ -373,8 +380,8 @@ const Humberger=()=>{
         {name:"POST ADVERT",path:"/"}
     ];
     return(
-        <div className={styles.humberg} id="humberg">
-            <span id="humIcon" onClick={handleHumberg}>
+        <div ref={ref} className={styles.humberg} id="humberg">
+            <span  id="humIcon" onClick={handleHumberg}>
                 {
                     isMobile ? <i class="bi bi-list"></i> : <i class="bi bi-x"></i>
                 }

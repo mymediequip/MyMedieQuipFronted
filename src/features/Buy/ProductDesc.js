@@ -61,11 +61,10 @@ export const ProductDescription=()=>{
 
 const ProductData=()=>{
   const prodTypes = useSelector((state)=>state.profileData.prodType)
-  console.log(prodTypes,"rpod")
-    const  location  =  useLocation()
-    const item =  location?.state?.prodDetails
+  const  location  =  useLocation()
+  const item =  location?.state?.prodDetails
+  console.log(item,"item")
     const c_seller = location?.state?.c_seller;
-    // console.log(item,"item")
     const navigate  =  useNavigate()
     let isLogin = localStorage.getItem("token")
     const [getStart,setGetStart]=useState(false);
@@ -77,7 +76,8 @@ const ProductData=()=>{
     const [profile, setProfle] = useState({});
     const [category, setcategory] = useState([]);
     const [openSocial,setOpenSocial]=useState(false);
- 
+    
+    // console.log(address,"item")
 
 
     useEffect(() => {
@@ -85,7 +85,7 @@ const ProductData=()=>{
         axios
         .get(API_URL)
         .then(response => {
-                setaddress(response?.data?.display_name)
+                setaddress(response?.data)
             })
             .catch(error => {
                 console.error('Error fetching address:', error);
@@ -235,7 +235,7 @@ const ProductData=()=>{
                         </div>
                     </div>
                     
-                    {openMeeting?<ScheduleMeeting isBuyClick={buyClick} setMeeting={setMeeting} sellarClick={sellarClick} data={item} profile={profile} />:<ProductMeta info={item} data={profile}/>}
+                    {openMeeting?<ScheduleMeeting isBuyClick={buyClick} setMeeting={setMeeting} sellarClick={sellarClick} data={item} profile={profile} />:<ProductMeta info={item} data={profile} address={address?.address?.state}/>}
                     
                     <div className={styles.prodActLinks}>
                         <NavLink className={styles.contactSellar} onClick={(e)=>{sellarClick(e,false)}}>
@@ -264,7 +264,7 @@ const ProductData=()=>{
                     
                     <div className={styles.prodLocation}>
                         <b style={{color:"#019C89"}}>Posted in</b>
-                        <span>{address}</span>
+                        <span>{address?.display_name}</span>
                         {/* <img src={dummyMap} alt='...'/> */}
                         <MapView lat={item?.latitude} long={item?.longitude}/>
                     </div>
@@ -305,18 +305,19 @@ const ProductData=()=>{
     );
 };
 
-export const ProductMeta = ({info , data}) => {
+export const ProductMeta = ({info , data ,address}) => {
   return (
     <React.Fragment>
       <div>
         <div className={styles.pd_links}>
           <div className={styles.sellerName}>
             <img src={data?.image ? `${profileImg}${data?.image}` :  testimage2} alt="..." />
-            <p>{`${data?.first_name} ${data?.last_name}`}</p>
+            {/* <p>{`${data?.first_name} ${data?.last_name}`}</p> */}
+            <p>{info?.seller_name ? info?.seller_name : "Yusuf"}</p>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:"5px"}}>
             <img src={location}  alt="..." />
-            <span>New Delhi</span>
+            <span>{address}</span>
           </div>
         </div>
       </div>
@@ -329,7 +330,7 @@ export const ProductMeta = ({info , data}) => {
       </div>
 
       <div>
-        <h3>₹ {info?.asking_price}</h3>
+        <h3>₹ {Number(info?.asking_price).toFixed(2)}</h3>
         <p>(Plus Shipping and VAT tax included)</p>
       </div>
     </React.Fragment>

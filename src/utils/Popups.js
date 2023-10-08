@@ -51,6 +51,25 @@ export const GetStarted=(props)=>{
     );
 };
 
+export const TextModel=(props)=>{
+    let cancelBtn  = props.setPopUp
+    let meetingBtn = props.setMeeting
+    return(
+        <div className={styles.textContainer}>
+            <div onClick={()=>{cancelBtn(false);meetingBtn(false)}} className={styles.cancelBtn}>
+                <b><i  class="bi bi-x-lg"></i></b>
+            </div>
+            <div className={styles.textDec}>
+            <p className={styles.pText}>Your Meeting is already Sheduled !</p>
+              <div className={styles.buttonDec}>
+                <button onClick={()=>cancelBtn(false)} className={styles.btnDec}>Reshedule</button>
+                <button onClick={()=>{cancelBtn(false);meetingBtn(false)}} className={styles.btnDec1}>Cancel</button>
+              </div>
+            </div>
+        </div>
+    );
+};
+
 export const BackgroundBlur=()=>{
     return(
         <div className={styles.bgBlur}></div>
